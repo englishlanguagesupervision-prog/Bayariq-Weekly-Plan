@@ -1,0 +1,599 @@
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>نظام الخطط الأسبوعية - مدارس البيارق الأهلية</title>
+  
+  <link href="https://fonts.googleapis.com/css2?family=Tajawal:wght@400;500;700;800&display=swap" rel="stylesheet">
+  
+  <!-- Firebase App & Database (CDN سريع وخفيف) -->
+  <script src="https://www.gstatic.com/firebasejs/8.10.1/firebase-app.js"></script>
+  <script src="https://www.gstatic.com/firebasejs/8.10.1/firebase-database.js"></script>
+
+  <style>
+    :root {
+      --primary: #104c45;
+      --gold: #b38b47;
+      --gold-border: #cfab6c;
+      --bg: #f8fafc;
+      --card: #ffffff;
+      --text: #1e293b;
+      --border: #cbd5e1;
+    }
+
+    * { box-sizing: border-box; font-family: 'Tajawal', sans-serif; }
+    body { background-color: var(--bg); margin: 0; padding: 15px; color: var(--text); }
+    .no-print { display: block; }
+
+    /* شريط التبديل العلوي */
+    .nav-tabs {
+      max-width: 1000px;
+      margin: 0 auto 15px auto;
+      display: flex;
+      gap: 10px;
+      justify-content: center;
+    }
+    .tab-btn {
+      padding: 10px 24px;
+      border: 2px solid var(--primary);
+      background: white;
+      color: var(--primary);
+      font-weight: 800;
+      border-radius: 8px;
+      cursor: pointer;
+      font-size: 15px;
+      transition: all 0.2s;
+    }
+    .tab-btn.active {
+      background: var(--primary);
+      color: white;
+    }
+
+    .container {
+      max-width: 1000px;
+      margin: 0 auto;
+      background: var(--card);
+      border-radius: 12px;
+      box-shadow: 0 4px 15px rgba(0,0,0,0.06);
+      padding: 25px;
+      border-top: 5px solid var(--primary);
+    }
+
+    .app-header {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      border-bottom: 2px solid #edf2f7;
+      padding-bottom: 15px;
+      margin-bottom: 20px;
+    }
+    .app-header img { height: 60px; object-fit: contain; }
+    .app-header-title { text-align: center; }
+    .app-header-title h2 { margin: 0; color: var(--primary); font-size: 20px; font-weight: 800; }
+    .app-header-title p { margin: 3px 0 0 0; color: var(--gold); font-weight: 700; font-size: 14px; }
+
+    .grid-3 {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+      gap: 12px;
+      margin-bottom: 15px;
+    }
+    label { display: block; font-weight: 700; font-size: 13px; color: var(--primary); margin-bottom: 5px; }
+    select, input {
+      width: 100%;
+      padding: 9px 12px;
+      border: 1.5px solid var(--border);
+      border-radius: 7px;
+      outline: none;
+      font-size: 14px;
+    }
+    select:focus, input:focus { border-color: var(--primary); }
+
+    .days-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(180px, 1fr));
+      gap: 10px;
+      margin-top: 15px;
+    }
+    .day-box {
+      background: #fdfefe;
+      border: 1px solid var(--border);
+      border-top: 3px solid var(--gold);
+      border-radius: 8px;
+      padding: 10px;
+    }
+    .day-box h4 { margin: 0 0 8px 0; color: var(--primary); font-size: 14px; text-align: center; }
+    .day-box input { margin-bottom: 6px; font-size: 13px; padding: 6px 8px; }
+
+    .btn-save {
+      width: 100%;
+      background: var(--primary);
+      color: white;
+      padding: 12px;
+      border: none;
+      border-radius: 8px;
+      font-size: 16px;
+      font-weight: 800;
+      cursor: pointer;
+      margin-top: 15px;
+    }
+    .btn-save:hover { background: #0c3934; }
+
+    .notice {
+      display: none;
+      padding: 8px 12px;
+      background: #eff6ff;
+      border: 1px solid #bfdbfe;
+      color: #1e40af;
+      border-radius: 6px;
+      margin-top: 10px;
+      font-size: 13px;
+      font-weight: 600;
+    }
+
+    /* ===================================================
+       قالب الورقة الرسمية (معاينة حية ومطابقة للطباعة)
+       =================================================== */
+    .sheet-wrapper {
+      margin-top: 30px;
+      background: white;
+      padding: 25px;
+      border: 2px solid var(--gold-border);
+      border-radius: 12px;
+    }
+    
+    .official-header {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      margin-bottom: 12px;
+    }
+    .official-header-right { text-align: right; font-size: 11px; font-weight: 700; color: #475569; line-height: 1.5; }
+    .official-header-logo img { height: 65px; }
+
+    .plan-title-bar {
+      background: var(--primary);
+      color: white;
+      text-align: center;
+      font-size: 17px;
+      font-weight: 800;
+      padding: 7px;
+      border-radius: 6px;
+      margin-bottom: 12px;
+    }
+
+    .meta-cards-grid {
+      display: grid;
+      grid-template-columns: repeat(4, 1fr);
+      gap: 10px;
+      margin-bottom: 15px;
+    }
+    .meta-card {
+      border: 1.5px solid var(--gold-border);
+      background: #fffdf9;
+      border-radius: 8px;
+      padding: 6px 4px;
+      text-align: center;
+    }
+    .meta-card .lbl { font-size: 11px; color: #78716c; font-weight: 700; margin-bottom: 2px; }
+    .meta-card .val { font-size: 13px; color: #1c1917; font-weight: 800; }
+
+    .plan-table {
+      width: 100%;
+      border-collapse: collapse;
+      margin-bottom: 15px;
+    }
+    .plan-table th, .plan-table td {
+      border: 1px solid #94a3b8;
+      padding: 6px 8px;
+      text-align: center;
+      font-size: 12px;
+    }
+    .plan-table th {
+      background: var(--primary);
+      color: white;
+      font-weight: 700;
+    }
+    .plan-table td.subject-name {
+      font-weight: 800;
+      color: var(--primary);
+      background: #f8fafc;
+      width: 15%;
+    }
+    .cell-content { text-align: right; font-size: 11px; }
+    .cell-content .lsn { font-weight: 700; color: #0f172a; margin-bottom: 3px; }
+    .cell-content .hw { color: #b45309; font-weight: 600; }
+
+    .official-footer {
+      border: 1.5px solid var(--gold-border);
+      background: #fffdf9;
+      border-radius: 8px;
+      padding: 6px;
+      text-align: center;
+      font-weight: 800;
+      font-size: 13px;
+      color: var(--primary);
+      margin-top: 10px;
+    }
+    .footer-sub {
+      text-align: center;
+      font-size: 11px;
+      font-weight: 700;
+      color: #64748b;
+      margin-top: 8px;
+    }
+
+    @media print {
+      body { background: white; padding: 0; }
+      .no-print { display: none !important; }
+      .sheet-wrapper {
+        border: 2px solid var(--gold-border) !important;
+        padding: 15px !important;
+        margin: 0 !important;
+        width: 100% !important;
+        box-shadow: none !important;
+      }
+      .plan-table th, .plan-title-bar {
+        background-color: var(--primary) !important;
+        color: white !important;
+        -webkit-print-color-adjust: exact;
+        print-color-adjust: exact;
+      }
+    }
+  </style>
+</head>
+<body>
+
+  <!-- شريط التبديل العلوي -->
+  <div class="nav-tabs no-print">
+    <button class="tab-btn active" id="tabTeacher" onclick="switchView('teacher')">بوابة المعلم (إدخال خطة مادة)</button>
+    <button class="tab-btn" id="tabAdmin" onclick="switchView('admin')">لوحة الإشراف (توليد وطباعة PDF)</button>
+  </div>
+
+  <div class="container">
+    
+    <!-- قسم إدخال المعلم -->
+    <div id="teacherSection" class="no-print">
+      <div class="app-header">
+        <div class="app-header-title">
+          <h2>إدخال الخطة الأسبوعية</h2>
+          <p>مدارس البيارق الأهلية - القسم الابتدائي</p>
+        </div>
+        <div>
+          <img src="logo.jpg" alt="مدارس البيارق" id="topLogo" onerror="this.style.display='none'">
+        </div>
+      </div>
+
+      <div class="grid-3">
+        <div>
+          <label>الصف الدراسي:</label>
+          <select id="teacherGrade" onchange="loadClassPlan()">
+            <option value="الصف الأول">الصف الأول</option>
+            <option value="الصف الثاني">الصف الثاني</option>
+            <option value="الصف الثالث">الصف الثالث</option>
+            <option value="الصف الرابع" selected>الصف الرابع</option>
+            <option value="الصف الخامس">الصف الخامس</option>
+            <option value="الصف السادس">الصف السادس</option>
+          </select>
+        </div>
+
+        <div>
+          <label>رقم الأسبوع:</label>
+          <input type="number" id="teacherWeek" value="6" min="1" max="18" onchange="loadClassPlan()">
+        </div>
+
+        <div>
+          <label>المادة الدراسية:</label>
+          <select id="teacherSubject" onchange="checkExistingSubjectData()">
+            <option value="القرآن الكريم والدراسات الإسلامية">القرآن الكريم والدراسات الإسلامية</option>
+            <option value="لغتي">لغتي</option>
+            <option value="الرياضيات">الرياضيات</option>
+            <option value="English">English</option>
+            <option value="Science">Science</option>
+            <option value="MATH">MATH</option>
+            <option value="اجتماعيات">اجتماعيات</option>
+            <option value="العلوم">العلوم</option>
+          </select>
+        </div>
+      </div>
+
+      <div id="existingNotice" class="notice">ℹ️ تم استرجاع البيانات المسجلة مسبقاً لهذه المادة، يمكنك التعديل عليها مباشرة والحفظ.</div>
+
+      <div class="days-grid">
+        <div class="day-box">
+          <h4>الأحد</h4>
+          <input type="text" id="sun_l" placeholder="موضوع الدرس">
+          <input type="text" id="sun_w" placeholder="الواجب">
+        </div>
+        <div class="day-box">
+          <h4>الإثنين</h4>
+          <input type="text" id="mon_l" placeholder="موضوع الدرس">
+          <input type="text" id="mon_w" placeholder="الواجب">
+        </div>
+        <div class="day-box">
+          <h4>الثلاثاء</h4>
+          <input type="text" id="tue_l" placeholder="موضوع الدرس">
+          <input type="text" id="tue_w" placeholder="الواجب">
+        </div>
+        <div class="day-box">
+          <h4>الأربعاء</h4>
+          <input type="text" id="wed_l" placeholder="موضوع الدرس">
+          <input type="text" id="wed_w" placeholder="الواجب">
+        </div>
+        <div class="day-box">
+          <h4>الخميس</h4>
+          <input type="text" id="thu_l" placeholder="موضوع الدرس">
+          <input type="text" id="thu_w" placeholder="الواجب">
+        </div>
+      </div>
+
+      <button class="btn-save" id="saveButton" onclick="savePlan()">⚡ حفظ خطة المادة فورياً</button>
+      <div style="font-size:13px; color:#64748b; margin-top:8px; text-align:center;">
+        * المعلم يعدل فقط على مادته، وباقي المواد المسجلة تظهر في الجدول بالأسفل لحفظ حقوق الجميع وعدم التداخل.
+      </div>
+    </div>
+
+    <!-- قسم الإدارة -->
+    <div id="adminSection" class="no-print" style="display:none;">
+      <div class="app-header">
+        <div class="app-header-title">
+          <h2>لوحة الإشراف والمتابعة</h2>
+          <p>عرض وتصدير الخطط الأسبوعية كـ PDF</p>
+        </div>
+      </div>
+      <div class="grid-3">
+        <div>
+          <label>الصف:</label>
+          <select id="adminGrade" onchange="syncAdminFilters()">
+            <option value="الصف الأول">الصف الأول</option>
+            <option value="الصف الثاني">الصف الثاني</option>
+            <option value="الصف الثالث">الصف الثالث</option>
+            <option value="الصف الرابع" selected>الصف الرابع</option>
+            <option value="الصف الخامس">الصف الخامس</option>
+            <option value="الصف السادس">الصف السادس</option>
+          </select>
+        </div>
+        <div>
+          <label>الأسبوع:</label>
+          <input type="number" id="adminWeek" value="6" onchange="syncAdminFilters()">
+        </div>
+        <div>
+          <label>إجراء:</label>
+          <button class="btn-save" style="margin-top:0;" onclick="window.print()">🖨️ طباعة / حفظ كـ PDF</button>
+        </div>
+      </div>
+    </div>
+
+    <!-- ==============================================
+         شاشة العرض الحي والمطابقة للصورة الرسمية
+         ============================================== -->
+    <div class="sheet-wrapper" id="printableSheet">
+      
+      <div class="official-header">
+        <div class="official-header-right">
+          المملكة العربية السعودية<br>
+          وزارة التعليم — الإدارة العامة للتعليم بمنطقة الرياض<br>
+          القسم الابتدائي
+        </div>
+        <div class="official-header-logo">
+          <img src="logo.jpg" alt="مدارس البيارق الأهلية" onerror="this.style.display='none'">
+        </div>
+      </div>
+
+      <div class="plan-title-bar" id="displayPlanTitle">
+        الخطة الأسبوعية للصف الرابع
+      </div>
+
+      <div class="meta-cards-grid">
+        <div class="meta-card">
+          <div class="lbl">الصف</div>
+          <div class="val" id="dispGrade">الصف الرابع</div>
+        </div>
+        <div class="meta-card">
+          <div class="lbl">الأسبوع</div>
+          <div class="val" id="dispWeek">رقم 6</div>
+        </div>
+        <div class="meta-card">
+          <div class="lbl">التاريخ الهجري</div>
+          <div class="val" id="dispHijri" contenteditable="true">اضغط لكتابة التاريخ الهجري</div>
+        </div>
+        <div class="meta-card">
+          <div class="lbl">التاريخ الميلادي</div>
+          <div class="val" id="dispGregorian" contenteditable="true">اضغط لكتابة التاريخ الميلادي</div>
+        </div>
+      </div>
+
+      <table class="plan-table">
+        <thead>
+          <tr>
+            <th>المادة / اليوم</th>
+            <th>الأحد</th>
+            <th>الإثنين</th>
+            <th>الثلاثاء</th>
+            <th>الأربعاء</th>
+            <th>الخميس</th>
+          </tr>
+        </thead>
+        <tbody id="planTableBody">
+          <!-- يتم التحديث لحظياً من Firebase -->
+        </tbody>
+      </table>
+
+      <div class="official-footer">
+        رؤيتنا: بناء الشخصية المتكاملة للطالب
+      </div>
+      <div class="footer-sub">
+        مدارس البيارق الأهلية • AL BAYARIQ PRIVATE SCHOOLS • الإشراف التربوي
+      </div>
+    </div>
+
+  </div>
+
+  <script>
+    // إعدادات Firebase الخاصة بمشروعك
+    const firebaseConfig = {
+      apiKey: "AIzaSyBUEDHUAK-6KQOwnsKECYEwsWZzOU2_LWs",
+      authDomain: "bayariq-weekly-plan.firebaseapp.com",
+      databaseURL: "https://bayariq-weekly-plan-default-rtdb.firebaseio.com",
+      projectId: "bayariq-weekly-plan",
+      storageBucket: "bayariq-weekly-plan.firebasestorage.app",
+      messagingSenderId: "693181426466",
+      appId: "1:693181426466:web:174246f36473087bfa137b"
+    };
+
+    if (!firebase.apps.length) {
+      firebase.initializeApp(firebaseConfig);
+    }
+    const db = firebase.database();
+
+    const defaultSubjects = [
+      "القرآن الكريم والدراسات الإسلامية",
+      "لغتي",
+      "الرياضيات",
+      "English",
+      "Science",
+      "MATH",
+      "اجتماعيات",
+      "العلوم"
+    ];
+
+    let currentClassData = {};
+
+    function switchView(view) {
+      if(view === 'teacher') {
+        document.getElementById('teacherSection').style.display = 'block';
+        document.getElementById('adminSection').style.display = 'none';
+        document.getElementById('tabTeacher').classList.add('active');
+        document.getElementById('tabAdmin').classList.remove('active');
+      } else {
+        document.getElementById('teacherSection').style.display = 'none';
+        document.getElementById('adminSection').style.display = 'block';
+        document.getElementById('tabAdmin').classList.add('active');
+        document.getElementById('tabTeacher').classList.remove('active');
+      }
+    }
+
+    function syncAdminFilters() {
+      document.getElementById('teacherGrade').value = document.getElementById('adminGrade').value;
+      document.getElementById('teacherWeek').value = document.getElementById('adminWeek').value;
+      loadClassPlan();
+    }
+
+    function loadClassPlan() {
+      const grade = document.getElementById('teacherGrade').value;
+      const week = document.getElementById('teacherWeek').value;
+
+      document.getElementById('displayPlanTitle').innerText = `الخطة الأسبوعية لـ ${grade}`;
+      document.getElementById('dispGrade').innerText = grade;
+      document.getElementById('dispWeek').innerText = `رقم ${week}`;
+
+      const path = `weekly_plans/week_${week}/${grade}`;
+      db.ref(path).on('value', (snapshot) => {
+        currentClassData = snapshot.val() || {};
+        renderTable();
+        checkExistingSubjectData();
+      });
+    }
+
+    function renderTable() {
+      const tbody = document.getElementById('planTableBody');
+      tbody.innerHTML = '';
+
+      defaultSubjects.forEach(sub => {
+        const cleanKey = sub.replace(/[\/\.\#\$\[\]]/g, '_');
+        const data = currentClassData[cleanKey] || null;
+
+        const row = document.createElement('tr');
+        let rowHtml = `<td class="subject-name">${sub}</td>`;
+        const days = ['sunday', 'monday', 'tuesday', 'wednesday', 'thursday'];
+
+        days.forEach(day => {
+          if (data && data.days && data.days[day] && (data.days[day].lesson || data.days[day].hw)) {
+            rowHtml += `<td>
+              <div class="cell-content">
+                <div class="lsn">${data.days[day].lesson || '—'}</div>
+                ${data.days[day].hw ? `<div class="hw"> الواجب: ${data.days[day].hw}</div>` : ''}
+              </div>
+            </td>`;
+          } else {
+            rowHtml += `<td style="color:#cbd5e1;">—</td>`;
+          }
+        });
+
+        row.innerHTML = rowHtml;
+        tbody.appendChild(row);
+      });
+    }
+
+    function checkExistingSubjectData() {
+      const sub = document.getElementById('teacherSubject').value;
+      const cleanKey = sub.replace(/[\/\.\#\$\[\]]/g, '_');
+      const data = currentClassData[cleanKey];
+      const notice = document.getElementById('existingNotice');
+
+      if (data && data.days) {
+        document.getElementById('sun_l').value = data.days.sunday?.lesson || '';
+        document.getElementById('sun_w').value = data.days.sunday?.hw || '';
+        document.getElementById('mon_l').value = data.days.monday?.lesson || '';
+        document.getElementById('mon_w').value = data.days.monday?.hw || '';
+        document.getElementById('tue_l').value = data.days.tuesday?.lesson || '';
+        document.getElementById('tue_w').value = data.days.tuesday?.hw || '';
+        document.getElementById('wed_l').value = data.days.wednesday?.lesson || '';
+        document.getElementById('wed_w').value = data.days.wednesday?.hw || '';
+        document.getElementById('thu_l').value = data.days.thursday?.lesson || '';
+        document.getElementById('thu_w').value = data.days.thursday?.hw || '';
+        notice.style.display = 'block';
+      } else {
+        clearInputs();
+        notice.style.display = 'none';
+      }
+    }
+
+    function clearInputs() {
+      ['sun_l','sun_w','mon_l','mon_w','tue_l','tue_w','wed_l','wed_w','thu_l','thu_w'].forEach(id => {
+        document.getElementById(id).value = '';
+      });
+    }
+
+    function savePlan() {
+      const btn = document.getElementById('saveButton');
+      const grade = document.getElementById('teacherGrade').value;
+      const week = document.getElementById('teacherWeek').value;
+      const subject = document.getElementById('teacherSubject').value;
+      const cleanKey = subject.replace(/[\/\.\#\$\[\]]/g, '_');
+
+      btn.disabled = true;
+      btn.innerText = "⏳ جاري الحفظ...";
+
+      const planData = {
+        subject: subject,
+        days: {
+          sunday: { lesson: document.getElementById('sun_l').value.trim(), hw: document.getElementById('sun_w').value.trim() },
+          monday: { lesson: document.getElementById('mon_l').value.trim(), hw: document.getElementById('mon_w').value.trim() },
+          tuesday: { lesson: document.getElementById('tue_l').value.trim(), hw: document.getElementById('tue_w').value.trim() },
+          wednesday: { lesson: document.getElementById('wed_l').value.trim(), hw: document.getElementById('wed_w').value.trim() },
+          thursday: { lesson: document.getElementById('thu_l').value.trim(), hw: document.getElementById('thu_w').value.trim() }
+        }
+      };
+
+      const path = `weekly_plans/week_${week}/${grade}/${cleanKey}`;
+      db.ref(path).set(planData)
+        .then(() => {
+          btn.disabled = false;
+          btn.innerText = "⚡ حفظ خطة المادة فورياً";
+          alert('✓ تم حفظ الخطة بنجاح وتحديث الجدول فوراً!');
+        })
+        .catch(err => {
+          btn.disabled = false;
+          btn.innerText = "⚡ حفظ خطة المادة فورياً";
+          alert('خطأ أثناء الحفظ: ' + err.message);
+        });
+    }
+
+    window.onload = () => {
+      loadClassPlan();
+    };
+  </script>
+</body>
+</html>
