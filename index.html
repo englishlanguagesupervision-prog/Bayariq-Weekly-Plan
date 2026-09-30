@@ -3,392 +3,717 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>نظام الخطط الأسبوعية - مدارس البيارق الأهلية</title>
-  
-  <link href="https://fonts.googleapis.com/css2?family=Tajawal:wght@400;500;700;800&display=swap" rel="stylesheet">
-  
-  <!-- Firebase App & Database -->
-  <script src="https://www.gstatic.com/firebasejs/8.10.1/firebase-app.js"></script>
-  <script src="https://www.gstatic.com/firebasejs/8.10.1/firebase-database.js"></script>
-
+  <title>بوابة البيارق الأهلية - الخطط الأسبوعية والواجبات اليومية</title>
+  <link href="https://fonts.googleapis.com/css2?family=Cairo:wght@400;600;700;800;900&display=swap" rel="stylesheet">
   <style>
     :root {
-      --primary: #104c45;
-      --gold: #b38b47;
-      --gold-border: #cfab6c;
-      --bg: #f8fafc;
-      --card: #ffffff;
-      --text: #1e293b;
-      --border: #cbd5e1;
+      --primary: #0e402d;       /* أخضر هوية البيارق */
+      --primary-dark: #07261a;
+      --gold: #c39a48;          /* ذهبي البيارق */
+      --gold-light: #fdfaf3;
+      --bg: #f4f7f6;
+      --card-bg: #ffffff;
+      --text: #2d3748;
+      --border: #dcdfe4;
       --danger: #dc2626;
+      --whatsapp: #25D366;
+      --info-bg: #eff6ff;
+      --info-border: #bfdbfe;
+      --info-text: #1d4ed8;
+      --lock-bg: #fef2f2;
+      --lock-border: #f87171;
+      --lock-text: #991b1b;
     }
 
-    * { box-sizing: border-box; font-family: 'Tajawal', sans-serif; }
-    body { background-color: var(--bg); margin: 0; padding: 15px; color: var(--text); }
-    .no-print { display: block; }
+    * {
+      box-sizing: border-box;
+      margin: 0;
+      padding: 0;
+      font-family: 'Cairo', sans-serif;
+    }
 
-    /* شريط التبديل العلوي */
-    .nav-tabs {
-      max-width: 1050px;
-      margin: 0 auto 15px auto;
-      display: flex;
-      gap: 10px;
-      justify-content: center;
-    }
-    .tab-btn {
-      padding: 10px 22px;
-      border: 2px solid var(--primary);
-      background: white;
-      color: var(--primary);
-      font-weight: 800;
-      border-radius: 8px;
-      cursor: pointer;
-      font-size: 15px;
-      transition: all 0.2s;
-    }
-    .tab-btn.active {
-      background: var(--primary);
-      color: white;
+    body {
+      background-color: var(--bg);
+      color: var(--text);
+      padding: 15px;
     }
 
     .container {
-      max-width: 1050px;
+      max-width: 1100px;
       margin: 0 auto;
-      background: var(--card);
-      border-radius: 12px;
-      box-shadow: 0 4px 15px rgba(0,0,0,0.06);
-      padding: 25px;
-      border-top: 5px solid var(--primary);
-    }
-
-    .app-header {
       display: flex;
-      justify-content: space-between;
-      align-items: center;
-      border-bottom: 2px solid #edf2f7;
-      padding-bottom: 15px;
-      margin-bottom: 20px;
-    }
-    .app-header-title { text-align: right; }
-    .app-header-title h2 { margin: 0; color: var(--primary); font-size: 20px; font-weight: 800; }
-    .app-header-title p { margin: 3px 0 0 0; color: var(--gold); font-weight: 700; font-size: 14px; }
-
-    .logo-img {
-      height: 65px;
-      max-width: 230px;
-      object-fit: contain;
+      flex-direction: column;
+      gap: 15px;
     }
 
-    .grid-4 {
-      display: grid;
-      grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
-      gap: 12px;
-      margin-bottom: 15px;
-    }
-    label { display: block; font-weight: 700; font-size: 13px; color: var(--primary); margin-bottom: 5px; }
-    select, input {
-      width: 100%;
-      padding: 9px 12px;
-      border: 1.5px solid var(--border);
-      border-radius: 7px;
-      outline: none;
-      font-size: 14px;
-    }
-    select:focus, input:focus { border-color: var(--primary); }
-
-    .days-grid {
-      display: grid;
-      grid-template-columns: repeat(auto-fit, minmax(170px, 1fr));
+    /* شريط البوابات */
+    .portal-nav {
+      display: flex;
+      justify-content: center;
       gap: 10px;
-      margin-top: 15px;
-    }
-    .day-box {
-      background: #fdfefe;
-      border: 1px solid var(--border);
-      border-top: 3px solid var(--gold);
-      border-radius: 8px;
+      flex-wrap: wrap;
+      background: #fff;
       padding: 10px;
-    }
-    .day-box h4 { margin: 0 0 8px 0; color: var(--primary); font-size: 14px; text-align: center; }
-    .day-box input {
-      width: 100%;
+      border-radius: 12px;
       border: 1px solid var(--border);
-      border-radius: 5px;
-      margin-bottom: 6px;
-      font-size: 13px;
-      padding: 6px 8px;
     }
 
-    .btn-save {
-      width: 100%;
-      background: var(--primary);
-      color: white;
-      padding: 12px;
-      border: none;
+    .nav-btn {
+      padding: 8px 16px;
       border-radius: 8px;
-      font-size: 16px;
-      font-weight: 800;
+      font-weight: 700;
+      font-size: 0.92rem;
+      border: 2px solid var(--primary);
       cursor: pointer;
-      margin-top: 15px;
-      transition: background 0.2s;
+      background: #fff;
+      color: var(--primary);
+      transition: all 0.2s ease;
+      display: inline-flex;
+      align-items: center;
+      gap: 6px;
     }
-    .btn-save:hover { background: #0c3934; }
 
-    .notice {
-      display: none;
-      padding: 8px 12px;
-      background: #eff6ff;
-      border: 1px solid #bfdbfe;
-      color: #1e40af;
-      border-radius: 6px;
-      margin-top: 10px;
-      font-size: 13px;
+    .nav-btn.active, .nav-btn:hover {
+      background-color: var(--primary);
+      color: #fff;
+    }
+
+    .nav-btn.admin-btn {
+      border-color: #854d0e;
+      color: #854d0e;
+    }
+
+    .nav-btn.admin-btn.active, .nav-btn.admin-btn:hover {
+      background-color: #854d0e;
+      color: #fff;
+    }
+
+    /* الأيقونتان الرئيسيتان للتبديل */
+    .system-switcher {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 15px;
+    }
+
+    .switch-card {
+      background: #fff;
+      border: 2px solid var(--border);
+      border-radius: 14px;
+      padding: 18px;
+      text-align: center;
+      cursor: pointer;
+      transition: all 0.25s ease;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      gap: 6px;
+    }
+
+    .switch-card:hover {
+      transform: translateY(-2px);
+      border-color: var(--gold);
+    }
+
+    .switch-card.active {
+      border-color: var(--primary);
+      background: linear-gradient(180deg, #ffffff 0%, #f0fdf4 100%);
+      box-shadow: 0 4px 15px rgba(14, 64, 45, 0.12);
+    }
+
+    .switch-card .icon {
+      font-size: 2rem;
+    }
+
+    .switch-card h3 {
+      font-size: 1.2rem;
+      color: var(--primary);
+      font-weight: 800;
+    }
+
+    .switch-card p {
+      font-size: 0.85rem;
+      color: #64748b;
       font-weight: 600;
     }
 
-    /* لوحة الإدارة وقفل الحماية */
-    .admin-auth-box {
-      max-width: 400px;
-      margin: 20px auto;
-      text-align: center;
-      padding: 25px;
-      border: 1.5px solid var(--gold-border);
-      border-radius: 10px;
-      background: #fffdfa;
-    }
-    .admin-controls-grid {
-      display: grid;
-      grid-template-columns: 1fr 1fr 1fr auto;
-      gap: 12px;
-      align-items: flex-end;
-      margin-bottom: 20px;
-    }
-    .btn-danger {
-      background: var(--danger);
-      color: white;
-      padding: 10px 18px;
-      border: none;
-      border-radius: 7px;
-      font-weight: 700;
-      cursor: pointer;
-    }
-    .btn-danger:hover { background: #b91c1c; }
-    .btn-secondary {
-      background: #475569;
-      color: white;
-      padding: 10px 18px;
-      border: none;
-      border-radius: 7px;
-      font-weight: 700;
-      cursor: pointer;
+    .card {
+      background: var(--card-bg);
+      border-radius: 12px;
+      padding: 20px;
+      box-shadow: 0 3px 10px rgba(0, 0, 0, 0.04);
+      border: 1px solid var(--border);
     }
 
-    /* ===================================================
-       قالب الورقة الرسمية (معاينة حية ومطابقة للطباعة)
-       =================================================== */
-    .sheet-wrapper {
-      margin-top: 30px;
-      background: white;
-      padding: 25px;
-      border: 2px solid var(--gold-border);
-      border-radius: 12px;
+    .card-title {
+      color: var(--primary);
+      font-size: 1.15rem;
+      font-weight: 700;
+      margin-bottom: 15px;
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      border-bottom: 2px solid var(--gold);
+      padding-bottom: 6px;
     }
-    
+
+    .form-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(180px, 1fr));
+      gap: 12px;
+      margin-bottom: 12px;
+    }
+
+    .form-group {
+      display: flex;
+      flex-direction: column;
+      gap: 5px;
+    }
+
+    label {
+      font-weight: 700;
+      font-size: 0.88rem;
+      color: var(--primary);
+    }
+
+    select, input, textarea {
+      padding: 9px 11px;
+      border: 1.5px solid var(--border);
+      border-radius: 8px;
+      font-size: 0.9rem;
+      outline: none;
+      background-color: #fff;
+      transition: 0.2s;
+    }
+
+    select:focus, input:focus, textarea:focus {
+      border-color: var(--primary);
+      box-shadow: 0 0 0 3px rgba(14, 64, 45, 0.12);
+    }
+
+    textarea {
+      resize: vertical;
+      min-height: 42px;
+    }
+
+    .btn {
+      padding: 9px 18px;
+      border: none;
+      border-radius: 8px;
+      font-weight: 700;
+      font-size: 0.9rem;
+      cursor: pointer;
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      gap: 6px;
+      transition: 0.2s;
+    }
+
+    .btn-primary { background-color: var(--primary); color: #fff; }
+    .btn-primary:hover { background-color: var(--primary-dark); }
+    .btn-print { background-color: var(--gold); color: #fff; }
+    .btn-print:hover { background-color: #a88235; }
+    .btn-whatsapp { background-color: var(--whatsapp); color: #fff; }
+    .btn-whatsapp:hover { background-color: #1eb855; }
+    .btn-danger { background-color: #fee2e2; color: var(--danger); border: 1px solid #fca5a5; }
+    .btn-danger:hover { background-color: #fecaca; }
+    .btn-edit { background-color: #fef9c3; color: #854d0e; border: 1px solid #fde047; }
+    .btn-edit:hover { background-color: #fef08a; }
+
+    /* شريط القفل التحذيري */
+    .lock-banner {
+      background-color: var(--lock-bg);
+      border: 2px solid var(--lock-border);
+      color: var(--lock-text);
+      padding: 14px 18px;
+      border-radius: 10px;
+      font-size: 0.98rem;
+      font-weight: 800;
+      display: none;
+      align-items: center;
+      gap: 10px;
+      box-shadow: 0 2px 8px rgba(220, 38, 38, 0.08);
+    }
+
+    /* شريط التنبيه الأزرق */
+    .info-bar {
+      background-color: var(--info-bg);
+      border: 1px solid var(--info-border);
+      color: var(--info-text);
+      padding: 10px 14px;
+      border-radius: 8px;
+      font-size: 0.9rem;
+      font-weight: 700;
+      margin-bottom: 14px;
+      display: flex;
+      align-items: center;
+      gap: 6px;
+    }
+
+    /* شبكة أيام الخطة الأسبوعية */
+    .days-grid {
+      display: grid;
+      grid-template-columns: repeat(5, 1fr);
+      gap: 10px;
+      margin-bottom: 15px;
+    }
+
+    .day-box {
+      border: 1.5px solid #d4af37;
+      border-radius: 10px;
+      background: #fff;
+      overflow: hidden;
+      display: flex;
+      flex-direction: column;
+    }
+
+    .day-box-header {
+      background: #fff;
+      color: var(--primary);
+      font-weight: 800;
+      text-align: center;
+      padding: 8px 5px;
+      font-size: 0.95rem;
+      border-bottom: 1.5px solid #d4af37;
+    }
+
+    .day-box-body {
+      padding: 8px;
+      display: flex;
+      flex-direction: column;
+      gap: 8px;
+    }
+
+    .day-box-body input {
+      width: 100%;
+      border: 1px solid #cbd5e1;
+      border-radius: 6px;
+      padding: 7px;
+      font-size: 0.85rem;
+    }
+
+    .btn-save-full {
+      width: 100%;
+      background-color: var(--primary);
+      color: #fff;
+      padding: 13px;
+      font-size: 1.05rem;
+      font-weight: 800;
+      border: none;
+      border-radius: 8px;
+      cursor: pointer;
+      transition: 0.2s;
+    }
+
+    .btn-save-full:hover {
+      background-color: var(--primary-dark);
+    }
+
+    .hint-text {
+      text-align: center;
+      font-size: 0.85rem;
+      color: #64748b;
+      margin-top: 8px;
+      font-weight: 600;
+    }
+
+    /* ورقة المعاينة والطباعة الرسمية A4 */
+    .print-sheet {
+      background: #ffffff;
+      padding: 24px 28px;
+      border-radius: 10px;
+      border: 1px solid var(--border);
+      position: relative;
+    }
+
     .official-header {
       display: flex;
       justify-content: space-between;
       align-items: center;
-      margin-bottom: 12px;
-    }
-    .official-header-right { 
-      text-align: right; 
-      font-size: 12px; 
-      font-weight: 700; 
-      color: #334155; 
-      line-height: 1.6; 
+      border-bottom: 2px solid var(--primary);
+      padding-bottom: 12px;
+      margin-bottom: 15px;
     }
 
-    .plan-title-bar {
-      background: var(--primary);
-      color: white;
+    .header-text-ar {
+      font-size: 0.88rem;
+      line-height: 1.6;
+      font-weight: 700;
+      color: #2d3748;
+      text-align: right;
+      flex: 1.2;
+    }
+
+    .header-center {
       text-align: center;
-      font-size: 17px;
-      font-weight: 800;
-      padding: 8px;
-      border-radius: 6px;
-      margin-bottom: 12px;
+      flex: 1;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      gap: 4px;
     }
 
-    .meta-cards-grid {
+    .header-center img {
+      max-height: 75px;
+      max-width: 130px;
+      object-fit: contain;
+    }
+
+    .header-center h2 {
+      color: var(--primary);
+      font-size: 1.35rem;
+      font-weight: 800;
+      white-space: nowrap;
+    }
+
+    .header-text-en {
+      font-size: 0.82rem;
+      line-height: 1.5;
+      font-weight: 700;
+      color: #2d3748;
+      text-align: left;
+      direction: ltr;
+      flex: 1.2;
+    }
+
+    .meta-bar {
       display: grid;
       grid-template-columns: repeat(4, 1fr);
       gap: 10px;
-      margin-bottom: 15px;
-    }
-    .meta-card {
-      border: 1.5px solid var(--gold-border);
-      background: #fffdf9;
-      border-radius: 8px;
-      padding: 6px 4px;
+      background: var(--gold-light);
+      padding: 10px;
+      border-radius: 7px;
+      border: 1px solid #ebd9b5;
+      margin-bottom: 16px;
       text-align: center;
     }
-    .meta-card .lbl { font-size: 11px; color: #78716c; font-weight: 700; margin-bottom: 2px; }
-    .meta-card .val { font-size: 13px; color: #1c1917; font-weight: 800; }
 
-    /* جدول الخطة - مضبوط لإنزال الأسطر عمودياً */
-    .plan-table {
+    .meta-item span {
+      display: block;
+      font-size: 0.8rem;
+      color: #64748b;
+      font-weight: 600;
+    }
+
+    .meta-item strong {
+      font-size: 0.98rem;
+      color: var(--primary);
+    }
+
+    .table-container {
+      width: 100%;
+      overflow: visible;
+    }
+
+    table {
       width: 100%;
       table-layout: fixed;
       border-collapse: collapse;
       margin-bottom: 15px;
     }
-    .plan-table th, .plan-table td {
-      border: 1px solid #94a3b8;
+
+    th, td {
+      border: 1.5px solid #cbd5e1;
       padding: 8px 6px;
       text-align: center;
-      vertical-align: top;
-      word-wrap: break-word;
+      font-size: 0.88rem;
+      vertical-align: middle;
       word-break: break-word;
-      white-space: normal;
-    }
-    .plan-table th {
-      background: var(--primary);
-      color: white;
-      font-weight: 700;
-      font-size: 12px;
-    }
-    .plan-table th:first-child, .plan-table td.subject-name {
-      width: 17%;
-    }
-    .plan-table td.subject-name {
-      font-weight: 800;
-      color: var(--primary);
-      background: #f8fafc;
-      font-size: 12px;
-      text-align: center;
-    }
-    .teacher-badge {
-      display: block;
-      font-size: 11px;
-      font-weight: 700;
-      color: var(--gold);
-      margin-top: 4px;
-    }
-
-    .admin-del-btn {
-      display: none;
-      background: #fee2e2;
-      color: #991b1b;
-      border: 1px solid #f87171;
-      border-radius: 4px;
-      font-size: 10px;
-      padding: 2px 5px;
-      cursor: pointer;
-      margin-top: 4px;
-    }
-
-    .cell-content { 
-      text-align: right; 
-      font-size: 11px; 
-      line-height: 1.45;
-    }
-    .cell-content .lsn { 
-      font-weight: 700; 
-      color: #0f172a; 
-      margin-bottom: 4px; 
-      white-space: pre-wrap;
-    }
-    .cell-content .hw { 
-      color: #b45309; 
-      font-weight: 700; 
-      background: #fffbeb;
-      padding: 3px 5px;
-      border-radius: 4px;
-      border-right: 2px solid var(--gold);
-      display: block;
+      overflow-wrap: anywhere;
       white-space: pre-wrap;
     }
 
-    .official-footer {
-      border: 1.5px solid var(--gold-border);
-      background: #fffdf9;
-      border-radius: 8px;
-      padding: 7px;
-      text-align: center;
-      font-weight: 800;
-      font-size: 13px;
-      color: var(--primary);
-      margin-top: 10px;
-    }
-    .footer-sub {
-      text-align: center;
-      font-size: 11px;
+    th {
+      background-color: var(--primary);
+      color: #ffffff;
       font-weight: 700;
-      color: #64748b;
-      margin-top: 8px;
+      font-size: 0.9rem;
     }
 
+    tr:nth-child(even) {
+      background-color: #f8fafc;
+    }
+
+    .text-right { text-align: right; }
+
+    .sheet-footer {
+      margin-top: 20px;
+      padding-top: 10px;
+      border-top: 1px solid var(--border);
+      text-align: center;
+      font-size: 0.92rem;
+      color: #4a5568;
+      font-weight: 700;
+    }
+
+    /* إعدادات الطباعة A4 */
     @page {
       size: A4 portrait;
-      margin: 8mm;
+      margin: 8mm 10mm;
     }
 
     @media print {
-      body { background: white; padding: 0; }
-      .no-print { display: none !important; }
-      .admin-del-btn { display: none !important; }
-      .container {
-        padding: 0 !important;
-        box-shadow: none !important;
-        max-width: 100% !important;
-        border: none !important;
-      }
-      .sheet-wrapper {
-        border: 2px solid var(--gold-border) !important;
-        padding: 12px !important;
+      html, body {
+        width: 100%;
         margin: 0 !important;
-        width: 100% !important;
-        border-radius: 8px !important;
+        padding: 0 !important;
+        background: #fff;
       }
-      .plan-table th, .plan-title-bar {
-        background-color: var(--primary) !important;
-        color: white !important;
-        -webkit-print-color-adjust: exact !important;
-        print-color-adjust: exact !important;
+      .no-print {
+        display: none !important;
       }
-      .meta-card, .official-footer {
-        -webkit-print-color-adjust: exact !important;
-        print-color-adjust: exact !important;
+      .container {
+        max-width: 100%;
+        gap: 0;
+      }
+      .print-sheet {
+        border: none;
+        padding: 0;
+      }
+      th {
+        background-color: #0e402d !important;
+        color: #fff !important;
+        -webkit-print-color-adjust: exact;
+        print-color-adjust: exact;
+      }
+      .meta-bar {
+        background-color: #fdfaf3 !important;
+        -webkit-print-color-adjust: exact;
+        print-color-adjust: exact;
+      }
+    }
+
+    @media(max-width: 800px) {
+      .days-grid {
+        grid-template-columns: 1fr;
       }
     }
   </style>
 </head>
 <body>
 
-  <!-- شريط التبديل العلوي -->
-  <div class="nav-tabs no-print">
-    <button class="tab-btn active" id="tabTeacher" onclick="switchView('teacher')">بوابة المعلم (إدخال مادة)</button>
-    <button class="tab-btn" id="tabAdmin" onclick="switchView('admin')">🔒 لوحة الإشراف والإدارة</button>
+<div class="container">
+
+  <!-- 1. شريط البوابات والصلاحيات -->
+  <div class="portal-nav no-print">
+    <button class="nav-btn active" id="btnParent" onclick="switchPortal('parent')">👨‍👩‍👧‍👦 بوابة ولي الأمر (عرض وطباعة)</button>
+    <button class="nav-btn" id="btnTeacher" onclick="switchPortal('teacher')">✍️ بوابة المعلم (إدخال)</button>
+    <button class="nav-btn admin-btn" id="btnAdmin" onclick="switchPortal('admin')">🔒 لوحة الإشراف والإدارة</button>
   </div>
 
-  <div class="container">
-    
-    <!-- قسم إدخال المعلم -->
-    <div id="teacherSection" class="no-print">
-      <div class="app-header">
-        <div class="app-header-title">
-          <h2>إدخال الخطة الأسبوعية</h2>
-          <p>مدارس البيارق الأهلية - القسم الابتدائي</p>
+  <!-- شريط القفل والتعطيل العام للجميع -->
+  <div id="lockoutBanner" class="lock-banner no-print">
+    <span>🔒</span>
+    <span id="lockoutMessageText">تم إغلاق وتجميد التعديل والإدخال من قِبل إدارة المدرسة.</span>
+  </div>
+
+  <!-- صندوق تحكم الأدمن في قفل النظام والرسائل المخصصة (يظهر للأدمن فقط) -->
+  <div class="card no-print admin-view" style="display: none; border-color: #dc2626; background: #fffaf0;">
+    <div class="card-title" style="color: #991b1b; border-bottom-color: #dc2626;">
+      🛡️️ إعدادات قفل النظام للجميع (التحكم الإداري)
+    </div>
+    <div style="display: flex; flex-direction: column; gap: 10px;">
+      <div style="display: flex; align-items: center; gap: 10px; flex-wrap: wrap;">
+        <label style="font-size: 1rem; color: #991b1b;">
+          <input type="checkbox" id="lockoutToggle" onchange="toggleLockoutSetting()" style="width: 18px; height: 18px; vertical-align: middle;">
+          <strong>تفعيل قفل التعديل والإدخال للمعلمين والطلاب</strong>
+        </label>
+        <span style="font-size: 0.85rem; color: #64748b;">(عند التفعيل يُمنع الجميع من الإضافة، ويبقى للأدمن فقط حق التعديل)</span>
+      </div>
+      <div class="form-group">
+        <label>نص رسالة الإغلاق المخصصة التي تظهر للجميع:</label>
+        <input type="text" id="lockoutCustomMessage" value="عزيزي المعلم / ولي الأمر: تم إغلاق تعديل الخطط والواجبات مؤقتاً للاعتماد النهائي من إدارة المدرسة." onchange="updateLockoutMessage()">
+      </div>
+    </div>
+  </div>
+
+  <!-- 2. الأيقونتان الرئيسيتان للتبديل -->
+  <div class="system-switcher no-print">
+    <div class="switch-card" id="cardWeekly" onclick="switchSystem('weekly')">
+      <div class="icon">📅</div>
+      <h3>الخطة الأسبوعية</h3>
+      <p>عرض وتوزيع الخطط الدراسية حتى الأسبوع 20</p>
+    </div>
+    <div class="switch-card active" id="cardDaily" onclick="switchSystem('daily')">
+      <div class="icon">📝</div>
+      <h3>الدروس والواجبات اليومية</h3>
+      <p>جدول الحصص اليومي (7 حصص) والتكليفات</p>
+    </div>
+  </div>
+
+  <!-- ==================== 1. قسم الدروس والواجبات اليومية ==================== -->
+  <div id="dailySectionContainer">
+    <!-- محددات البحث اليومي -->
+    <div class="card no-print">
+      <div class="form-grid" style="margin-bottom: 0;">
+        <div class="form-group">
+          <label>الصف الدراسي:</label>
+          <select id="gradeSelect" onchange="updateClassSection(); renderDailyTable();">
+            <option value="الصف الأول">الصف الأول</option>
+            <option value="الصف الثاني">الصف الثاني</option>
+            <option value="الصف الثالث">الصف الثالث</option>
+            <option value="الصف الرابع">الصف الرابع</option>
+            <option value="الصف الخامس">الصف الخامس</option>
+            <option value="الصف السادس" selected>الصف السادس</option>
+          </select>
         </div>
-        <div>
-          <img src="logo.jpg" alt="مدارس البيارق" class="logo-img" onerror="this.onerror=null; this.src='https://raw.githubusercontent.com/Aboroqaya/bayariq/main/logo.jpg';">
+
+        <div class="form-group">
+          <label>الفصل:</label>
+          <select id="sectionSelect" onchange="renderDailyTable();"></select>
+        </div>
+
+        <div class="form-group">
+          <label>اليوم:</label>
+          <select id="daySelect" onchange="renderDailyTable();">
+            <option value="الأحد">الأحد</option>
+            <option value="الإثنين">الإثنين</option>
+            <option value="الثلاثاء">الثلاثاء</option>
+            <option value="الأربعاء" selected>الأربعاء</option>
+            <option value="الخميس">الخميس</option>
+          </select>
+        </div>
+
+        <div class="form-group">
+          <label>التاريخ الهجري:</label>
+          <input type="text" id="dateInput" value="19 / 04 / 1448 هـ" onchange="saveDate(); renderDailyTable();">
+        </div>
+      </div>
+    </div>
+
+    <!-- لوحة إدخال وتعديل الواجب اليومي -->
+    <div class="card no-print teacher-view" style="display: none;">
+      <div class="card-title" id="dailyFormTitle">✍ تسجيل الحصة والواجب اليومي</div>
+      
+      <div class="form-grid">
+        <div class="form-group" style="max-width: 130px;">
+          <label>الحصة (1 - 7):</label>
+          <select id="periodNumber">
+            <option value="1">الحصة 1</option>
+            <option value="2">الحصة 2</option>
+            <option value="3">الحصة 3</option>
+            <option value="4">الحصة 4</option>
+            <option value="5">الحصة 5</option>
+            <option value="6">الحصة 6</option>
+            <option value="7">الحصة 7</option>
+          </select>
+        </div>
+
+        <div class="form-group">
+          <label>المادة الدراسية:</label>
+          <select id="subjectInput">
+            <option value="القرآن الكريم والدراسات الإسلامية">القرآن الكريم والدراسات الإسلامية</option>
+            <option value="لغتي">لغتي</option>
+            <option value="الرياضيات">الرياضيات</option>
+            <option value="العلوم">العلوم</option>
+            <option value="الدراسات الاجتماعية">الدراسات الاجتماعية</option>
+            <option value="English">English</option>
+            <option value="مهارات رقمية">مهارات رقمية</option>
+            <option value="التربية البدنية والدفاع عن النفس">التربية البدنية</option>
+            <option value="التربية الفنية">التربية الفنية</option>
+            <option value="نافس">نافس</option>
+            <option value="قدرات">قدرات</option>
+          </select>
+        </div>
+
+        <div class="form-group">
+          <label>اسم المعلم:</label>
+          <input type="text" id="dailyTeacherNameInput" placeholder="أدخل اسم المعلم...">
+        </div>
+
+        <div class="form-group">
+          <label>موضوع الدرس:</label>
+          <input type="text" id="lessonInput" placeholder="أدخل عنوان أو موضوع الدرس...">
         </div>
       </div>
 
-      <div class="grid-4">
-        <div>
+      <div class="form-group">
+        <label>الواجب والتكليفات المطلوبة:</label>
+        <textarea id="homeworkInput" placeholder="اكتب رقم الصفحة ورقم السؤال أو التكليف..."></textarea>
+      </div>
+
+      <div style="display: flex; gap: 10px; margin-top: 12px;">
+        <button class="btn btn-primary" onclick="teacherSavePeriod()">💾 حفظ الحصة في الجدول</button>
+      </div>
+    </div>
+
+    <!-- لوحة الأدمن للواجب اليومي -->
+    <div class="card no-print admin-view" style="display: none; border-color: #854d0e; background: #fffcf7;">
+      <div class="card-title" style="color: #854d0e; border-bottom-color: #854d0e;">🔒 إدارة الحصص اليومية (الإشراف)</div>
+      <button class="btn btn-danger" onclick="adminClearCurrentDay()">🗑 مسح جميع حصص هذا اليوم لهذا الفصل</button>
+    </div>
+
+    <!-- أزرار الإجراءات اليومية -->
+    <div class="no-print" style="display: flex; gap: 10px; justify-content: flex-end; flex-wrap: wrap;">
+      <button class="btn btn-whatsapp" onclick="shareDailyWhatsApp()">📲 إرسال الواجبات عبر الواتساب</button>
+      <button class="btn btn-print" onclick="window.print()">🖨️ طباعة جدول اليوم (A4)</button>
+    </div>
+
+    <!-- ورقة الطباعة والعرض للواجب اليومي -->
+    <div class="print-sheet" id="printAreaDaily">
+      <div class="official-header">
+        <div class="header-text-ar">
+          المملكة العربية السعودية<br>
+          وزارة التعليم<br>
+          مدارس البيارق الأهلية<br>
+          القسم الابتدائي — بنين
+        </div>
+        <div class="header-center">
+          <img src="logo.png" alt="شعار مدارس البيارق" onerror="this.onerror=null; this.src='https://englishlanguagesupervision-prog.github.io/Bayariq-Weekly-Plan/logo.jpg';">
+          <h2>الدروس والواجبات اليومية</h2>
+        </div>
+        <div class="header-text-en">
+          Kingdom of Saudi Arabia<br>
+          Ministry of Education<br>
+          Al-Bayariq Private Schools<br>
+          Primary Section – Boys
+        </div>
+      </div>
+
+      <div class="meta-bar">
+        <div class="meta-item"><span>الصف الدراسي</span><strong id="displayDailyGrade">الصف السادس</strong></div>
+        <div class="meta-item"><span>الفصل</span><strong id="displayDailySection">السادس 2</strong></div>
+        <div class="meta-item"><span>اليوم</span><strong id="displayDailyDay">الأربعاء</strong></div>
+        <div class="meta-item"><span>التاريخ</span><strong id="displayDailyDate">19 / 04 / 1448 هـ</strong></div>
+      </div>
+
+      <div class="table-container">
+        <table>
+          <thead>
+            <tr>
+              <th style="width: 7%;">م</th>
+              <th style="width: 25%;">المادة والمعلم</th>
+              <th style="width: 33%;">موضوع الدرس</th>
+              <th style="width: 35%;">الواجب</th>
+            </tr>
+          </thead>
+          <tbody id="dailyTableBody"></tbody>
+        </table>
+      </div>
+
+      <!-- تحكم الأدمن المباشر في تعديل وحذف كل حصة يومية -->
+      <div id="adminDailyControls" class="no-print admin-view" style="display: none; background: #fff1f2; padding: 12px; border-radius: 8px; border: 1px solid #fecdd3; margin-top: 10px;">
+        <strong style="color: #9f1239; font-size: 0.9rem; display: block; margin-bottom: 8px;">لوحة تحكم وتعديل الحصص الفردية للأدمن:</strong>
+        <div style="display: flex; gap: 8px; flex-wrap: wrap;" id="adminDailyControlButtons"></div>
+      </div>
+
+      <div class="sheet-footer">
+        رؤيتنا: بناء الشخصية المتكاملة للطالب
+      </div>
+    </div>
+  </div>
+
+  <!-- ==================== 2. قسم الخطة الأسبوعية (حتى الأسبوع 20) ==================== -->
+  <div id="weeklySectionContainer" style="display: none;">
+    
+    <!-- بطاقة إدخال الخطة الأسبوعية للمعلم والأدمن -->
+    <div class="card no-print teacher-view" style="display: none;">
+      
+      <div class="form-grid">
+        <div class="form-group">
           <label>الصف الدراسي:</label>
-          <select id="teacherGrade" onchange="loadClassPlan()">
+          <select id="weeklyGradeSelect" onchange="loadWeeklySubjectDraft(); renderWeeklyTable();">
             <option value="الصف الأول">الصف الأول</option>
             <option value="الصف الثاني">الصف الثاني</option>
             <option value="الصف الثالث">الصف الثالث</option>
@@ -398,414 +723,750 @@
           </select>
         </div>
 
-        <div>
-          <label>رقم الأسبوع:</label>
-          <input type="number" id="teacherWeek" value="6" min="1" max="18" onchange="loadClassPlan()">
-        </div>
-
-        <div>
-          <label>المادة الدراسية:</label>
-          <select id="teacherSubject" onchange="checkExistingSubjectData()">
-            <option value="القرآن الكريم والدراسات الإسلامية">القرآن الكريم والدراسات الإسلامية</option>
-            <option value="لغتي">لغتي</option>
-            <option value="الرياضيات">الرياضيات</option>
-            <option value="English">English</option>
-            <option value="Science">Science</option>
-            <option value="MATH">MATH</option>
-            <option value="اجتماعيات">اجتماعيات</option>
-            <option value="العلوم">العلوم</option>
+        <div class="form-group">
+          <label>رقم الأسبوع (حتى 20):</label>
+          <select id="weekNumberSelect" onchange="loadWeeklySubjectDraft(); renderWeeklyTable();">
+            <!-- تتولد الأسابيع من 1 إلى 20 برمجياً -->
           </select>
         </div>
 
-        <div>
+        <div class="form-group">
+          <label>المادة الدراسية:</label>
+          <select id="weeklySubjectInput" onchange="loadWeeklySubjectDraft();">
+            <option value="القرآن الكريم والدراسات الإسلامية" selected>القرآن الكريم والدراسات الإسلامية</option>
+            <option value="لغتي">لغتي</option>
+            <option value="الرياضيات">الرياضيات</option>
+            <option value="العلوم">العلوم</option>
+            <option value="الدراسات الاجتماعية">الدراسات الاجتماعية</option>
+            <option value="English">English</option>
+            <option value="مهارات رقمية">مهارات رقمية</option>
+            <option value="التربية الفنية">التربية الفنية</option>
+          </select>
+        </div>
+
+        <div class="form-group">
           <label>اسم المعلم:</label>
-          <input type="text" id="teacherName" placeholder="أ. اسم المعلم">
+          <input type="text" id="weeklyTeacherNameInput" placeholder="أدخل اسم المعلم...">
         </div>
       </div>
 
-      <div id="existingNotice" class="notice">ℹ️ تم استرجاع الخطة المسجلة سابقاً لهذه المادة، يمكنك تعديلها والحفظ.</div>
+      <div class="info-bar">
+        ℹ️ تم استرجاع الخطة المسجلة سابقاً لهذه المادة، يمكنك تعديلها والحفظ.
+      </div>
 
+      <!-- شبكة الأيام الخمسة -->
       <div class="days-grid">
+        <!-- الأحد -->
         <div class="day-box">
-          <h4>الأحد</h4>
-          <input type="text" id="sun_l" placeholder="موضوع الدرس">
-          <input type="text" id="sun_w" placeholder="الواجب المحدد">
+          <div class="day-box-header">الأحد</div>
+          <div class="day-box-body">
+            <input type="text" id="sunLesson" placeholder="موضوع الدرس">
+            <input type="text" id="sunHw" placeholder="الواجب المحدد">
+          </div>
         </div>
+
+        <!-- الإثنين -->
         <div class="day-box">
-          <h4>الإثنين</h4>
-          <input type="text" id="mon_l" placeholder="موضوع الدرس">
-          <input type="text" id="mon_w" placeholder="الواجب المحدد">
+          <div class="day-box-header">الإثنين</div>
+          <div class="day-box-body">
+            <input type="text" id="monLesson" placeholder="موضوع الدرس">
+            <input type="text" id="monHw" placeholder="الواجب المحدد">
+          </div>
         </div>
+
+        <!-- الثلاثاء -->
         <div class="day-box">
-          <h4>الثلاثاء</h4>
-          <input type="text" id="tue_l" placeholder="موضوع الدرس">
-          <input type="text" id="tue_w" placeholder="الواجب المحدد">
+          <div class="day-box-header">الثلاثاء</div>
+          <div class="day-box-body">
+            <input type="text" id="tueLesson" placeholder="موضوع الدرس">
+            <input type="text" id="tueHw" placeholder="الواجب المحدد">
+          </div>
         </div>
+
+        <!-- الأربعاء -->
         <div class="day-box">
-          <h4>الأربعاء</h4>
-          <input type="text" id="wed_l" placeholder="موضوع الدرس">
-          <input type="text" id="wed_w" placeholder="الواجب المحدد">
+          <div class="day-box-header">الأربعاء</div>
+          <div class="day-box-body">
+            <input type="text" id="wedLesson" placeholder="موضوع الدرس">
+            <input type="text" id="wedHw" placeholder="الواجب المحدد">
+          </div>
         </div>
+
+        <!-- الخميس -->
         <div class="day-box">
-          <h4>الخميس</h4>
-          <input type="text" id="thu_l" placeholder="موضوع الدرس">
-          <input type="text" id="thu_w" placeholder="الواجب المحدد">
+          <div class="day-box-header">الخميس</div>
+          <div class="day-box-body">
+            <input type="text" id="thuLesson" placeholder="موضوع الدرس">
+            <input type="text" id="thuHw" placeholder="الواجب المحدد">
+          </div>
         </div>
       </div>
 
-      <button class="btn-save" id="saveButton" onclick="savePlan()">⚡ حفظ خطة المادة فورياً</button>
-      <div style="font-size:13px; color:#64748b; margin-top:8px; text-align:center;">
-        * يكتب المعلم خطة مادته وتظهر في الجدول بالأسفل لمراجعتها مع خطط زملائه.
-      </div>
+      <button class="btn-save-full" onclick="teacherSaveWeeklyPlan()">⚡ حفظ خطة المادة فورياً</button>
+      <div class="hint-text">* يكتب المعلم خطة مادته وتظهر في الجدول بالأسفل لمراجعتها مع خطط زملائه.</div>
     </div>
 
-    <!-- قسم الإدارة المحمي بكلمة سر -->
-    <div id="adminSection" class="no-print" style="display:none;">
-      
-      <!-- مربع تسجيل الدخول للإدارة -->
-      <div id="adminLoginBox" class="admin-auth-box">
-        <h3 style="color:var(--primary); margin:0 0 10px 0;">🔒 تسجيل دخول المشرف التربوي</h3>
-        <p style="font-size:13px; color:#64748b; margin-bottom:15px;">هذا القسم مخصص للإدارة لمسح وتعديل الخطط وتصدير PDF</p>
-        <input type="password" id="adminPasswordInput" placeholder="أدخل كلمة مرور الإدارة" style="margin-bottom:12px; text-align:center;">
-        <button class="btn-save" style="margin-top:0;" onclick="verifyAdminPassword()">دخول لوحة الإشراف</button>
-      </div>
-
-      <!-- محتوى لوحة الإدارة بعد التحقق -->
-      <div id="adminContentBox" style="display:none;">
-        <div class="app-header">
-          <div class="app-header-title">
-            <h2>لوحة الإشراف والتحكم الكامل</h2>
-            <p>إدارة الخطط، حذف المواد الخاطئة، وتصدير PDF</p>
-          </div>
-          <div>
-            <button class="btn-secondary" onclick="adminLogout()">تسجيل خروج 🔒</button>
-          </div>
+    <!-- لوحة استعراض ولي الأمر والأدمن للخطة الأسبوعية -->
+    <div class="card no-print" id="weeklyParentFilter">
+      <div class="form-grid" style="margin-bottom: 0;">
+        <div class="form-group">
+          <label>عرض الخطة للصف:</label>
+          <select id="viewWeeklyGradeSelect" onchange="syncGradeAndRender();">
+            <option value="الصف الأول">الصف الأول</option>
+            <option value="الصف الثاني">الصف الثاني</option>
+            <option value="الصف الثالث">الصف الثالث</option>
+            <option value="الصف الرابع" selected>الصف الرابع</option>
+            <option value="الصف الخامس">الصف الخامس</option>
+            <option value="الصف السادس">الصف السادس</option>
+          </select>
         </div>
 
-        <div class="admin-controls-grid">
-          <div>
-            <label>الصف:</label>
-            <select id="adminGrade" onchange="syncAdminFilters()">
-              <option value="الصف الأول">الصف الأول</option>
-              <option value="الصف الثاني">الصف الثاني</option>
-              <option value="الصف الثالث">الصف الثالث</option>
-              <option value="الصف الرابع" selected>الصف الرابع</option>
-              <option value="الصف الخامس">الصف الخامس</option>
-              <option value="الصف السادس">الصف السادس</option>
-            </select>
-          </div>
-          <div>
-            <label>الأسبوع:</label>
-            <input type="number" id="adminWeek" value="6" onchange="syncAdminFilters()">
-          </div>
-          <div>
-            <label>إجراء الطباعة:</label>
-            <button class="btn-save" style="margin-top:0;" onclick="window.print()">🖨️ طباعة / تصدير PDF</button>
-          </div>
-          <div>
-            <label>إجراء الحذف الكامل:</label>
-            <button class="btn-danger" onclick="deleteAllClassPlans()">🗑️ مسح خطة الصف بالكامل</button>
-          </div>
+        <div class="form-group">
+          <label>رقم الأسبوع (حتى 20):</label>
+          <select id="viewWeekNumberSelect" onchange="syncWeekAndRender();">
+            <!-- تتولد الأسابيع من 1 إلى 20 برمجياً -->
+          </select>
+        </div>
+
+        <div class="form-group">
+          <label>تاريخ الأسبوع الهجري:</label>
+          <input type="text" id="weeklyDateText" value="9 ربيع الآخر 1448 هـ" onchange="renderWeeklyTable();">
         </div>
       </div>
     </div>
 
-    <!-- ==============================================
-         شاشة العرض الحي والمطابقة للصورة الرسمية
-         ============================================== -->
-    <div class="sheet-wrapper" id="printableSheet">
-      
+    <!-- لوحة الأدمن للخطة الأسبوعية -->
+    <div class="card no-print admin-view" style="display: none; border-color: #854d0e; background: #fffcf7;">
+      <div class="card-title" style="color: #854d0e; border-bottom-color: #854d0e;">🔒 إدارة الخطط الأسبوعية (الإشراف)</div>
+      <button class="btn btn-danger" onclick="adminClearCurrentWeek()">🗑 مسح خطة هذا الأسبوع بالكامل لهذا الصف</button>
+    </div>
+
+    <!-- أزرار الإجراءات الأسبوعية -->
+    <div class="no-print" style="display: flex; gap: 10px; justify-content: flex-end; flex-wrap: wrap;">
+      <button class="btn btn-whatsapp" onclick="shareWeeklyWhatsApp()">📲 إرسال الخطة عبر الواتساب</button>
+      <button class="btn btn-print" onclick="window.print()">🖨️ طباعة الخطة الأسبوعية (A4)</button>
+    </div>
+
+    <!-- ورقة الطباعة والعرض للخطة الأسبوعية -->
+    <div class="print-sheet" id="printAreaWeekly">
       <div class="official-header">
-        <div class="official-header-right">
+        <div class="header-text-ar">
           المملكة العربية السعودية<br>
-          وزارة التعليم — الإدارة العامة للتعليم بمنطقة الرياض<br>
-          القسم الابتدائي
+          وزارة التعليم<br>
+          مدارس البيارق الأهلية<br>
+          القسم الابتدائي — بنين
         </div>
-        <div>
-          <img src="logo.jpg" alt="مدارس البيارق الأهلية" class="logo-img" onerror="this.onerror=null; this.src='https://raw.githubusercontent.com/Aboroqaya/bayariq/main/logo.jpg';">
+        <div class="header-center">
+          <img src="logo.png" alt="شعار مدارس البيارق" onerror="this.onerror=null; this.src='https://englishlanguagesupervision-prog.github.io/Bayariq-Weekly-Plan/logo.jpg';">
+          <h2 id="weeklySheetTitle">الخطة الأسبوعية للصف الرابع</h2>
         </div>
-      </div>
-
-      <div class="plan-title-bar" id="displayPlanTitle">
-        الخطة الأسبوعية للصف الرابع
-      </div>
-
-      <div class="meta-cards-grid">
-        <div class="meta-card">
-          <div class="lbl">الصف</div>
-          <div class="val" id="dispGrade">الصف الرابع</div>
-        </div>
-        <div class="meta-card">
-          <div class="lbl">الأسبوع</div>
-          <div class="val" id="dispWeek">رقم 6</div>
-        </div>
-        <div class="meta-card">
-          <div class="lbl">التاريخ الهجري</div>
-          <div class="val" id="dispHijri" contenteditable="true">9 ربيع الآخر 1448 هـ</div>
-        </div>
-        <div class="meta-card">
-          <div class="lbl">التاريخ الميلادي</div>
-          <div class="val" id="dispGregorian" contenteditable="true">30 سبتمبر 2026 م</div>
+        <div class="header-text-en">
+          Kingdom of Saudi Arabia<br>
+          Ministry of Education<br>
+          Al-Bayariq Private Schools<br>
+          Primary Section – Boys
         </div>
       </div>
 
-      <table class="plan-table">
-        <thead>
-          <tr>
-            <th>المادة / اليوم</th>
-            <th>الأحد</th>
-            <th>الإثنين</th>
-            <th>الثلاثاء</th>
-            <th>الأربعاء</th>
-            <th>الخميس</th>
-          </tr>
-        </thead>
-        <tbody id="planTableBody">
-          <!-- يتم التحديث لحظياً من Firebase -->
-        </tbody>
-      </table>
+      <div class="meta-bar">
+        <div class="meta-item"><span>الصف الدراسي</span><strong id="displayWeeklyGrade">الصف الرابع</strong></div>
+        <div class="meta-item"><span>الأسبوع</span><strong id="displayWeeklyWeek">رقم 6</strong></div>
+        <div class="meta-item" style="grid-column: span 2;"><span>التاريخ الهجري</span><strong id="displayWeeklyDate">9 ربيع الآخر 1448 هـ</strong></div>
+      </div>
 
-      <div class="official-footer">
+      <div class="table-container">
+        <table>
+          <thead>
+            <tr>
+              <th style="width: 15%;">المادة / المعلم</th>
+              <th style="width: 17%;">الأحد</th>
+              <th style="width: 17%;">الإثنين</th>
+              <th style="width: 17%;">الثلاثاء</th>
+              <th style="width: 17%;">الأربعاء</th>
+              <th style="width: 17%;">الخميس</th>
+            </tr>
+          </thead>
+          <tbody id="weeklyTableBody"></tbody>
+        </table>
+      </div>
+
+      <!-- تحكم الأدمن المباشر في تعديل وحذف كل مادة أسبوعية -->
+      <div id="adminWeeklyControls" class="no-print admin-view" style="display: none; background: #fff1f2; padding: 12px; border-radius: 8px; border: 1px solid #fecdd3; margin-top: 10px;">
+        <strong style="color: #9f1239; font-size: 0.9rem; display: block; margin-bottom: 8px;">لوحة تحكم وتعديل المواد للأدمن:</strong>
+        <div style="display: flex; gap: 8px; flex-wrap: wrap;" id="adminWeeklyControlButtons"></div>
+      </div>
+
+      <div class="sheet-footer">
         رؤيتنا: بناء الشخصية المتكاملة للطالب
-      </div>
-      <div class="footer-sub">
-        مدارس البيارق الأهلية • AL BAYARIQ PRIVATE SCHOOLS • الإشراف التربوي
       </div>
     </div>
 
   </div>
 
-  <script>
-    // كلمة مرور الإدارة المطلوبة
-    const ADMIN_PASSWORD = "14482026";
-    let isAdminLoggedIn = false;
+</div>
 
-    // إعدادات Firebase الخاصة بمشروعك
-    const firebaseConfig = {
-      apiKey: "AIzaSyBUEDHUAK-6KQOwnsKECYEwsWZzOU2_LWs",
-      authDomain: "bayariq-weekly-plan.firebaseapp.com",
-      databaseURL: "https://bayariq-weekly-plan-default-rtdb.firebaseio.com",
-      projectId: "bayariq-weekly-plan",
-      storageBucket: "bayariq-weekly-plan.firebasestorage.app",
-      messagingSenderId: "693181426466",
-      appId: "1:693181426466:web:174246f36473087bfa137b"
-    };
+<script>
+  const TOTAL_PERIODS = 7;
+  const MAX_WEEKS = 20;
 
-    if (!firebase.apps.length) {
-      firebase.initializeApp(firebaseConfig);
+  let activeSystem = 'daily'; 
+  let currentPortal = 'parent'; 
+
+  let dailyData = {};
+  let weeklyData = {};
+
+  // إعدادات القفل
+  let isLocked = false;
+  let lockMessage = "عزيزي المعلم / ولي الأمر: تم إغلاق تعديل الخطط والواجبات مؤقتاً للاعتماد النهائي من إدارة المدرسة.";
+
+  // توليد الأسابيع حتى 20
+  function populateWeeks() {
+    const s1 = document.getElementById('weekNumberSelect');
+    const s2 = document.getElementById('viewWeekNumberSelect');
+    s1.innerHTML = '';
+    s2.innerHTML = '';
+
+    for (let i = 1; i <= MAX_WEEKS; i++) {
+      const o1 = document.createElement('option');
+      o1.value = i.toString();
+      o1.textContent = i.toString();
+      if (i === 6) o1.selected = true;
+      s1.appendChild(o1);
+
+      const o2 = document.createElement('option');
+      o2.value = i.toString();
+      o2.textContent = `الأسبوع ${i}`;
+      if (i === 6) o2.selected = true;
+      s2.appendChild(o2);
     }
-    const db = firebase.database();
+  }
 
-    const defaultSubjects = [
-      "القرآن الكريم والدراسات الإسلامية",
-      "لغتي",
-      "الرياضيات",
-      "English",
-      "Science",
-      "MATH",
-      "اجتماعيات",
-      "العلوم"
-    ];
+  // التبديل بين النظامين
+  function switchSystem(sys) {
+    activeSystem = sys;
+    document.getElementById('cardDaily').classList.toggle('active', sys === 'daily');
+    document.getElementById('cardWeekly').classList.toggle('active', sys === 'weekly');
 
-    let currentClassData = {};
+    document.getElementById('dailySectionContainer').style.display = sys === 'daily' ? 'block' : 'none';
+    document.getElementById('weeklySectionContainer').style.display = sys === 'weekly' ? 'block' : 'none';
 
-    function switchView(view) {
-      if(view === 'teacher') {
-        document.getElementById('teacherSection').style.display = 'block';
-        document.getElementById('adminSection').style.display = 'none';
-        document.getElementById('tabTeacher').classList.add('active');
-        document.getElementById('tabAdmin').classList.remove('active');
-      } else {
-        document.getElementById('teacherSection').style.display = 'none';
-        document.getElementById('adminSection').style.display = 'block';
-        document.getElementById('tabAdmin').classList.add('active');
-        document.getElementById('tabTeacher').classList.remove('active');
-        
-        if (!isAdminLoggedIn) {
-          document.getElementById('adminLoginBox').style.display = 'block';
-          document.getElementById('adminContentBox').style.display = 'none';
-        } else {
-          document.getElementById('adminLoginBox').style.display = 'none';
-          document.getElementById('adminContentBox').style.display = 'block';
-        }
-      }
+    if (sys === 'daily') {
+      renderDailyTable();
+    } else {
+      loadWeeklySubjectDraft();
+      renderWeeklyTable();
     }
+  }
 
-    function verifyAdminPassword() {
-      const pass = document.getElementById('adminPasswordInput').value;
-      if (pass === ADMIN_PASSWORD) {
-        isAdminLoggedIn = true;
-        document.getElementById('adminLoginBox').style.display = 'none';
-        document.getElementById('adminContentBox').style.display = 'block';
-        renderTable();
-      } else {
+  // التبديل بين البوابات
+  function switchPortal(portal) {
+    if (portal === 'parent') {
+      currentPortal = 'parent';
+      applyPortalUI();
+    } else if (portal === 'teacher') {
+      const pwd = prompt("فضلاً أدخل كلمة مرور المعلم:");
+      if (pwd === "bayariq123") {
+        currentPortal = 'teacher';
+        applyPortalUI();
+      } else if (pwd !== null) {
         alert("كلمة المرور غير صحيحة!");
       }
-    }
-
-    function adminLogout() {
-      isAdminLoggedIn = false;
-      document.getElementById('adminPasswordInput').value = '';
-      document.getElementById('adminLoginBox').style.display = 'block';
-      document.getElementById('adminContentBox').style.display = 'none';
-      renderTable();
-    }
-
-    function syncAdminFilters() {
-      document.getElementById('teacherGrade').value = document.getElementById('adminGrade').value;
-      document.getElementById('teacherWeek').value = document.getElementById('adminWeek').value;
-      loadClassPlan();
-    }
-
-    function loadClassPlan() {
-      const grade = document.getElementById('teacherGrade').value;
-      const week = document.getElementById('teacherWeek').value;
-
-      document.getElementById('displayPlanTitle').innerText = `الخطة الأسبوعية لـ ${grade}`;
-      document.getElementById('dispGrade').innerText = grade;
-      document.getElementById('dispWeek').innerText = `رقم ${week}`;
-
-      const path = `weekly_plans/week_${week}/${grade}`;
-      db.ref(path).on('value', (snapshot) => {
-        currentClassData = snapshot.val() || {};
-        renderTable();
-        checkExistingSubjectData();
-      });
-    }
-
-    function renderTable() {
-      const tbody = document.getElementById('planTableBody');
-      tbody.innerHTML = '';
-
-      defaultSubjects.forEach(sub => {
-        const cleanKey = sub.replace(/[\/\.\#\$\[\]]/g, '_');
-        const data = currentClassData[cleanKey] || null;
-
-        const row = document.createElement('tr');
-        
-        const teacherTitle = data && data.teacherName ? `<span class="teacher-badge">${data.teacherName}</span>` : '';
-        const adminDeleteBtn = (isAdminLoggedIn && data) ? `<button class="admin-del-btn" style="display:inline-block;" onclick="deleteSubjectPlan('${cleanKey}', '${sub}')">حذف المادة 🗑️</button>` : '';
-
-        let rowHtml = `<td class="subject-name">${sub}${teacherTitle}${adminDeleteBtn}</td>`;
-        
-        const days = ['sunday', 'monday', 'tuesday', 'wednesday', 'thursday'];
-
-        days.forEach(day => {
-          if (data && data.days && data.days[day] && (data.days[day].lesson || data.days[day].hw)) {
-            const lsn = data.days[day].lesson ? `<div class="lsn">${data.days[day].lesson}</div>` : '';
-            const hw = data.days[day].hw ? `<span class="hw">الواجب: ${data.days[day].hw}</span>` : '';
-            rowHtml += `<td>
-              <div class="cell-content">
-                ${lsn}
-                ${hw}
-              </div>
-            </td>`;
-          } else {
-            rowHtml += `<td style="color:#cbd5e1;">—</td>`;
-          }
-        });
-
-        row.innerHTML = rowHtml;
-        tbody.appendChild(row);
-      });
-    }
-
-    function checkExistingSubjectData() {
-      const sub = document.getElementById('teacherSubject').value;
-      const cleanKey = sub.replace(/[\/\.\#\$\[\]]/g, '_');
-      const data = currentClassData[cleanKey];
-      const notice = document.getElementById('existingNotice');
-
-      if (data && data.days) {
-        document.getElementById('teacherName').value = data.teacherName || '';
-        document.getElementById('sun_l').value = data.days.sunday?.lesson || '';
-        document.getElementById('sun_w').value = data.days.sunday?.hw || '';
-        document.getElementById('mon_l').value = data.days.monday?.lesson || '';
-        document.getElementById('mon_w').value = data.days.monday?.hw || '';
-        document.getElementById('tue_l').value = data.days.tuesday?.lesson || '';
-        document.getElementById('tue_w').value = data.days.tuesday?.hw || '';
-        document.getElementById('wed_l').value = data.days.wednesday?.lesson || '';
-        document.getElementById('wed_w').value = data.days.wednesday?.hw || '';
-        document.getElementById('thu_l').value = data.days.thursday?.lesson || '';
-        document.getElementById('thu_w').value = data.days.thursday?.hw || '';
-        notice.style.display = 'block';
-      } else {
-        clearInputs();
-        notice.style.display = 'none';
+    } else if (portal === 'admin') {
+      const pwd = prompt("فضلاً أدخل كلمة مرور لوحة الإشراف (الأدمن):");
+      if (pwd === "14482026") {
+        currentPortal = 'admin';
+        applyPortalUI();
+      } else if (pwd !== null) {
+        alert("كلمة مرور الإدارة غير صحيحة!");
       }
     }
+  }
 
-    function clearInputs() {
-      document.getElementById('teacherName').value = '';
-      ['sun_l','sun_w','mon_l','mon_w','tue_l','tue_w','wed_l','wed_w','thu_l','thu_w'].forEach(id => {
-        document.getElementById(id).value = '';
-      });
+  function applyPortalUI() {
+    document.querySelectorAll('.nav-btn').forEach(b => b.classList.remove('active'));
+    document.querySelectorAll('.teacher-view').forEach(el => el.style.display = 'none');
+    document.querySelectorAll('.admin-view').forEach(el => el.style.display = 'none');
+
+    // إظهار أو إخفاء شريط القفل
+    const lockBanner = document.getElementById('lockoutBanner');
+    if (isLocked) {
+      lockBanner.style.display = 'flex';
+      document.getElementById('lockoutMessageText').textContent = lockMessage;
+    } else {
+      lockBanner.style.display = 'none';
     }
 
-    function savePlan() {
-      const btn = document.getElementById('saveButton');
-      const grade = document.getElementById('teacherGrade').value;
-      const week = document.getElementById('teacherWeek').value;
-      const subject = document.getElementById('teacherSubject').value;
-      const teacherName = document.getElementById('teacherName').value.trim();
-      const cleanKey = subject.replace(/[\/\.\#\$\[\]]/g, '_');
-
-      btn.disabled = true;
-      btn.innerText = "⏳ جاري الحفظ...";
-
-      const planData = {
-        subject: subject,
-        teacherName: teacherName,
-        days: {
-          sunday: { lesson: document.getElementById('sun_l').value.trim(), hw: document.getElementById('sun_w').value.trim() },
-          monday: { lesson: document.getElementById('mon_l').value.trim(), hw: document.getElementById('mon_w').value.trim() },
-          tuesday: { lesson: document.getElementById('tue_l').value.trim(), hw: document.getElementById('tue_w').value.trim() },
-          wednesday: { lesson: document.getElementById('wed_l').value.trim(), hw: document.getElementById('wed_w').value.trim() },
-          thursday: { lesson: document.getElementById('thu_l').value.trim(), hw: document.getElementById('thu_w').value.trim() }
-        }
-      };
-
-      const path = `weekly_plans/week_${week}/${grade}/${cleanKey}`;
-      db.ref(path).set(planData)
-        .then(() => {
-          btn.disabled = false;
-          btn.innerText = "⚡ حفظ خطة المادة فورياً";
-          alert('✓ تم حفظ واعتماد خطة المادة وتحديث الجدول فوراً!');
-        })
-        .catch(err => {
-          btn.disabled = false;
-          btn.innerText = "⚡ حفظ خطة المادة فورياً";
-          alert('خطأ: ' + err.message);
-        });
-    }
-
-    function deleteSubjectPlan(cleanKey, subName) {
-      if (!isAdminLoggedIn) return;
-      if (confirm(`هل أنت متأكد من حذف بيانات مادة (${subName})؟`)) {
-        const grade = document.getElementById('teacherGrade').value;
-        const week = document.getElementById('teacherWeek').value;
-        const path = `weekly_plans/week_${week}/${grade}/${cleanKey}`;
-        db.ref(path).remove().then(() => {
-          alert(`تم مسح مادة (${subName}) بنجاح.`);
-        });
+    if (currentPortal === 'parent') {
+      document.getElementById('btnParent').classList.add('active');
+    } else if (currentPortal === 'teacher') {
+      document.getElementById('btnTeacher').classList.add('active');
+      // إذا كان النظام مقفلاً، يُمنع المعلم من رؤية نموذج الإدخال
+      if (!isLocked) {
+        document.querySelectorAll('.teacher-view').forEach(el => el.style.display = 'block');
       }
+    } else if (currentPortal === 'admin') {
+      document.getElementById('btnAdmin').classList.add('active');
+      // الأدمن يرى نماذج التعديل دائماً حتى ولو كان النظام مقفلاً
+      document.querySelectorAll('.teacher-view').forEach(el => el.style.display = 'block');
+      document.querySelectorAll('.admin-view').forEach(el => el.style.display = 'block');
+    }
+    renderDailyTable();
+    renderWeeklyTable();
+  }
+
+  // إدارة القفل من قبل الأدمن
+  function toggleLockoutSetting() {
+    isLocked = document.getElementById('lockoutToggle').checked;
+    saveAllData();
+    applyPortalUI();
+    alert(isLocked ? "تم قفل التعديل والإدخال للجميع بنجاح." : "تم فتح التعديل والإدخال للجميع بنجاح.");
+  }
+
+  function updateLockoutMessage() {
+    lockMessage = document.getElementById('lockoutCustomMessage').value;
+    saveAllData();
+    if (isLocked) applyPortalUI();
+  }
+
+  /* ================= منطق الواجبات اليومية ================= */
+  function updateClassSection() {
+    const grade = document.getElementById('gradeSelect').value;
+    const sectionSelect = document.getElementById('sectionSelect');
+    sectionSelect.innerHTML = '';
+    for (let i = 1; i <= 4; i++) {
+      const opt = document.createElement('option');
+      opt.value = `${grade.replace('الصف ', '')} ${i}`;
+      opt.textContent = `فصل ${i}`;
+      if (i === 2) opt.selected = true;
+      sectionSelect.appendChild(opt);
+    }
+  }
+
+  function getDailyKey() {
+    const grade = document.getElementById('gradeSelect').value;
+    const section = document.getElementById('sectionSelect').value;
+    const day = document.getElementById('daySelect').value;
+    return `${grade}_${section}_${day}`;
+  }
+
+  function teacherSavePeriod() {
+    if (isLocked && currentPortal !== 'admin') {
+      alert("النظام مغلق للتعديل حالياً بأمر الإدارة!");
+      return;
     }
 
-    function deleteAllClassPlans() {
-      if (!isAdminLoggedIn) return;
-      const grade = document.getElementById('adminGrade').value;
-      const week = document.getElementById('adminWeek').value;
-      if (confirm(`⚠️ تحذير: هل أنت متأكد من مسح جميع مواد (${grade}) للأسبوع (${week}) بالكامل؟`)) {
-        const path = `weekly_plans/week_${week}/${grade}`;
-        db.ref(path).remove().then(() => {
-          alert('تم مسح خطة الصف بالكامل.');
-        });
-      }
+    const key = getDailyKey();
+    const period = parseInt(document.getElementById('periodNumber').value);
+    const subject = document.getElementById('subjectInput').value;
+    const teacher = document.getElementById('dailyTeacherNameInput').value.trim();
+    const lesson = document.getElementById('lessonInput').value.trim();
+    const homework = document.getElementById('homeworkInput').value.trim();
+
+    if (!lesson && !homework) {
+      alert("يرجى كتابة موضوع الدرس أو الواجب.");
+      return;
     }
 
-    window.onload = () => {
-      loadClassPlan();
+    if (!dailyData[key]) dailyData[key] = {};
+    dailyData[key][period] = {
+      subject,
+      teacher: teacher || '',
+      lesson: lesson || '—',
+      homework: homework || 'لا يوجد'
     };
-  </script>
+
+    saveAllData();
+    renderDailyTable();
+
+    document.getElementById('lessonInput').value = '';
+    document.getElementById('homeworkInput').value = '';
+    if (period < TOTAL_PERIODS) {
+      document.getElementById('periodNumber').value = (period + 1).toString();
+    }
+    alert(`تم حفظ الحصة (${period}) بنجاح.`);
+  }
+
+  // تعديل الحصة للأدمن
+  function adminEditDailyPeriod(p) {
+    const key = getDailyKey();
+    if (dailyData[key] && dailyData[key][p]) {
+      const row = dailyData[key][p];
+      document.getElementById('periodNumber').value = p.toString();
+      document.getElementById('subjectInput').value = row.subject;
+      document.getElementById('dailyTeacherNameInput').value = row.teacher || '';
+      document.getElementById('lessonInput').value = row.lesson !== '—' ? row.lesson : '';
+      document.getElementById('homeworkInput').value = row.homework !== 'لا يوجد' ? row.homework : '';
+      
+      window.scrollTo({ top: document.querySelector('.teacher-view').offsetTop - 20, behavior: 'smooth' });
+    }
+  }
+
+  function adminDeleteDailyPeriod(p) {
+    const key = getDailyKey();
+    if (confirm(`حذف الحصة ${p}؟`)) {
+      if (dailyData[key] && dailyData[key][p]) {
+        delete dailyData[key][p];
+        saveAllData();
+        renderDailyTable();
+      }
+    }
+  }
+
+  function adminClearCurrentDay() {
+    const key = getDailyKey();
+    if (confirm("تحذير: هل أنت متأكد من مسح جميع حصص هذا اليوم لهذا الفصل؟")) {
+      delete dailyData[key];
+      saveAllData();
+      renderDailyTable();
+    }
+  }
+
+  function renderDailyTable() {
+    const grade = document.getElementById('gradeSelect').value;
+    const section = document.getElementById('sectionSelect').value;
+    const day = document.getElementById('daySelect').value;
+    const date = document.getElementById('dateInput').value;
+
+    document.getElementById('displayDailyGrade').textContent = grade;
+    document.getElementById('displayDailySection').textContent = section;
+    document.getElementById('displayDailyDay').textContent = day;
+    document.getElementById('displayDailyDate').textContent = date;
+
+    const key = getDailyKey();
+    const current = dailyData[key] || {};
+    const tbody = document.getElementById('dailyTableBody');
+    tbody.innerHTML = '';
+
+    const adminBtns = document.getElementById('adminDailyControlButtons');
+    adminBtns.innerHTML = '';
+
+    for (let i = 1; i <= TOTAL_PERIODS; i++) {
+      const row = current[i] || { subject: '—', teacher: '', lesson: '—', homework: '—' };
+      const tr = document.createElement('tr');
+      const teacherBadge = row.teacher ? `<div style="font-size: 0.8rem; color: #475569; font-weight: 600; margin-top: 3px;">(أ. ${row.teacher})</div>` : '';
+
+      tr.innerHTML = `
+        <td style="font-weight: 800; color: var(--primary);">${i}</td>
+        <td style="font-weight: 700;">
+          ${row.subject}
+          ${teacherBadge}
+        </td>
+        <td class="text-right">${row.lesson}</td>
+        <td class="text-right">${row.homework}</td>
+      `;
+      tbody.appendChild(tr);
+
+      // إنشاء أزرار تحكم كاملة للأدمن (تعديل + حذف)
+      if (row.subject !== '—') {
+        const wrap = document.createElement('div');
+        wrap.style.display = 'inline-flex';
+        wrap.style.gap = '4px';
+
+        const btnEdit = document.createElement('button');
+        btnEdit.className = 'btn btn-edit';
+        btnEdit.style.padding = '3px 8px';
+        btnEdit.style.fontSize = '0.8rem';
+        btnEdit.textContent = `✏️ تعديل الحصة ${i}`;
+        btnEdit.onclick = () => adminEditDailyPeriod(i);
+
+        const btnDel = document.createElement('button');
+        btnDel.className = 'btn btn-danger';
+        btnDel.style.padding = '3px 8px';
+        btnDel.style.fontSize = '0.8rem';
+        btnDel.textContent = `🗑️ حذف`;
+        btnDel.onclick = () => adminDeleteDailyPeriod(i);
+
+        wrap.appendChild(btnEdit);
+        wrap.appendChild(btnDel);
+        adminBtns.appendChild(wrap);
+      }
+    }
+  }
+
+  function shareDailyWhatsApp() {
+    const grade = document.getElementById('gradeSelect').value;
+    const section = document.getElementById('sectionSelect').value;
+    const day = document.getElementById('daySelect').value;
+    const date = document.getElementById('dateInput').value;
+    const key = getDailyKey();
+    const current = dailyData[key] || {};
+
+    let msg = `*مدارس البيارق الأهلية - القسم الابتدائي*\n`;
+    msg += `*الدروس والواجبات اليومية*\n`;
+    msg += `📌 *الصف:* ${grade} (${section})\n`;
+    msg += `📅 *اليوم:* ${day} (${date})\n`;
+    msg += `━━━━━━━━━━━━━━━━━━━━━\n`;
+
+    let has = false;
+    for (let i = 1; i <= TOTAL_PERIODS; i++) {
+      const row = current[i];
+      if (row && row.subject !== '—') {
+        has = true;
+        const teacherText = row.teacher ? ` - أ. ${row.teacher}` : '';
+        msg += `*الحصة ${i} (${row.subject}${teacherText}):*\n• الدرس: ${row.lesson}\n• الواجب: ${row.homework}\n\n`;
+      }
+    }
+    if (!has) msg += `لم يتم رصد واجبات لهذا اليوم بعد.\n`;
+    msg += `━━━━━━━━━━━━━━━━━━━━━\nرؤيتنا: بناء الشخصية المتكاملة للطالب`;
+    window.open(`https://api.whatsapp.com/send?text=${encodeURIComponent(msg)}`, '_blank');
+  }
+
+  /* ================= منطق الخطة الأسبوعية (حتى الأسبوع 20) ================= */
+  function getWeeklyKey() {
+    const grade = document.getElementById('weeklyGradeSelect').value;
+    const week = document.getElementById('weekNumberSelect').value;
+    return `${grade}_الأسبوع_${week}`;
+  }
+
+  function syncGradeAndRender() {
+    document.getElementById('weeklyGradeSelect').value = document.getElementById('viewWeeklyGradeSelect').value;
+    loadWeeklySubjectDraft();
+    renderWeeklyTable();
+  }
+
+  function syncWeekAndRender() {
+    document.getElementById('weekNumberSelect').value = document.getElementById('viewWeekNumberSelect').value;
+    loadWeeklySubjectDraft();
+    renderWeeklyTable();
+  }
+
+  function loadWeeklySubjectDraft() {
+    const key = getWeeklyKey();
+    const sub = document.getElementById('weeklySubjectInput').value;
+    const currentSub = (weeklyData[key] && weeklyData[key][sub]) ? weeklyData[key][sub] : null;
+
+    document.getElementById('weeklyTeacherNameInput').value = currentSub ? currentSub.teacher : '';
+
+    document.getElementById('sunLesson').value = currentSub ? currentSub.sunLesson : '';
+    document.getElementById('sunHw').value = currentSub ? currentSub.sunHw : '';
+
+    document.getElementById('monLesson').value = currentSub ? currentSub.monLesson : '';
+    document.getElementById('monHw').value = currentSub ? currentSub.monHw : '';
+
+    document.getElementById('tueLesson').value = currentSub ? currentSub.tueLesson : '';
+    document.getElementById('tueHw').value = currentSub ? currentSub.tueHw : '';
+
+    document.getElementById('wedLesson').value = currentSub ? currentSub.wedLesson : '';
+    document.getElementById('wedHw').value = currentSub ? currentSub.wedHw : '';
+
+    document.getElementById('thuLesson').value = currentSub ? currentSub.thuLesson : '';
+    document.getElementById('thuHw').value = currentSub ? currentSub.thuHw : '';
+  }
+
+  function teacherSaveWeeklyPlan() {
+    if (isLocked && currentPortal !== 'admin') {
+      alert("النظام مغلق للتعديل حالياً بأمر الإدارة!");
+      return;
+    }
+
+    const key = getWeeklyKey();
+    const sub = document.getElementById('weeklySubjectInput').value;
+    const teacher = document.getElementById('weeklyTeacherNameInput').value.trim();
+
+    if (!weeklyData[key]) weeklyData[key] = {};
+
+    weeklyData[key][sub] = {
+      teacher: teacher || '',
+      sunLesson: document.getElementById('sunLesson').value.trim(),
+      sunHw: document.getElementById('sunHw').value.trim(),
+
+      monLesson: document.getElementById('monLesson').value.trim(),
+      monHw: document.getElementById('monHw').value.trim(),
+
+      tueLesson: document.getElementById('tueLesson').value.trim(),
+      tueHw: document.getElementById('tueHw').value.trim(),
+
+      wedLesson: document.getElementById('wedLesson').value.trim(),
+      wedHw: document.getElementById('wedHw').value.trim(),
+
+      thuLesson: document.getElementById('thuLesson').value.trim(),
+      thuHw: document.getElementById('thuHw').value.trim()
+    };
+
+    saveAllData();
+    renderWeeklyTable();
+    alert(`تم اعتماد وحفظ خطة مادة (${sub}) بنجاح.`);
+  }
+
+  // تعديل مادة للأدمن
+  function adminEditWeeklySubject(sub) {
+    document.getElementById('weeklySubjectInput').value = sub;
+    loadWeeklySubjectDraft();
+    window.scrollTo({ top: document.querySelector('#weeklySectionContainer .teacher-view').offsetTop - 20, behavior: 'smooth' });
+  }
+
+  function adminDeleteWeeklySubject(sub) {
+    const key = getWeeklyKey();
+    if (confirm(`حذف خطة مادة (${sub}) بالكامل؟`)) {
+      if (weeklyData[key] && weeklyData[key][sub]) {
+        delete weeklyData[key][sub];
+        saveAllData();
+        renderWeeklyTable();
+        loadWeeklySubjectDraft();
+      }
+    }
+  }
+
+  function adminClearCurrentWeek() {
+    const key = getWeeklyKey();
+    if (confirm("هل أنت متأكد من مسح جميع خطط هذا الأسبوع بالكامل؟")) {
+      delete weeklyData[key];
+      saveAllData();
+      renderWeeklyTable();
+      loadWeeklySubjectDraft();
+    }
+  }
+
+  function formatDayCell(lesson, hw) {
+    if (!lesson && !hw) return '—';
+    let content = '';
+    if (lesson) content += `<div style="font-weight: 700; color: #1e293b;">${lesson}</div>`;
+    if (hw) content += `<div style="font-size: 0.82rem; color: #b45309; background: #fffbeb; padding: 2px 4px; border-radius: 4px; margin-top: 4px; border: 1px dashed #fde68a;"><strong>الواجب:</strong> ${hw}</div>`;
+    return content;
+  }
+
+  function renderWeeklyTable() {
+    const grade = document.getElementById('weeklyGradeSelect').value;
+    const week = document.getElementById('weekNumberSelect').value;
+    const dateText = document.getElementById('weeklyDateText').value;
+
+    document.getElementById('weeklySheetTitle').textContent = `الخطة الأسبوعية لـ ${grade}`;
+    document.getElementById('displayWeeklyGrade').textContent = grade;
+    document.getElementById('displayWeeklyWeek').textContent = `رقم ${week}`;
+    document.getElementById('displayWeeklyDate').textContent = dateText;
+
+    const key = getWeeklyKey();
+    const currentWeekPlans = weeklyData[key] || {};
+    const tbody = document.getElementById('weeklyTableBody');
+    tbody.innerHTML = '';
+
+    const adminBtns = document.getElementById('adminWeeklyControlButtons');
+    adminBtns.innerHTML = '';
+
+    const subjects = Object.keys(currentWeekPlans);
+
+    if (subjects.length === 0) {
+      tbody.innerHTML = `<tr><td colspan="6" style="padding: 24px; color: #94a3b8; font-weight: 700; font-size: 1rem;">لم يتم إدخال خطط دراسية لهذا الأسبوع بعد.</td></tr>`;
+      return;
+    }
+
+    subjects.forEach(sub => {
+      const p = currentWeekPlans[sub];
+      const tr = document.createElement('tr');
+      const teacherText = p.teacher ? `<div style="font-size: 0.8rem; color: #64748b; font-weight: 600; margin-top: 3px;">(أ. ${p.teacher})</div>` : '';
+
+      tr.innerHTML = `
+        <td style="font-weight: 800; color: var(--primary); text-align: center;">
+          ${sub}
+          ${teacherText}
+        </td>
+        <td class="text-right">${formatDayCell(p.sunLesson, p.sunHw)}</td>
+        <td class="text-right">${formatDayCell(p.monLesson, p.monHw)}</td>
+        <td class="text-right">${formatDayCell(p.tueLesson, p.tueHw)}</td>
+        <td class="text-right">${formatDayCell(p.wedLesson, p.wedHw)}</td>
+        <td class="text-right">${formatDayCell(p.thuLesson, p.thuHw)}</td>
+      `;
+      tbody.appendChild(tr);
+
+      // أزرار تحكم الأدمن (تعديل + حذف)
+      const wrap = document.createElement('div');
+      wrap.style.display = 'inline-flex';
+      wrap.style.gap = '4px';
+
+      const btnEdit = document.createElement('button');
+      btnEdit.className = 'btn btn-edit';
+      btnEdit.style.padding = '3px 8px';
+      btnEdit.style.fontSize = '0.8rem';
+      btnEdit.textContent = `✏️ تعديل (${sub})`;
+      btnEdit.onclick = () => adminEditWeeklySubject(sub);
+
+      const btnDel = document.createElement('button');
+      btnDel.className = 'btn btn-danger';
+      btnDel.style.padding = '3px 8px';
+      btnDel.style.fontSize = '0.8rem';
+      btnDel.textContent = `🗑️ حذف`;
+      btnDel.onclick = () => adminDeleteWeeklySubject(sub);
+
+      wrap.appendChild(btnEdit);
+      wrap.appendChild(btnDel);
+      adminBtns.appendChild(wrap);
+    });
+  }
+
+  function shareWeeklyWhatsApp() {
+    const grade = document.getElementById('weeklyGradeSelect').value;
+    const week = document.getElementById('weekNumberSelect').value;
+    const dateText = document.getElementById('weeklyDateText').value;
+    const key = getWeeklyKey();
+    const currentWeekPlans = weeklyData[key] || {};
+    const subjects = Object.keys(currentWeekPlans);
+
+    let msg = `*مدارس البيارق الأهلية - القسم الابتدائي*\n`;
+    msg += `*الخطة الدراسية الأسبوعية*\n`;
+    msg += `📌 *الصف:* ${grade}\n`;
+    msg += `📅 *الأسبوع:* رقم ${week} (${dateText})\n`;
+    msg += `━━━━━━━━━━━━━━━━━━━━━\n`;
+
+    if (subjects.length === 0) {
+      msg += `لم يتم رصد خطط أسبوعية لهذا الصف بعد.\n`;
+    } else {
+      subjects.forEach(sub => {
+        const p = currentWeekPlans[sub];
+        const teacherText = p.teacher ? ` (أ. ${p.teacher})` : '';
+        msg += `📚 *مادة ${sub}${teacherText}:*\n`;
+        if (p.sunLesson || p.sunHw) msg += `• الأحد: ${p.sunLesson || '—'} | واجب: ${p.sunHw || '—'}\n`;
+        if (p.monLesson || p.monHw) msg += `• الإثنين: ${p.monLesson || '—'} | واجب: ${p.monHw || '—'}\n`;
+        if (p.tueLesson || p.tueHw) msg += `• الثلاثاء: ${p.tueLesson || '—'} | واجب: ${p.tueHw || '—'}\n`;
+        if (p.wedLesson || p.wedHw) msg += `• الأربعاء: ${p.wedLesson || '—'} | واجب: ${p.wedHw || '—'}\n`;
+        if (p.thuLesson || p.thuHw) msg += `• الخميس: ${p.thuLesson || '—'} | واجب: ${p.thuHw || '—'}\n`;
+        msg += `\n`;
+      });
+    }
+
+    msg += `━━━━━━━━━━━━━━━━━━━━━\nرؤيتنا: بناء الشخصية المتكاملة للطالب`;
+    window.open(`https://api.whatsapp.com/send?text=${encodeURIComponent(msg)}`, '_blank');
+  }
+
+  /* ================= الحفظ العام ================= */
+  function saveDate() {
+    localStorage.setItem('bayariq_date_daily_v4', document.getElementById('dateInput').value);
+  }
+
+  function saveAllData() {
+    localStorage.setItem('bayariq_daily_unified_v4', JSON.stringify(dailyData));
+    localStorage.setItem('bayariq_weekly_unified_v4', JSON.stringify(weeklyData));
+    localStorage.setItem('bayariq_is_locked', JSON.stringify(isLocked));
+    localStorage.setItem('bayariq_lock_message', lockMessage);
+  }
+
+  function loadAllData() {
+    const d = localStorage.getItem('bayariq_daily_unified_v4');
+    if (d) { try { dailyData = JSON.parse(d); } catch(e){} }
+
+    const w = localStorage.getItem('bayariq_weekly_unified_v4');
+    if (w) { try { weeklyData = JSON.parse(w); } catch(e){} }
+
+    const lk = localStorage.getItem('bayariq_is_locked');
+    if (lk) { try { isLocked = JSON.parse(lk); } catch(e){} }
+
+    const msg = localStorage.getItem('bayariq_lock_message');
+    if (msg) lockMessage = msg;
+
+    const dateVal = localStorage.getItem('bayariq_date_daily_v4');
+    if (dateVal) document.getElementById('dateInput').value = dateVal;
+
+    document.getElementById('lockoutToggle').checked = isLocked;
+    document.getElementById('lockoutCustomMessage').value = lockMessage;
+  }
+
+  window.onload = function() {
+    populateWeeks();
+    updateClassSection();
+    loadAllData();
+    applyPortalUI();
+    switchSystem('weekly');
+  };
+</script>
+
 </body>
 </html>
