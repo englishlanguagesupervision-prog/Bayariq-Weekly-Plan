@@ -220,6 +220,7 @@
       display: flex;
       align-items: center;
       gap: 6px;
+      transition: 0.3s ease;
     }
 
     .days-grid {
@@ -372,7 +373,7 @@
     th, td {
       border: 1.5px solid #cbd5e1;
       padding: 8px 6px;
-      text-align: center;
+      text-align: center; /* توسيط افتراضي لجميع الخلايا */
       font-size: 0.88rem;
       vertical-align: middle;
       word-break: break-word;
@@ -388,7 +389,11 @@
     }
 
     tr:nth-child(even) { background-color: #f8fafc; }
-    .text-right { text-align: right; }
+    
+    /* توسيط نصوص موضوع الدرس والواجبات */
+    .cell-center {
+      text-align: center !important;
+    }
 
     .sheet-footer {
       margin-top: 20px;
@@ -400,15 +405,89 @@
       font-weight: 700;
     }
 
-    @page { size: A4 portrait; margin: 8mm 10mm; }
+    /* ==========================================
+       إعدادات الطباعة الدقيقة لاحتواء A4 في صفحة واحدة فقط
+       ========================================== */
+    @page { 
+      size: A4 portrait; 
+      margin: 6mm 8mm; 
+    }
 
     @media print {
-      html, body { width: 100%; margin: 0 !important; padding: 0 !important; background: #fff; }
+      html, body { 
+        width: 100% !important; 
+        height: auto !important;
+        margin: 0 !important; 
+        padding: 0 !important; 
+        background: #fff !important; 
+        overflow: hidden !important;
+      }
       .no-print { display: none !important; }
-      .container { max-width: 100%; gap: 0; }
-      .print-sheet { border: none; padding: 0; }
-      th { background-color: #0e402d !important; color: #fff !important; -webkit-print-color-adjust: exact; print-color-adjust: exact; }
-      .meta-bar { background-color: #fdfaf3 !important; -webkit-print-color-adjust: exact; print-color-adjust: exact; }
+      .container { 
+        max-width: 100% !important; 
+        gap: 0 !important; 
+        margin: 0 !important;
+        padding: 0 !important;
+      }
+      .print-sheet { 
+        border: none !important; 
+        padding: 0 !important; 
+        page-break-inside: avoid !important;
+        break-inside: avoid !important;
+      }
+      
+      .official-header {
+        padding-bottom: 6px !important;
+        margin-bottom: 8px !important;
+      }
+      .official-header h2 {
+        font-size: 1.15rem !important;
+      }
+      .header-center img {
+        max-height: 55px !important;
+      }
+      .header-text-ar, .header-text-en {
+        font-size: 0.75rem !important;
+        line-height: 1.4 !important;
+      }
+      .meta-bar {
+        padding: 6px !important;
+        margin-bottom: 8px !important;
+        gap: 6px !important;
+        background-color: #fdfaf3 !important; 
+        -webkit-print-color-adjust: exact; 
+        print-color-adjust: exact; 
+      }
+      .meta-item span {
+        font-size: 0.72rem !important;
+      }
+      .meta-item strong {
+        font-size: 0.84rem !important;
+      }
+
+      table {
+        margin-bottom: 8px !important;
+        page-break-inside: avoid !important;
+        break-inside: avoid !important;
+      }
+      th { 
+        background-color: #0e402d !important; 
+        color: #fff !important; 
+        font-size: 0.82rem !important;
+        padding: 5px 3px !important;
+        -webkit-print-color-adjust: exact; 
+        print-color-adjust: exact; 
+      }
+      td {
+        padding: 5px 4px !important;
+        font-size: 0.8rem !important;
+        line-height: 1.25 !important;
+      }
+      .sheet-footer {
+        margin-top: 8px !important;
+        padding-top: 6px !important;
+        font-size: 0.8rem !important;
+      }
     }
 
     @media(max-width: 800px) {
@@ -495,6 +574,11 @@
         </div>
 
         <div class="form-group">
+          <label>رقم الأسبوع:</label>
+          <select id="dailyWeekSelect" onchange="renderDailyTable();"></select>
+        </div>
+
+        <div class="form-group">
           <label>اليوم:</label>
           <select id="daySelect" onchange="renderDailyTable();">
             <option value="الأحد">الأحد</option>
@@ -571,7 +655,7 @@
     <!-- لوحة الأدمن للواجب اليومي -->
     <div class="card no-print admin-view" style="display: none; border-color: #854d0e; background: #fffcf7;">
       <div class="card-title" style="color: #854d0e; border-bottom-color: #854d0e;">🔒 إدارة الحصص اليومية (الإشراف)</div>
-      <button class="btn btn-danger" onclick="adminClearCurrentDay()">🗑 مسح جميع حصص هذا اليوم لهذا الفصل سحابياً</button>
+      <button class="btn btn-danger" onclick="adminClearCurrentDay()">🗑 مسح حصص هذا اليوم لهذا الأسبوع سحابياً</button>
     </div>
 
     <!-- أزرار الإجراءات اليومية -->
@@ -603,7 +687,7 @@
 
       <div class="meta-bar">
         <div class="meta-item"><span>الصف الدراسي</span><strong id="displayDailyGrade">الصف السادس</strong></div>
-        <div class="meta-item"><span>الفصل</span><strong id="displayDailySection">السادس 2</strong></div>
+        <div class="meta-item"><span>الفصل والأسبوع</span><strong id="displayDailySection">السادس 2 (الأسبوع 6)</strong></div>
         <div class="meta-item"><span>اليوم</span><strong id="displayDailyDay">الأربعاء</strong></div>
         <div class="meta-item"><span>التاريخ</span><strong id="displayDailyDate">19 / 04 / 1448 هـ</strong></div>
       </div>
@@ -633,14 +717,14 @@
     </div>
   </div>
 
-  <!-- ==================== 2. قسم الخطة الأسبوعية (حتى الأسبوع 20) ==================== -->
+  <!-- ==================== 2. قسم الخطة الأسبوعية ==================== -->
   <div id="weeklySectionContainer" style="display: none;">
     
     <div class="card no-print teacher-view" style="display: none;">
       <div class="form-grid">
         <div class="form-group">
           <label>الصف الدراسي:</label>
-          <select id="weeklyGradeSelect" onchange="loadWeeklySubjectDraft(); renderWeeklyTable();">
+          <select id="weeklyGradeSelect" onchange="onTeacherGradeChange();">
             <option value="الصف الأول">الصف الأول</option>
             <option value="الصف الثاني">الصف الثاني</option>
             <option value="الصف الثالث">الصف الثالث</option>
@@ -652,7 +736,7 @@
 
         <div class="form-group">
           <label>رقم الأسبوع (حتى 20):</label>
-          <select id="weekNumberSelect" onchange="loadWeeklySubjectDraft(); renderWeeklyTable();"></select>
+          <select id="weekNumberSelect" onchange="onTeacherWeekChange();"></select>
         </div>
 
         <div class="form-group">
@@ -675,7 +759,7 @@
         </div>
       </div>
 
-      <div class="info-bar">
+      <div class="info-bar" id="weeklyInfoBar">
         ℹ️ تم استرجاع الخطة المسجلة سحابياً لهذه المادة، يمكنك تعديلها والحفظ.
       </div>
 
@@ -719,10 +803,10 @@
       </div>
 
       <button class="btn-save-full" onclick="teacherSaveWeeklyPlan()">⚡ اعتماد وحفظ خطة المادة سحابياً</button>
-      <div class="hint-text">* تُحفظ الخطة وتظهر فوراً لدى جميع المعلمين وأولياء الأمور والإدارة.</div>
+      <div class="hint-text">* تُحفظ الخطة فوراً وتظهر لجميع المعلمين وأولياء الأمور في الأسبوع المختار.</div>
     </div>
 
-    <!-- لوحة استعراض ولي الأمر والأدمن للخطة الأسبوعية -->
+    <!-- لوحة استعراض ولي الأمر والأدمن -->
     <div class="card no-print" id="weeklyParentFilter">
       <div class="form-grid" style="margin-bottom: 0;">
         <div class="form-group">
@@ -761,7 +845,7 @@
       <button class="btn btn-print" onclick="window.print()">🖨️ طباعة الخطة الأسبوعية (A4)</button>
     </div>
 
-    <!-- ورقة الطباعة والعرض للخطة الأسبوعية -->
+    <!-- ورقة الطباعة والعرض -->
     <div class="print-sheet" id="printAreaWeekly">
       <div class="official-header">
         <div class="header-text-ar">
@@ -819,7 +903,7 @@
 </div>
 
 <script>
-  // تهيئة Firebase بمفاتيح مشروع bayariq-weekly-plan
+  // تهيئة Firebase بمفاتيح مشروعك
   const firebaseConfig = {
     apiKey: "AIzaSyBUEDHUAK-6KQOwnsKECYEwsWZzOU2_LWs",
     authDomain: "bayariq-weekly-plan.firebaseapp.com",
@@ -857,8 +941,11 @@
   function populateWeeks() {
     const s1 = document.getElementById('weekNumberSelect');
     const s2 = document.getElementById('viewWeekNumberSelect');
+    const s3 = document.getElementById('dailyWeekSelect');
+    
     s1.innerHTML = '';
     s2.innerHTML = '';
+    s3.innerHTML = '';
 
     for (let i = 1; i <= MAX_WEEKS; i++) {
       const o1 = document.createElement('option');
@@ -872,6 +959,12 @@
       o2.textContent = `الأسبوع ${i}`;
       if (i === 6) o2.selected = true;
       s2.appendChild(o2);
+
+      const o3 = document.createElement('option');
+      o3.value = i.toString();
+      o3.textContent = `الأسبوع ${i}`;
+      if (i === 6) o3.selected = true;
+      s3.appendChild(o3);
     }
   }
 
@@ -976,8 +1069,9 @@
   function getDailyKey() {
     const grade = document.getElementById('gradeSelect').value;
     const section = document.getElementById('sectionSelect').value;
+    const week = document.getElementById('dailyWeekSelect').value;
     const day = document.getElementById('daySelect').value;
-    return sanitizeKey(`${grade}_${section}_${day}`);
+    return sanitizeKey(`${grade}_${section}_أسبوع${week}_${day}`);
   }
 
   function teacherSavePeriod() {
@@ -1048,7 +1142,7 @@
 
   function adminClearCurrentDay() {
     const key = getDailyKey();
-    if (confirm("تحذير: هل أنت متأكد من مسح جميع حصص هذا اليوم لهذا الفصل سحابياً؟")) {
+    if (confirm("تحذير: هل أنت متأكد من مسح حصص هذا اليوم لهذا الأسبوع سحابياً؟")) {
       if (db) {
         db.ref(`daily/${key}`).remove();
       } else {
@@ -1061,11 +1155,12 @@
   function renderDailyTable() {
     const grade = document.getElementById('gradeSelect').value;
     const section = document.getElementById('sectionSelect').value;
+    const week = document.getElementById('dailyWeekSelect').value;
     const day = document.getElementById('daySelect').value;
     const date = document.getElementById('dateInput').value;
 
     document.getElementById('displayDailyGrade').textContent = grade;
-    document.getElementById('displayDailySection').textContent = section;
+    document.getElementById('displayDailySection').textContent = `${section} (الأسبوع ${week})`;
     document.getElementById('displayDailyDay').textContent = day;
     document.getElementById('displayDailyDate').textContent = date;
 
@@ -1088,8 +1183,8 @@
           ${row.subject}
           ${teacherBadge}
         </td>
-        <td class="text-right">${row.lesson}</td>
-        <td class="text-right">${row.homework}</td>
+        <td class="cell-center">${row.lesson}</td>
+        <td class="cell-center">${row.homework}</td>
       `;
       tbody.appendChild(tr);
 
@@ -1122,6 +1217,7 @@
   function shareDailyWhatsApp() {
     const grade = document.getElementById('gradeSelect').value;
     const section = document.getElementById('sectionSelect').value;
+    const week = document.getElementById('dailyWeekSelect').value;
     const day = document.getElementById('daySelect').value;
     const date = document.getElementById('dateInput').value;
     const key = getDailyKey();
@@ -1129,7 +1225,7 @@
 
     let msg = `*مدارس البيارق الأهلية - القسم الابتدائي*\n`;
     msg += `*الدروس والواجبات اليومية*\n`;
-    msg += `📌 *الصف:* ${grade} (${section})\n`;
+    msg += `📌 *الصف:* ${grade} (${section}) - *الأسبوع ${week}*\n`;
     msg += `📅 *اليوم:* ${day} (${date})\n`;
     msg += `━━━━━━━━━━━━━━━━━━━━━\n`;
 
@@ -1154,14 +1250,30 @@
     return sanitizeKey(`${grade}_الأسبوع_${week}`);
   }
 
+  function onTeacherGradeChange() {
+    const val = document.getElementById('weeklyGradeSelect').value;
+    document.getElementById('viewWeeklyGradeSelect').value = val;
+    loadWeeklySubjectDraft();
+    renderWeeklyTable();
+  }
+
+  function onTeacherWeekChange() {
+    const val = document.getElementById('weekNumberSelect').value;
+    document.getElementById('viewWeekNumberSelect').value = val;
+    loadWeeklySubjectDraft();
+    renderWeeklyTable();
+  }
+
   function syncGradeAndRender() {
-    document.getElementById('weeklyGradeSelect').value = document.getElementById('viewWeeklyGradeSelect').value;
+    const val = document.getElementById('viewWeeklyGradeSelect').value;
+    document.getElementById('weeklyGradeSelect').value = val;
     loadWeeklySubjectDraft();
     renderWeeklyTable();
   }
 
   function syncWeekAndRender() {
-    document.getElementById('weekNumberSelect').value = document.getElementById('viewWeekNumberSelect').value;
+    const val = document.getElementById('viewWeekNumberSelect').value;
+    document.getElementById('weekNumberSelect').value = val;
     loadWeeklySubjectDraft();
     renderWeeklyTable();
   }
@@ -1171,17 +1283,31 @@
     const sub = document.getElementById('weeklySubjectInput').value;
     const currentSub = (weeklyData[key] && weeklyData[key][sub]) ? weeklyData[key][sub] : null;
 
-    document.getElementById('weeklyTeacherNameInput').value = currentSub ? currentSub.teacher : '';
-    document.getElementById('sunLesson').value = currentSub ? currentSub.sunLesson : '';
-    document.getElementById('sunHw').value = currentSub ? currentSub.sunHw : '';
-    document.getElementById('monLesson').value = currentSub ? currentSub.monLesson : '';
-    document.getElementById('monHw').value = currentSub ? currentSub.monHw : '';
-    document.getElementById('tueLesson').value = currentSub ? currentSub.tueLesson : '';
-    document.getElementById('tueHw').value = currentSub ? currentSub.tueHw : '';
-    document.getElementById('wedLesson').value = currentSub ? currentSub.wedLesson : '';
-    document.getElementById('wedHw').value = currentSub ? currentSub.wedHw : '';
-    document.getElementById('thuLesson').value = currentSub ? currentSub.thuLesson : '';
-    document.getElementById('thuHw').value = currentSub ? currentSub.thuHw : '';
+    document.getElementById('weeklyTeacherNameInput').value = currentSub ? (currentSub.teacher || '') : '';
+    document.getElementById('sunLesson').value = currentSub ? (currentSub.sunLesson || '') : '';
+    document.getElementById('sunHw').value = currentSub ? (currentSub.sunHw || '') : '';
+    document.getElementById('monLesson').value = currentSub ? (currentSub.monLesson || '') : '';
+    document.getElementById('monHw').value = currentSub ? (currentSub.monHw || '') : '';
+    document.getElementById('tueLesson').value = currentSub ? (currentSub.tueLesson || '') : '';
+    document.getElementById('tueHw').value = currentSub ? (currentSub.tueHw || '') : '';
+    document.getElementById('wedLesson').value = currentSub ? (currentSub.wedLesson || '') : '';
+    document.getElementById('wedHw').value = currentSub ? (currentSub.wedHw || '') : '';
+    document.getElementById('thuLesson').value = currentSub ? (currentSub.thuLesson || '') : '';
+    document.getElementById('thuHw').value = currentSub ? (currentSub.thuHw || '') : '';
+
+    const infoBar = document.getElementById('weeklyInfoBar');
+    if (infoBar) {
+      const curWeek = document.getElementById('weekNumberSelect').value;
+      if (currentSub) {
+        infoBar.innerHTML = `ℹ️ تم استرجاع الخطة المسجلة للأسبوع (${curWeek}) - يمكنك التعديل والحفظ.`;
+        infoBar.style.backgroundColor = 'var(--info-bg)';
+        infoBar.style.color = 'var(--info-text)';
+      } else {
+        infoBar.innerHTML = `✨ أسبوع جديد (${curWeek}) - الخانات فارغة وجاهزة لإدخال خطة جديدة.`;
+        infoBar.style.backgroundColor = '#f0fdf4';
+        infoBar.style.color = '#15803d';
+      }
+    }
   }
 
   function teacherSaveWeeklyPlan() {
@@ -1216,7 +1342,7 @@
       renderWeeklyTable();
     }
 
-    alert(`تم اعتماد وحفظ خطة مادة (${sub}) سحابياً.`);
+    alert(`تم اعتماد وحفظ خطة مادة (${sub}) للأسبوع (${document.getElementById('weekNumberSelect').value}) سحابياً.`);
   }
 
   function adminEditWeeklySubject(sub) {
@@ -1254,8 +1380,8 @@
   function formatDayCell(lesson, hw) {
     if (!lesson && !hw) return '—';
     let content = '';
-    if (lesson) content += `<div style="font-weight: 700; color: #1e293b;">${lesson}</div>`;
-    if (hw) content += `<div style="font-size: 0.82rem; color: #b45309; background: #fffbeb; padding: 2px 4px; border-radius: 4px; margin-top: 4px; border: 1px dashed #fde68a;"><strong>الواجب:</strong> ${hw}</div>`;
+    if (lesson) content += `<div style="font-weight: 700; color: #1e293b; text-align: center;">${lesson}</div>`;
+    if (hw) content += `<div style="font-size: 0.82rem; color: #b45309; background: #fffbeb; padding: 2px 4px; border-radius: 4px; margin-top: 4px; border: 1px dashed #fde68a; text-align: center;"><strong>الواجب:</strong> ${hw}</div>`;
     return content;
   }
 
@@ -1280,7 +1406,7 @@
     const subjects = Object.keys(currentWeekPlans);
 
     if (subjects.length === 0) {
-      tbody.innerHTML = `<tr><td colspan="6" style="padding: 24px; color: #94a3b8; font-weight: 700; font-size: 1rem;">لم يتم إدخال خطط دراسية لهذا الأسبوع بعد.</td></tr>`;
+      tbody.innerHTML = `<tr><td colspan="6" style="padding: 24px; color: #94a3b8; font-weight: 700; font-size: 1rem; text-align: center;">لم يتم إدخال خطط دراسية للأسبوع (${week}) بعد.</td></tr>`;
       return;
     }
 
@@ -1294,11 +1420,11 @@
           ${sub}
           ${teacherText}
         </td>
-        <td class="text-right">${formatDayCell(p.sunLesson, p.sunHw)}</td>
-        <td class="text-right">${formatDayCell(p.monLesson, p.monHw)}</td>
-        <td class="text-right">${formatDayCell(p.tueLesson, p.tueHw)}</td>
-        <td class="text-right">${formatDayCell(p.wedLesson, p.wedHw)}</td>
-        <td class="text-right">${formatDayCell(p.thuLesson, p.thuHw)}</td>
+        <td class="cell-center">${formatDayCell(p.sunLesson, p.sunHw)}</td>
+        <td class="cell-center">${formatDayCell(p.monLesson, p.monHw)}</td>
+        <td class="cell-center">${formatDayCell(p.tueLesson, p.tueHw)}</td>
+        <td class="cell-center">${formatDayCell(p.wedLesson, p.wedHw)}</td>
+        <td class="cell-center">${formatDayCell(p.thuLesson, p.thuHw)}</td>
       `;
       tbody.appendChild(tr);
 
@@ -1341,7 +1467,7 @@
     msg += `━━━━━━━━━━━━━━━━━━━━━\n`;
 
     if (subjects.length === 0) {
-      msg += `لم يتم رصد خطط أسبوعية لهذا الصف بعد.\n`;
+      msg += `لم يتم رصد خطط أسبوعية لهذا الصف في الأسبوع ${week} بعد.\n`;
     } else {
       subjects.forEach(sub => {
         const p = currentWeekPlans[sub];
@@ -1360,7 +1486,6 @@
     window.open(`https://api.whatsapp.com/send?text=${encodeURIComponent(msg)}`, '_blank');
   }
 
-  // مزامنة البيانات سحابياً بشكل لحظي
   function initFirebaseSync() {
     if (!db) return;
 
