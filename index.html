@@ -35,7 +35,7 @@
 
     .container { max-width: 1100px; margin: 0 auto; display: flex; flex-direction: column; gap: 15px; }
 
-    /* الترويسة الرئيسية في الواجهة: الشعار والرؤية */
+    /* الترويسة الرئيسية */
     .hero-brand-card {
       background: #ffffff;
       border-radius: 16px;
@@ -46,7 +46,6 @@
       gap: 10px;
       border: 1px solid var(--border);
       box-shadow: 0 4px 15px rgba(0,0,0,0.03);
-      position: relative;
     }
 
     .hero-top-row {
@@ -54,6 +53,8 @@
       align-items: center;
       justify-content: space-between;
       width: 100%;
+      flex-wrap: wrap;
+      gap: 12px;
     }
 
     .hero-logo-box {
@@ -151,7 +152,6 @@
       display: inline-flex;
       align-items: center;
       gap: 6px;
-      position: relative;
     }
     .gear-btn:hover { background: #e2e8f0; color: #1e293b; }
     .gear-btn.active { background: var(--primary); color: #fff; border-color: var(--primary); }
@@ -180,7 +180,7 @@
       box-shadow: 0 6px 16px rgba(14, 64, 45, 0.3);
     }
 
-    /* الأقسام الثلاثة الرئيسية */
+    /* الأقسام الثلاثة */
     .system-switcher {
       display: grid;
       grid-template-columns: repeat(3, 1fr);
@@ -383,7 +383,47 @@
       100% { transform: scale(0.9); }
     }
 
-    /* صفوف إدخال الدروس للخطة الأسبوعية (خانة الدرس فقط) */
+    /* صندوق المكتسبات المهارية التفاعلي المدمج */
+    .skill-embedded-wrapper {
+      background: #fff;
+      border: 1.5px solid #cbd5e1;
+      border-radius: 12px;
+      padding: 16px;
+      box-shadow: 0 4px 20px rgba(0,0,0,0.04);
+      display: flex;
+      flex-direction: column;
+      gap: 14px;
+      align-items: center;
+    }
+
+    .skill-image-preview {
+      max-width: 100%;
+      max-height: 520px;
+      border-radius: 10px;
+      border: 1px solid var(--border);
+      object-fit: contain;
+      cursor: zoom-in;
+      transition: 0.3s;
+    }
+    .skill-image-preview:hover {
+      box-shadow: 0 8px 25px rgba(0,0,0,0.12);
+    }
+
+    .skill-iframe-container {
+      width: 100%;
+      height: 500px;
+      border-radius: 10px;
+      border: 1.5px solid #cbd5e1;
+      overflow: hidden;
+      background: #f8fafc;
+    }
+    .skill-iframe-container iframe {
+      width: 100%;
+      height: 100%;
+      border: none;
+    }
+
+    /* صفوف إدخال الدروس للخطة الأسبوعية */
     .lesson-rows-container {
       display: flex;
       flex-direction: column;
@@ -654,7 +694,7 @@
     <span id="syncText">متصل بالسحابة (مزامنة مباشرة لجميع الأجهزة)</span>
   </div>
 
-  <!-- 1. شريط البوابات: بوابة ولي الأمر الكبيرة في المنتصف + ترسان جانبيان -->
+  <!-- 1. شريط البوابات -->
   <div class="portal-nav-bar no-print">
     <button class="gear-btn" id="btnTeacher" onclick="switchPortal('teacher')" title="دخول المعلم">
       ⚙️ المعلم
@@ -731,7 +771,7 @@
             <input type="text" id="adminWeekDateInput" value="من 04 / 10 / 2026 إلى 08 / 10 / 2026 م" onchange="saveWeekSettings()">
           </div>
         </div>
-        <button class="btn btn-danger" onclick="adminClearAllWeeklyPlans()">🗑️️ تصفير ومحو الخطة الأسبوعية للبدء بأسبوع جديد</button>
+        <button class="btn btn-danger" onclick="adminClearAllWeeklyPlans()">🗑️ تصفير ومحو الخطة الأسبوعية للبدء بأسبوع جديد</button>
       </div>
 
       <!-- تحكم الأدمن في شريط تنبيهات أولياء الأمور -->
@@ -740,24 +780,28 @@
         <textarea id="adminAlertNoticeInput" placeholder="اكتب التنبيه الهام هنا..." onchange="saveAlertNotice()"></textarea>
       </div>
 
-      <!-- تحكم الأدمن في المكتسبات المهارية -->
+      <!-- تحكم الأدمن في المكتسبات المهارية (دعم الرفع المباشر والعرض المدمج) -->
       <div style="background: #fff; padding: 12px; border-radius: 8px; border: 1px solid #ebd9b5;">
-        <strong style="color: #854d0e; display: block; margin-bottom: 8px;">🎯 إدارة المكتسبات المهارية:</strong>
+        <strong style="color: #854d0e; display: block; margin-bottom: 8px;">🎯 إدارة المكتسبات المهارية (تفتح وتعمل مباشرة في الصفحة):</strong>
         <div class="form-grid">
           <div class="form-group">
             <label>نص أو عنوان المهارة:</label>
-            <input type="text" id="adminSkillTextInput" placeholder="مثلاً: إتقان جدول الضرب / مهارة القراءة السريعة...">
+            <input type="text" id="adminSkillTextInput" placeholder="مثلاً: مهارة الفهم القرائي / جدول الضرب...">
           </div>
           <div class="form-group">
-            <label>رابط إثرائي أو ملف (اختياري):</label>
-            <input type="url" id="adminSkillLinkInput" placeholder="https://...">
+            <label>رابط تفاعلي أو فيديو يوتيوب أو مستند Google Drive (يفتح مدمجاً في الصفحة):</label>
+            <input type="url" id="adminSkillLinkInput" placeholder="رابط يوتيوب أو Drive أو موقع تعليمي...">
           </div>
           <div class="form-group">
-            <label>رابط صورة المهارة (اختياري):</label>
-            <input type="url" id="adminSkillImgInput" placeholder="رابط صورة المهارة...">
+            <label>رفع صورة مباشرة من الجهاز (أو رابط خارجي):</label>
+            <input type="file" id="adminSkillFileInput" accept="image/*" onchange="handleSkillImageUpload(this)">
+            <input type="url" id="adminSkillImgInput" placeholder="أو ضع رابط صورة مباشر..." style="margin-top: 5px;">
           </div>
         </div>
-        <button class="btn btn-primary" onclick="saveSkillContent()">💾 حفظ واعتماد المكتسبات المهارية</button>
+        <div style="display: flex; gap: 10px; margin-top: 8px;">
+          <button class="btn btn-primary" onclick="saveSkillContent()">💾 حفظ واعتماد المكتسبات المهارية</button>
+          <button class="btn btn-danger" onclick="clearSkillContent()">🗑️ مسح المحتوى الحالي</button>
+        </div>
       </div>
 
       <!-- سجل استفسارات أولياء الأمور -->
@@ -786,7 +830,7 @@
     <div class="switch-card" id="cardSkills" onclick="switchSystem('skills')">
       <div class="icon">🎯</div>
       <h3>المكتسبات المهارية</h3>
-      <p>أهداف ومهارات ونواتج التعلم المستهدفة</p>
+      <p>تفتح وتُعرض مباشرة في الصفحة</p>
     </div>
   </div>
 
@@ -950,7 +994,7 @@
     </div>
   </div>
 
-  <!-- ==================== 2. قسم الخطة الأسبوعية (موضوع الدرس فقط بدون واجبات) ==================== -->
+  <!-- ==================== 2. قسم الخطة الأسبوعية ==================== -->
   <div id="weeklySectionContainer" style="display: none;">
     
     <div class="card no-print teacher-view" style="display: none;">
@@ -1005,7 +1049,7 @@
       </div>
 
       <div class="info-bar" id="weeklyInfoBar">
-        ℹ️ اكتب موضوعات الدروس الخاصة بمادتك حسب عدد الحصص الأسبوعية (تم إلغاء خانة الواجب في الخطة الأسبوعية).
+        ℹ️ اكتب موضوعات الدروس الخاصة بمادتك حسب عدد الحصص الأسبوعية (بدون خانة الواجب).
       </div>
 
       <!-- صفوف موضوعات الدروس فقط -->
@@ -1040,7 +1084,7 @@
       <button class="btn btn-print" onclick="window.print()">🖨️ طباعة الخطة الأسبوعية (A4)</button>
     </div>
 
-    <!-- ورقة الطباعة والعرض للخطة الأسبوعية (موضوع الدرس فقط) -->
+    <!-- ورقة الطباعة والعرض للخطة الأسبوعية -->
     <div class="print-sheet" id="printAreaWeekly">
       <div class="official-header">
         <div class="header-text-ar">
@@ -1085,7 +1129,7 @@
 
   </div>
 
-  <!-- ==================== 3. قسم المكتسبات المهارية ==================== -->
+  <!-- ==================== 3. قسم المكتسبات المهارية (تفتح وتعمل مباشرة في الصفحة) ==================== -->
   <div id="skillsSectionContainer" style="display: none;">
     <div class="card">
       <div class="card-title">🎯 المكتسبات المهارية ونواتج التعلم المستهدفة</div>
@@ -1416,6 +1460,23 @@
     document.getElementById('parentAlertNoticeText').textContent = parentAlertText;
   }
 
+  /* ================= منطق المكتسبات المهارية التفاعلي المباشر ================= */
+  // رفع الصورة مباشرة من الجهاز وتحويلها إلى Base64
+  function handleSkillImageUpload(input) {
+    if (input.files && input.files[0]) {
+      const file = input.files[0];
+      if (file.size > 2 * 1024 * 1024) {
+        alert("حجم الصورة كبير جداً، يرجى اختيار صورة أقل من 2 ميجابايت.");
+        return;
+      }
+      const reader = new FileReader();
+      reader.onload = function(e) {
+        document.getElementById('adminSkillImgInput').value = e.target.result;
+      };
+      reader.readAsDataURL(file);
+    }
+  }
+
   function saveSkillContent() {
     const text = document.getElementById('adminSkillTextInput').value.trim();
     const link = document.getElementById('adminSkillLinkInput').value.trim();
@@ -1424,7 +1485,47 @@
     skillsData = { text, link, img };
     if (db) db.ref('system/skillsData').set(skillsData);
     renderSkills();
-    alert("تم حفظ المكتسبات المهارية بنجاح.");
+    alert("تم حفظ المكتسبات المهارية وعرضها مباشرة بالصفحة.");
+  }
+
+  function clearSkillContent() {
+    if (confirm("هل تريد مسح محتوى المكتسبات المهارية الحالي؟")) {
+      skillsData = { text: '', link: '', img: '' };
+      if (db) db.ref('system/skillsData').set(skillsData);
+      document.getElementById('adminSkillTextInput').value = '';
+      document.getElementById('adminSkillLinkInput').value = '';
+      document.getElementById('adminSkillImgInput').value = '';
+      renderSkills();
+      alert("تم المسح بنجاح.");
+    }
+  }
+
+  // تحويل روابط يوتيوب ومستندات Drive لفتحها مدمجة في الصفحة
+  function getEmbedUrl(rawUrl) {
+    if (!rawUrl) return null;
+    let url = rawUrl.trim();
+
+    // 1. YouTube
+    if (url.includes('youtube.com/watch') || url.includes('youtu.be/')) {
+      let videoId = '';
+      if (url.includes('youtu.be/')) {
+        videoId = url.split('youtu.be/')[1].split('?')[0];
+      } else if (url.includes('v=')) {
+        videoId = url.split('v=')[1].split('&')[0];
+      }
+      if (videoId) {
+        return { type: 'youtube', embed: `https://www.youtube.com/embed/${videoId}` };
+      }
+    }
+
+    // 2. Google Drive / Docs / Sheets / PDF
+    if (url.includes('drive.google.com') || url.includes('docs.google.com')) {
+      if (url.includes('/view') || url.includes('/edit')) {
+        return { type: 'drive', embed: url.replace(/\/view.*$/, '/preview').replace(/\/edit.*$/, '/preview') };
+      }
+    }
+
+    return { type: 'web', embed: url };
   }
 
   function renderSkills() {
@@ -1432,21 +1533,61 @@
     area.innerHTML = '';
 
     if (!skillsData.text && !skillsData.link && !skillsData.img) {
-      area.innerHTML = `<div style="color: #64748b; font-weight: 700; padding: 20px;">سيتم إدراج المكتسبات المهارية ونواتج التعلم المستهدفة قريباً من قِبل إدارة المدرسة.</div>`;
+      area.innerHTML = `<div style="color: #64748b; font-weight: 700; padding: 25px; font-size: 1.05rem;">سيتم إدراج المكتسبات المهارية ونواتج التعلم المستهدفة قريباً من قِبل إدارة المدرسة.</div>`;
       return;
     }
 
+    const wrapper = document.createElement('div');
+    wrapper.className = 'skill-embedded-wrapper';
+
+    // 1. العنوان والنص التوجيهي
     if (skillsData.text) {
-      area.innerHTML += `<div style="font-size: 1.25rem; font-weight: 800; color: var(--primary);">${skillsData.text}</div>`;
+      wrapper.innerHTML += `
+        <div style="font-size: 1.35rem; font-weight: 900; color: var(--primary); text-align: center; border-bottom: 2px solid var(--gold); padding-bottom: 6px; width: 100%;">
+          ⭐ ${skillsData.text}
+        </div>
+      `;
     }
 
+    // 2. عرض الصورة مباشرة في الصفحة
     if (skillsData.img) {
-      area.innerHTML += `<div style="margin: 10px 0;"><img src="${skillsData.img}" alt="المكتسبات المهارية" style="max-width: 100%; max-height: 400px; border-radius: 10px; border: 1px solid var(--border);" onerror="this.style.display='none'"></div>`;
+      wrapper.innerHTML += `
+        <div style="width: 100%; display: flex; justify-content: center; margin: 8px 0;">
+          <img src="${skillsData.img}" class="skill-image-preview" alt="المكتسبات المهارية" onclick="window.open(this.src, '_blank')" title="اضغط لتكبير الصورة بدقة كاملة">
+        </div>
+      `;
     }
 
+    // 3. عرض الرابط (فيديو أو مستند تفاعلي) مدمجاً في الصفحة مباشرة
     if (skillsData.link) {
-      area.innerHTML += `<div><a href="${skillsData.link}" target="_blank" class="btn btn-primary" style="text-decoration: none;">🔗 اضغط هنا للاطلاع على المحتوى الإثرائي / المهارة</a></div>`;
+      const embedInfo = getEmbedUrl(skillsData.link);
+      if (embedInfo) {
+        if (embedInfo.type === 'youtube' || embedInfo.type === 'drive') {
+          wrapper.innerHTML += `
+            <div style="width: 100%; text-align: right; margin-top: 6px;">
+              <strong style="color: var(--primary); font-size: 0.95rem;">📺 المحتوى التفاعلي المباشر:</strong>
+            </div>
+            <div class="skill-iframe-container">
+              <iframe src="${embedInfo.embed}" allowfullscreen allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"></iframe>
+            </div>
+          `;
+        } else {
+          // رابط ويب عام مع إمكانية الفتح في نافذة تفاعلية مدمجة أو خارجية
+          wrapper.innerHTML += `
+            <div class="skill-iframe-container" style="height: 450px;">
+              <iframe src="${embedInfo.embed}" sandbox="allow-scripts allow-same-origin allow-forms"></iframe>
+            </div>
+            <div style="margin-top: 6px;">
+              <a href="${skillsData.link}" target="_blank" class="btn btn-primary" style="text-decoration: none;">
+                🌐 فتح الرابط في نافذة كاملة جديدة
+              </a>
+            </div>
+          `;
+        }
+      }
     }
+
+    area.appendChild(wrapper);
   }
 
   function adminClearAllWeeklyPlans() {
@@ -1787,7 +1928,7 @@
     window.open(`https://api.whatsapp.com/send?text=${encodeURIComponent(msg)}`, '_blank');
   }
 
-  /* ================= منطق الخطة الأسبوعية (موضوع الدرس فقط) ================= */
+  /* ================= منطق الخطة الأسبوعية ================= */
   function getWeeklyKey() {
     const grade = document.getElementById('weeklyGradeSelect').value;
     return sanitizeKey(`${grade}`);
@@ -1807,7 +1948,6 @@
     renderWeeklyTable();
   }
 
-  // توليد صف إدخال الدرس فقط بدون خانة الواجب
   function createLessonRowHtml(index, lessonVal = '') {
     return `
       <div class="lesson-row-card" id="lessonRow_${index}">
@@ -2000,7 +2140,7 @@
       const headerTr = document.createElement('tr');
       headerTr.innerHTML = `
         <td class="merged-subject-header-td">
-          📚 المادة: ${sub} &nbsp;&nbsp;|&nbsp;&nbsp; 👨‍🏫 المعلم: ${teacherName}
+          📚 المادة: ${sub} &nbsp;&nbsp;|&nbsp;&nbsp; 👨‍‍🏫 المعلم: ${teacherName}
         </td>
       `;
       tbody.appendChild(headerTr);
