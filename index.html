@@ -383,7 +383,7 @@
       100% { transform: scale(0.9); }
     }
 
-    /* صندوق المكتسبات المهارية التفاعلي المدمج */
+    /* صندوق المكتسبات المهارية متعدد الصور */
     .skill-embedded-wrapper {
       background: #fff;
       border: 1.5px solid #cbd5e1;
@@ -394,13 +394,22 @@
       flex-direction: column;
       gap: 14px;
       align-items: center;
+      width: 100%;
+    }
+
+    .skill-images-grid {
+      display: flex;
+      flex-direction: column;
+      gap: 15px;
+      width: 100%;
+      align-items: center;
     }
 
     .skill-image-preview {
       max-width: 100%;
-      max-height: 520px;
+      max-height: 550px;
       border-radius: 10px;
-      border: 1px solid var(--border);
+      border: 1.5px solid var(--border);
       object-fit: contain;
       cursor: zoom-in;
       transition: 0.3s;
@@ -571,7 +580,7 @@
       border-top: 2.5px solid var(--primary) !important;
       font-weight: 900 !important;
       color: var(--primary) !important;
-      font-size: 1.02rem !important;
+      font-size: 1.05rem !important;
       padding: 10px 12px !important;
       text-align: center !important;
     }
@@ -672,7 +681,7 @@
 
 <div class="container">
 
-  <!-- بطاقة الترويسة الأنيقة: الشعار والرؤية -->
+  <!-- بطاقة الترويسة الأنيقة -->
   <div class="hero-brand-card no-print">
     <div class="hero-top-row">
       <div class="hero-logo-box">
@@ -755,7 +764,7 @@
             <input type="text" id="adminOverrideDateInput" placeholder="مثلاً: 04 / 10 / 2026 م" onchange="saveAdminDateOverride()">
           </div>
         </div>
-        <span style="font-size: 0.8rem; color: #64748b;">* يتم تفريغ جدول الواجبات اليومية تلقائياً كل يوم الساعة 11:00 مساءً للبدء باليوم التالي.</span>
+        <span style="font-size: 0.8rem; color: #64748b;">* يتم تفريغ الواجبات يومياً 11 م ما عدا واجبات الخميس تبقى حتى مساء السبت.</span>
       </div>
 
       <!-- إعدادات الأسبوع الموحد وزر المسح للأدمن فقط -->
@@ -780,24 +789,24 @@
         <textarea id="adminAlertNoticeInput" placeholder="اكتب التنبيه الهام هنا..." onchange="saveAlertNotice()"></textarea>
       </div>
 
-      <!-- تحكم الأدمن في المكتسبات المهارية (دعم الرفع المباشر والعرض المدمج) -->
+      <!-- تحكم الأدمن في المكتسبات المهارية -->
       <div style="background: #fff; padding: 12px; border-radius: 8px; border: 1px solid #ebd9b5;">
-        <strong style="color: #854d0e; display: block; margin-bottom: 8px;">🎯 إدارة المكتسبات المهارية (تفتح وتعمل مباشرة في الصفحة):</strong>
+        <strong style="color: #854d0e; display: block; margin-bottom: 8px;">🎯 إدارة المكتسبات المهارية (رفع عدة صور وروابط تفتح بالصفحة):</strong>
         <div class="form-grid">
           <div class="form-group">
             <label>نص أو عنوان المهارة:</label>
             <input type="text" id="adminSkillTextInput" placeholder="مثلاً: مهارة الفهم القرائي / جدول الضرب...">
           </div>
           <div class="form-group">
-            <label>رابط تفاعلي أو فيديو يوتيوب أو مستند Google Drive (يفتح مدمجاً في الصفحة):</label>
+            <label>رابط تفاعلي أو فيديو يوتيوب أو مستند Drive:</label>
             <input type="url" id="adminSkillLinkInput" placeholder="رابط يوتيوب أو Drive أو موقع تعليمي...">
           </div>
           <div class="form-group">
-            <label>رفع صورة مباشرة من الجهاز (أو رابط خارجي):</label>
-            <input type="file" id="adminSkillFileInput" accept="image/*" onchange="handleSkillImageUpload(this)">
-            <input type="url" id="adminSkillImgInput" placeholder="أو ضع رابط صورة مباشر..." style="margin-top: 5px;">
+            <label>رفع صور مباشرة من الجهاز (يمكن اختيار أكثر من صورة معاً):</label>
+            <input type="file" id="adminSkillFileInput" accept="image/*" multiple onchange="handleMultipleSkillImagesUpload(this)">
           </div>
         </div>
+        <div id="adminSkillUploadedCount" style="font-size: 0.85rem; color: #047857; font-weight: 700; margin: 4px 0;"></div>
         <div style="display: flex; gap: 10px; margin-top: 8px;">
           <button class="btn btn-primary" onclick="saveSkillContent()">💾 حفظ واعتماد المكتسبات المهارية</button>
           <button class="btn btn-danger" onclick="clearSkillContent()">🗑️ مسح المحتوى الحالي</button>
@@ -825,7 +834,7 @@
     <div class="switch-card active" id="cardDaily" onclick="switchSystem('daily')">
       <div class="icon">📝</div>
       <h3>الواجبات اليومية</h3>
-      <p>جدول اليوم المباشر (تفريغ يومي 11 م)</p>
+      <p>جدول اليوم المباشر</p>
     </div>
     <div class="switch-card" id="cardSkills" onclick="switchSystem('skills')">
       <div class="icon">🎯</div>
@@ -834,7 +843,7 @@
     </div>
   </div>
 
-  <!-- ==================== 1. قسم الدروس والواجبات اليومية ==================== -->
+  <!-- ==================== 1. قسم الدروس والواجبات اليومية (مع اسم المعلم) ==================== -->
   <div id="dailySectionContainer">
     <div class="card no-print">
       <div class="form-grid" style="margin-bottom: 0;">
@@ -867,7 +876,7 @@
       </div>
     </div>
 
-    <!-- لوحة إدخال المعلم للواجب اليومي -->
+    <!-- لوحة إدخال المعلم للواجب اليومي (تحتوي على اسم المعلم) -->
     <div class="card no-print teacher-view" style="display: none;">
       <div class="card-title">✍ تسجيل / تعديل الحصة لجدول اليوم</div>
       
@@ -942,7 +951,7 @@
       <button class="btn btn-print" onclick="window.print()">🖨️ طباعة جدول اليوم (A4)</button>
     </div>
 
-    <!-- ورقة الطباعة والعرض للواجب اليومي -->
+    <!-- ورقة الطباعة والعرض للواجب اليومي (المادة والمعلم) -->
     <div class="print-sheet" id="printAreaDaily">
       <div class="official-header">
         <div class="header-text-ar">
@@ -984,7 +993,7 @@
       </div>
 
       <div id="teacherDailyControls" class="no-print teacher-view" style="display: none; background: #f8fafc; padding: 10px; border-radius: 8px; border: 1px solid var(--border); margin-top: 10px;">
-        <strong style="color: var(--primary); font-size: 0.9rem; display: block; margin-bottom: 6px;">✏️ خيارات تعديل الحصص المضافة:</strong>
+        <strong style="color: var(--primary); font-size: 0.9rem; display: block; margin-bottom: 6px;">✏️️ خيارات تعديل الحصص المضافة:</strong>
         <div style="display: flex; gap: 8px; flex-wrap: wrap;" id="dailyActionButtons"></div>
       </div>
 
@@ -994,7 +1003,7 @@
     </div>
   </div>
 
-  <!-- ==================== 2. قسم الخطة الأسبوعية ==================== -->
+  <!-- ==================== 2. قسم الخطة الأسبوعية (بدون اسم المعلم وبدون واجبات) ==================== -->
   <div id="weeklySectionContainer" style="display: none;">
     
     <div class="card no-print teacher-view" style="display: none;">
@@ -1012,7 +1021,7 @@
           </select>
         </div>
 
-        <div class="form-group">
+        <div class="form-group" style="grid-column: span 2;">
           <label>المادة الدراسية:</label>
           <select id="weeklySubjectInput" onchange="checkCustomSubject('weekly'); loadWeeklySubjectDraft();">
             <option value="لغتي" selected>لغتي</option>
@@ -1041,15 +1050,10 @@
           </select>
           <input type="text" id="customWeeklySubjectInput" placeholder="اكتب اسم المادة هنا..." style="display: none; margin-top: 5px; border-color: var(--gold);" onchange="loadWeeklySubjectDraft()">
         </div>
-
-        <div class="form-group">
-          <label>اسم المعلم:</label>
-          <input type="text" id="weeklyTeacherNameInput" placeholder="أدخل اسم المعلم...">
-        </div>
       </div>
 
       <div class="info-bar" id="weeklyInfoBar">
-        ℹ️ اكتب موضوعات الدروس الخاصة بمادتك حسب عدد الحصص الأسبوعية (بدون خانة الواجب).
+        ℹ️ اكتب موضوعات الدروس الخاصة بمادتك حسب عدد الحصص الأسبوعية (الخطة عامة وموحدة لجميع فصول الصف).
       </div>
 
       <!-- صفوف موضوعات الدروس فقط -->
@@ -1084,7 +1088,7 @@
       <button class="btn btn-print" onclick="window.print()">🖨️ طباعة الخطة الأسبوعية (A4)</button>
     </div>
 
-    <!-- ورقة الطباعة والعرض للخطة الأسبوعية -->
+    <!-- ورقة الطباعة والعرض للخطة الأسبوعية (بدون اسم المعلم) -->
     <div class="print-sheet" id="printAreaWeekly">
       <div class="official-header">
         <div class="header-text-ar">
@@ -1129,7 +1133,7 @@
 
   </div>
 
-  <!-- ==================== 3. قسم المكتسبات المهارية (تفتح وتعمل مباشرة في الصفحة) ==================== -->
+  <!-- ==================== 3. قسم المكتسبات المهارية (متعدد الصور) ==================== -->
   <div id="skillsSectionContainer" style="display: none;">
     <div class="card">
       <div class="card-title">🎯 المكتسبات المهارية ونواتج التعلم المستهدفة</div>
@@ -1241,7 +1245,7 @@
 
   let dailyData = {};
   let weeklyData = {};
-  let skillsData = {};
+  let skillsData = { text: '', link: '', images: [] };
   let parentAlertText = "حرصاً على تميز أبنائنا الطلاب، نرجو متابعة إنجاز الواجبات اليومية ومراجعة الخطة الأسبوعية بشكل مستمر، والتواصل مع إدارة المدرسة عند الحاجة.";
 
   let currentWeekTitle = "الأسبوع السادس";
@@ -1258,6 +1262,8 @@
   let userRatingScore = 10;
   let lastAutoClearDate = "";
 
+  let tempUploadedImages = [];
+
   function computeLiveDateTime() {
     if (adminOverrideDay !== "auto" && adminOverrideDay !== "") {
       currentEffectiveDay = adminOverrideDay;
@@ -1266,6 +1272,7 @@
       const dayIdx = now.getDay();
       const daysMap = ['الأحد', 'الإثنين', 'الثلاثاء', 'الأربعاء', 'الخميس', 'الجمعة', 'السبت'];
       
+      // إذا كان يوم جمعة أو سبت نحسب الأحد القادم تلقائياً
       if (dayIdx === 5 || dayIdx === 6) {
         currentEffectiveDay = 'الأحد';
       } else {
@@ -1298,11 +1305,21 @@
     if (elDate) elDate.value = currentEffectiveDate;
   }
 
+  // التفريغ التلقائي: يومياً 11 م عدا الخميس يترك حتى مساء السبت 11 م
   function checkDailyAutoClear() {
     const now = new Date();
+    const dayIdx = now.getDay(); // 0=Sun, 1=Mon, 2=Tue, 3=Wed, 4=Thu, 5=Fri, 6=Sat
     const hours = now.getHours();
     const todayKey = now.toDateString();
 
+    // إذا كان يوم الخميس أو الجمعة: لا نقوم بالتفريغ، لتبقى واجبات الخميس حتى مساء السبت
+    if (dayIdx === 4 || dayIdx === 5) {
+      return;
+    }
+
+    // يتم التفريغ عند حلول الساعة 11 مساءً (23:00 وما بعدها)
+    // - لأيام الأحد والإثنين والثلاثاء والأربعاء: يتم تفريغ نفس اليوم الساعة 11 م.
+    // - ليوم السبت: الساعة 11 م يتم تفريغ جدول الخميس المنتهي تمهيداً للأحد.
     if (hours >= 23 && lastAutoClearDate !== todayKey) {
       lastAutoClearDate = todayKey;
       if (db) {
@@ -1460,52 +1477,62 @@
     document.getElementById('parentAlertNoticeText').textContent = parentAlertText;
   }
 
-  /* ================= منطق المكتسبات المهارية التفاعلي المباشر ================= */
-  // رفع الصورة مباشرة من الجهاز وتحويلها إلى Base64
-  function handleSkillImageUpload(input) {
-    if (input.files && input.files[0]) {
-      const file = input.files[0];
-      if (file.size > 2 * 1024 * 1024) {
-        alert("حجم الصورة كبير جداً، يرجى اختيار صورة أقل من 2 ميجابايت.");
-        return;
+  /* ================= منطق المكتسبات المهارية متعددة الصور ================= */
+  function handleMultipleSkillImagesUpload(input) {
+    tempUploadedImages = [];
+    const files = input.files;
+    if (files && files.length > 0) {
+      let readCount = 0;
+      for (let i = 0; i < files.length; i++) {
+        const file = files[i];
+        const reader = new FileReader();
+        reader.onload = function(e) {
+          tempUploadedImages.push(e.target.result);
+          readCount++;
+          if (readCount === files.length) {
+            document.getElementById('adminSkillUploadedCount').textContent = `✅ تم اختيار (${tempUploadedImages.length}) صور بنجاح، اضغط حفظ للاعتماد.`;
+          }
+        };
+        reader.readAsDataURL(file);
       }
-      const reader = new FileReader();
-      reader.onload = function(e) {
-        document.getElementById('adminSkillImgInput').value = e.target.result;
-      };
-      reader.readAsDataURL(file);
     }
   }
 
   function saveSkillContent() {
     const text = document.getElementById('adminSkillTextInput').value.trim();
     const link = document.getElementById('adminSkillLinkInput').value.trim();
-    const img = document.getElementById('adminSkillImgInput').value.trim();
 
-    skillsData = { text, link, img };
-    if (db) db.ref('system/skillsData').set(skillsData);
+    let finalImages = tempUploadedImages.length > 0 ? tempUploadedImages : (skillsData.images || []);
+
+    skillsData = {
+      text,
+      link,
+      images: finalImages
+    };
+
+    if (db) db.ref('system/skillsData_v2').set(skillsData);
     renderSkills();
-    alert("تم حفظ المكتسبات المهارية وعرضها مباشرة بالصفحة.");
+    alert("تم حفظ واعتماد المكتسبات المهارية وعرضها مباشرة بالصفحة.");
   }
 
   function clearSkillContent() {
     if (confirm("هل تريد مسح محتوى المكتسبات المهارية الحالي؟")) {
-      skillsData = { text: '', link: '', img: '' };
-      if (db) db.ref('system/skillsData').set(skillsData);
+      skillsData = { text: '', link: '', images: [] };
+      tempUploadedImages = [];
+      if (db) db.ref('system/skillsData_v2').set(skillsData);
       document.getElementById('adminSkillTextInput').value = '';
       document.getElementById('adminSkillLinkInput').value = '';
-      document.getElementById('adminSkillImgInput').value = '';
+      document.getElementById('adminSkillFileInput').value = '';
+      document.getElementById('adminSkillUploadedCount').textContent = '';
       renderSkills();
       alert("تم المسح بنجاح.");
     }
   }
 
-  // تحويل روابط يوتيوب ومستندات Drive لفتحها مدمجة في الصفحة
   function getEmbedUrl(rawUrl) {
     if (!rawUrl) return null;
     let url = rawUrl.trim();
 
-    // 1. YouTube
     if (url.includes('youtube.com/watch') || url.includes('youtu.be/')) {
       let videoId = '';
       if (url.includes('youtu.be/')) {
@@ -1518,7 +1545,6 @@
       }
     }
 
-    // 2. Google Drive / Docs / Sheets / PDF
     if (url.includes('drive.google.com') || url.includes('docs.google.com')) {
       if (url.includes('/view') || url.includes('/edit')) {
         return { type: 'drive', embed: url.replace(/\/view.*$/, '/preview').replace(/\/edit.*$/, '/preview') };
@@ -1532,7 +1558,8 @@
     const area = document.getElementById('skillsDisplayArea');
     area.innerHTML = '';
 
-    if (!skillsData.text && !skillsData.link && !skillsData.img) {
+    const hasImages = skillsData.images && skillsData.images.length > 0;
+    if (!skillsData.text && !skillsData.link && !hasImages) {
       area.innerHTML = `<div style="color: #64748b; font-weight: 700; padding: 25px; font-size: 1.05rem;">سيتم إدراج المكتسبات المهارية ونواتج التعلم المستهدفة قريباً من قِبل إدارة المدرسة.</div>`;
       return;
     }
@@ -1540,7 +1567,6 @@
     const wrapper = document.createElement('div');
     wrapper.className = 'skill-embedded-wrapper';
 
-    // 1. العنوان والنص التوجيهي
     if (skillsData.text) {
       wrapper.innerHTML += `
         <div style="font-size: 1.35rem; font-weight: 900; color: var(--primary); text-align: center; border-bottom: 2px solid var(--gold); padding-bottom: 6px; width: 100%;">
@@ -1549,22 +1575,23 @@
       `;
     }
 
-    // 2. عرض الصورة مباشرة في الصفحة
-    if (skillsData.img) {
-      wrapper.innerHTML += `
-        <div style="width: 100%; display: flex; justify-content: center; margin: 8px 0;">
-          <img src="${skillsData.img}" class="skill-image-preview" alt="المكتسبات المهارية" onclick="window.open(this.src, '_blank')" title="اضغط لتكبير الصورة بدقة كاملة">
-        </div>
-      `;
+    if (hasImages) {
+      let imgsHtml = '<div class="skill-images-grid">';
+      skillsData.images.forEach((imgSrc, index) => {
+        imgsHtml += `
+          <img src="${imgSrc}" class="skill-image-preview" alt="مهارة ${index + 1}" onclick="window.open(this.src, '_blank')" title="اضغط لتكبير الصورة بدقة كاملة">
+        `;
+      });
+      imgsHtml += '</div>';
+      wrapper.innerHTML += imgsHtml;
     }
 
-    // 3. عرض الرابط (فيديو أو مستند تفاعلي) مدمجاً في الصفحة مباشرة
     if (skillsData.link) {
       const embedInfo = getEmbedUrl(skillsData.link);
       if (embedInfo) {
         if (embedInfo.type === 'youtube' || embedInfo.type === 'drive') {
           wrapper.innerHTML += `
-            <div style="width: 100%; text-align: right; margin-top: 6px;">
+            <div style="width: 100%; text-align: right; margin-top: 8px;">
               <strong style="color: var(--primary); font-size: 0.95rem;">📺 المحتوى التفاعلي المباشر:</strong>
             </div>
             <div class="skill-iframe-container">
@@ -1572,14 +1599,13 @@
             </div>
           `;
         } else {
-          // رابط ويب عام مع إمكانية الفتح في نافذة تفاعلية مدمجة أو خارجية
           wrapper.innerHTML += `
             <div class="skill-iframe-container" style="height: 450px;">
               <iframe src="${embedInfo.embed}" sandbox="allow-scripts allow-same-origin allow-forms"></iframe>
             </div>
             <div style="margin-top: 6px;">
               <a href="${skillsData.link}" target="_blank" class="btn btn-primary" style="text-decoration: none;">
-                🌐 فتح الرابط في نافذة كاملة جديدة
+                🌐 فتح الرابط في نافذة جديدة
               </a>
             </div>
           `;
@@ -1736,7 +1762,7 @@
     }
   }
 
-  /* ================= منطق الواجبات اليومية ================= */
+  /* ================= منطق الواجبات اليومية (مع اسم المعلم) ================= */
   function updateClassSection() {
     const grade = document.getElementById('gradeSelect').value;
     const sectionSelect = document.getElementById('sectionSelect');
@@ -1928,7 +1954,7 @@
     window.open(`https://api.whatsapp.com/send?text=${encodeURIComponent(msg)}`, '_blank');
   }
 
-  /* ================= منطق الخطة الأسبوعية ================= */
+  /* ================= منطق الخطة الأسبوعية (بدون اسم المعلم) ================= */
   function getWeeklyKey() {
     const grade = document.getElementById('weeklyGradeSelect').value;
     return sanitizeKey(`${grade}`);
@@ -1984,8 +2010,6 @@
     const sub = getSelectedSubject('weekly');
     const currentSub = (weeklyData[key] && weeklyData[key][sub]) ? weeklyData[key][sub] : null;
 
-    document.getElementById('weeklyTeacherNameInput').value = currentSub ? (currentSub.teacher || '') : '';
-    
     const container = document.getElementById('lessonRowsContainer');
     container.innerHTML = '';
 
@@ -2022,7 +2046,6 @@
 
     const key = getWeeklyKey();
     const sub = getSelectedSubject('weekly');
-    const teacher = document.getElementById('weeklyTeacherNameInput').value.trim();
 
     const rows = document.querySelectorAll('#lessonRowsContainer .lesson-row-card');
     const lessonsArray = [];
@@ -2042,7 +2065,6 @@
     }
 
     const planObj = {
-      teacher: teacher || '',
       lessons: lessonsArray
     };
 
@@ -2134,18 +2156,17 @@
     subjects.forEach(sub => {
       const p = currentWeekPlans[sub];
       const lessonsList = p.lessons || [];
-      const teacherName = p.teacher ? `أ. ${p.teacher}` : 'معلم المادة';
 
-      // 1. رأس المادة المدمج
+      // 1. رأس المادة بدون اسم المعلم
       const headerTr = document.createElement('tr');
       headerTr.innerHTML = `
         <td class="merged-subject-header-td">
-          📚 المادة: ${sub} &nbsp;&nbsp;|&nbsp;&nbsp; 👨‍‍🏫 المعلم: ${teacherName}
+          📚 المادة الدراسية: ${sub}
         </td>
       `;
       tbody.appendChild(headerTr);
 
-      // 2. عنوان العمود (موضوع الدرس فقط)
+      // 2. عنوان العمود
       const subheadTr = document.createElement('tr');
       subheadTr.innerHTML = `
         <th class="subhead-th" style="width: 100%; text-align: center;">موضوع الدرس</th>
@@ -2220,8 +2241,7 @@
       subjects = sortSubjectsByPriority(subjects);
       subjects.forEach(sub => {
         const p = currentWeekPlans[sub];
-        const teacherText = p.teacher ? ` (أ. ${p.teacher})` : '';
-        msg += `📚 *مادة ${sub}${teacherText}:*\n`;
+        msg += `📚 *مادة ${sub}:*\n`;
         const list = p.lessons || [];
         list.forEach((item, idx) => {
           msg += `• درس ${idx + 1}: ${item.lesson}\n`;
@@ -2259,7 +2279,7 @@
       currentWeekTitle = sys.weekTitle || currentWeekTitle;
       currentWeekDate = sys.weekDate || currentWeekDate;
       parentAlertText = sys.parentAlert || parentAlertText;
-      skillsData = sys.skillsData || {};
+      skillsData = sys.skillsData_v2 || { text: '', link: '', images: [] };
       adminOverrideDay = sys.overrideDay || "auto";
       adminOverrideDate = sys.overrideDate || "";
       lastAutoClearDate = sys.lastAutoClearDate || "";
@@ -2277,7 +2297,6 @@
       if (skillsData) {
         document.getElementById('adminSkillTextInput').value = skillsData.text || '';
         document.getElementById('adminSkillLinkInput').value = skillsData.link || '';
-        document.getElementById('adminSkillImgInput').value = skillsData.img || '';
       }
 
       computeLiveDateTime();
