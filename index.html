@@ -3,7 +3,7 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>بوابة البيارق الأهلية - الخطط الأسبوعية والواجبات اليومية</title>
+  <title>بوابة البيارق الأهلية - الخطط الأسبوعية والواجبات والمكتسبات المهارية</title>
   <link href="https://fonts.googleapis.com/css2?family=Cairo:wght@400;600;700;800;900&display=swap" rel="stylesheet">
   
   <!-- مكتبات Firebase السحابية الرسمية -->
@@ -35,6 +35,66 @@
 
     .container { max-width: 1100px; margin: 0 auto; display: flex; flex-direction: column; gap: 15px; }
 
+    /* الترويسة الرئيسية في الواجهة: الشعار والرؤية */
+    .hero-brand-card {
+      background: #ffffff;
+      border-radius: 16px;
+      padding: 16px 24px;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      gap: 10px;
+      border: 1px solid var(--border);
+      box-shadow: 0 4px 15px rgba(0,0,0,0.03);
+      position: relative;
+    }
+
+    .hero-top-row {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      width: 100%;
+    }
+
+    .hero-logo-box {
+      display: flex;
+      align-items: center;
+      gap: 14px;
+    }
+
+    .hero-logo-box img {
+      max-height: 80px;
+      max-width: 130px;
+      object-fit: contain;
+    }
+
+    .hero-title-box h1 {
+      font-size: 1.4rem;
+      color: var(--primary);
+      font-weight: 900;
+      line-height: 1.3;
+    }
+
+    .hero-title-box p {
+      font-size: 0.88rem;
+      color: #64748b;
+      font-weight: 700;
+    }
+
+    .vision-ribbon {
+      background: linear-gradient(135deg, #fdfaf3 0%, #fef3c7 100%);
+      border: 1.5px solid #ebd9b5;
+      color: #854d0e;
+      padding: 6px 20px;
+      border-radius: 30px;
+      font-size: 0.95rem;
+      font-weight: 800;
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      box-shadow: 0 2px 8px rgba(195, 154, 72, 0.15);
+    }
+
     .sync-status {
       display: flex;
       align-items: center;
@@ -44,7 +104,7 @@
       font-weight: 700;
       color: #047857;
       background: #ecfdf5;
-      padding: 5px 12px;
+      padding: 4px 12px;
       border-radius: 20px;
       border: 1px solid #a7f3d0;
       width: fit-content;
@@ -65,50 +125,80 @@
       100% { transform: scale(0.9); opacity: 0.7; }
     }
 
-    .portal-nav {
+    /* شريط البوابات */
+    .portal-nav-bar {
       display: flex;
-      justify-content: center;
-      gap: 10px;
-      flex-wrap: wrap;
+      align-items: center;
+      justify-content: space-between;
+      gap: 12px;
       background: #fff;
-      padding: 10px;
-      border-radius: 12px;
+      padding: 10px 18px;
+      border-radius: 14px;
       border: 1px solid var(--border);
+      box-shadow: 0 3px 10px rgba(0,0,0,0.03);
     }
 
-    .nav-btn {
-      padding: 8px 16px;
+    .gear-btn {
+      padding: 8px 14px;
       border-radius: 8px;
       font-weight: 700;
-      font-size: 0.92rem;
-      border: 2px solid var(--primary);
+      font-size: 0.88rem;
+      border: 1.5px solid var(--border);
       cursor: pointer;
-      background: #fff;
-      color: var(--primary);
+      background: #f8fafc;
+      color: #475569;
       transition: 0.2s;
       display: inline-flex;
       align-items: center;
       gap: 6px;
+      position: relative;
+    }
+    .gear-btn:hover { background: #e2e8f0; color: #1e293b; }
+    .gear-btn.active { background: var(--primary); color: #fff; border-color: var(--primary); }
+    .gear-btn.admin-btn.active { background: #854d0e; color: #fff; border-color: #854d0e; }
+
+    .parent-main-btn {
+      flex: 1;
+      max-width: 480px;
+      padding: 10px 24px;
+      border-radius: 10px;
+      font-weight: 800;
+      font-size: 1.05rem;
+      border: 2px solid var(--primary);
+      cursor: pointer;
+      background: linear-gradient(180deg, #134e38 0%, #0e402d 100%);
+      color: #fff;
+      transition: all 0.25s ease;
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      gap: 10px;
+      box-shadow: 0 4px 12px rgba(14, 64, 45, 0.2);
+    }
+    .parent-main-btn:hover {
+      transform: translateY(-2px);
+      box-shadow: 0 6px 16px rgba(14, 64, 45, 0.3);
     }
 
-    .nav-btn.active, .nav-btn:hover { background-color: var(--primary); color: #fff; }
-    .nav-btn.admin-btn { border-color: #854d0e; color: #854d0e; }
-    .nav-btn.admin-btn.active, .nav-btn.admin-btn:hover { background-color: #854d0e; color: #fff; }
-
-    .system-switcher { display: grid; grid-template-columns: 1fr 1fr; gap: 15px; }
+    /* الأقسام الثلاثة الرئيسية */
+    .system-switcher {
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap: 12px;
+    }
 
     .switch-card {
       background: #fff;
       border: 2px solid var(--border);
       border-radius: 14px;
-      padding: 18px;
+      padding: 15px 10px;
       text-align: center;
       cursor: pointer;
       transition: all 0.25s ease;
       display: flex;
       flex-direction: column;
       align-items: center;
-      gap: 6px;
+      gap: 5px;
     }
 
     .switch-card:hover { transform: translateY(-2px); border-color: var(--gold); }
@@ -118,9 +208,9 @@
       box-shadow: 0 4px 15px rgba(14, 64, 45, 0.12);
     }
 
-    .switch-card .icon { font-size: 2rem; }
-    .switch-card h3 { font-size: 1.2rem; color: var(--primary); font-weight: 800; }
-    .switch-card p { font-size: 0.85rem; color: #64748b; font-weight: 600; }
+    .switch-card .icon { font-size: 1.8rem; }
+    .switch-card h3 { font-size: 1.1rem; color: var(--primary); font-weight: 800; }
+    .switch-card p { font-size: 0.8rem; color: #64748b; font-weight: 600; }
 
     .card {
       background: var(--card-bg);
@@ -222,70 +312,112 @@
       transition: 0.3s ease;
     }
 
-    .days-grid {
-      display: grid;
-      grid-template-columns: repeat(5, 1fr);
+    .parent-alert-box {
+      background: linear-gradient(135deg, #fffbeb 0%, #fef3c7 100%);
+      border: 2px solid #f59e0b;
+      border-radius: 12px;
+      padding: 16px 20px;
+      box-shadow: 0 4px 15px rgba(245, 158, 11, 0.1);
+    }
+    .parent-alert-title {
+      color: #92400e;
+      font-size: 1.1rem;
+      font-weight: 800;
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      margin-bottom: 6px;
+    }
+    .parent-alert-content {
+      font-size: 0.95rem;
+      font-weight: 600;
+      color: #78350f;
+      line-height: 1.6;
+    }
+
+    .rating-container {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      gap: 8px;
+      background: #fff;
+      padding: 16px;
+      border-radius: 12px;
+      border: 1px solid var(--border);
+    }
+    .stars-box {
+      display: flex;
+      gap: 4px;
+      direction: ltr;
+    }
+    .star-item {
+      font-size: 1.6rem;
+      color: #cbd5e1;
+      cursor: pointer;
+      transition: 0.2s;
+    }
+    .star-item.active {
+      color: #f59e0b;
+    }
+
+    /* مؤشرات الاستفسارات: أحمر وأخضر */
+    .status-dot {
+      display: inline-block;
+      width: 12px;
+      height: 12px;
+      border-radius: 50%;
+      margin-left: 6px;
+    }
+    .status-dot.red {
+      background-color: #ef4444;
+      box-shadow: 0 0 0 3px rgba(239, 68, 68, 0.25);
+      animation: pulseDot 1.2s infinite;
+    }
+    .status-dot.green {
+      background-color: #10b981;
+      box-shadow: 0 0 0 2px rgba(16, 185, 129, 0.2);
+    }
+
+    @keyframes pulseDot {
+      0% { transform: scale(0.9); }
+      50% { transform: scale(1.3); }
+      100% { transform: scale(0.9); }
+    }
+
+    .lesson-rows-container {
+      display: flex;
+      flex-direction: column;
       gap: 10px;
       margin-bottom: 15px;
     }
 
-    .day-box {
-      border: 1.5px solid #d4af37;
-      border-radius: 10px;
-      background: #fff;
-      overflow: hidden;
-      display: flex;
-      flex-direction: column;
-    }
-
-    .day-box-header {
-      background: #fff;
-      color: var(--primary);
-      font-weight: 800;
-      text-align: center;
-      padding: 8px 5px;
-      font-size: 0.95rem;
-      border-bottom: 1.5px solid #d4af37;
-    }
-
-    .day-box-body {
-      padding: 8px;
-      display: flex;
-      flex-direction: column;
-      gap: 8px;
-    }
-
-    .day-box-body input {
-      width: 100%;
-      border: 1px solid #cbd5e1;
-      border-radius: 6px;
-      padding: 7px;
-      font-size: 0.85rem;
-      text-align: center;
-    }
-
-    .btn-save-full {
-      width: 100%;
-      background-color: var(--primary);
-      color: #fff;
-      padding: 13px;
-      font-size: 1.05rem;
-      font-weight: 800;
-      border: none;
+    .lesson-row-card {
+      background: #fdfaf3;
+      border: 1px solid #ebd9b5;
       border-radius: 8px;
+      padding: 10px;
+      display: grid;
+      grid-template-columns: 80px 1fr 1fr 40px;
+      gap: 10px;
+      align-items: center;
+    }
+
+    .btn-add-row {
+      background: #ecfdf5;
+      color: #047857;
+      border: 1.5px dashed #10b981;
+      padding: 8px 14px;
+      border-radius: 8px;
+      font-weight: 700;
       cursor: pointer;
+      display: inline-flex;
+      align-items: center;
+      gap: 6px;
+      width: fit-content;
+      margin-bottom: 15px;
       transition: 0.2s;
     }
-
-    .btn-save-full:hover { background-color: var(--primary-dark); }
-
-    .hint-text {
-      text-align: center;
-      font-size: 0.85rem;
-      color: #64748b;
-      margin-top: 8px;
-      font-weight: 600;
-    }
+    .btn-add-row:hover { background: #d1fae5; }
 
     .print-sheet {
       background: #ffffff;
@@ -348,7 +480,7 @@
 
     .meta-bar {
       display: grid;
-      grid-template-columns: repeat(4, 1fr);
+      grid-template-columns: repeat(3, 1fr);
       gap: 10px;
       background: var(--gold-light);
       padding: 10px;
@@ -394,6 +526,24 @@
       text-align: center !important;
     }
 
+    .merged-subject-header-td {
+      background: #f0fdf4 !important;
+      border-top: 2.5px solid var(--primary) !important;
+      font-weight: 900 !important;
+      color: var(--primary) !important;
+      font-size: 1.02rem !important;
+      padding: 10px 12px !important;
+      text-align: center !important;
+    }
+
+    .subhead-th {
+      font-weight: 700 !important;
+      color: #1e293b !important;
+      background: #e6edf5 !important;
+      font-size: 0.88rem !important;
+      padding: 6px 8px !important;
+    }
+
     .sheet-footer {
       margin-top: 20px;
       padding-top: 10px;
@@ -404,7 +554,6 @@
       font-weight: 700;
     }
 
-    /* إعدادات الطباعة A4 صفحة واحدة */
     @page { 
       size: A4 portrait; 
       margin: 6mm 8mm; 
@@ -424,7 +573,7 @@
         max-width: 100% !important; 
         gap: 0 !important; 
         margin: 0 !important;
-        padding: 0 !important;
+        padding: 0 !important; 
       }
       .print-sheet { 
         border: none !important; 
@@ -432,7 +581,6 @@
         page-break-inside: avoid !important;
         break-inside: avoid !important;
       }
-      
       .official-header {
         padding-bottom: 6px !important;
         margin-bottom: 8px !important;
@@ -478,15 +626,27 @@
         font-size: 0.8rem !important;
       }
     }
-
-    @media(max-width: 800px) {
-      .days-grid { grid-template-columns: 1fr; }
-    }
   </style>
 </head>
 <body>
 
 <div class="container">
+
+  <!-- بطاقة الترويسة الأنيقة في الواجهة: الشعار والرؤية -->
+  <div class="hero-brand-card no-print">
+    <div class="hero-top-row">
+      <div class="hero-logo-box">
+        <img src="logo.png" alt="شعار مدارس البيارق" onerror="this.onerror=null; this.src='https://englishlanguagesupervision-prog.github.io/Bayariq-Weekly-Plan/logo.jpg';">
+        <div class="hero-title-box">
+          <h1>مدارس البيارق الأهلية</h1>
+          <p>القسم الابتدائي — بنين | المنظومة التعليمية الرقمية الموحدة</p>
+        </div>
+      </div>
+      <div class="vision-ribbon">
+        ✨ رؤيتنا: بناء الشخصية المتكاملة للطالب
+      </div>
+    </div>
+  </div>
 
   <!-- مؤشر المزامنة السحابية -->
   <div class="sync-status no-print">
@@ -494,11 +654,20 @@
     <span id="syncText">متصل بالسحابة (مزامنة مباشرة لجميع الأجهزة)</span>
   </div>
 
-  <!-- 1. شريط البوابات -->
-  <div class="portal-nav no-print">
-    <button class="nav-btn active" id="btnParent" onclick="switchPortal('parent')">👨‍‍👩‍👧‍👦 بوابة ولي الأمر (عرض وطباعة)</button>
-    <button class="nav-btn" id="btnTeacher" onclick="switchPortal('teacher')">✍️ بوابة المعلم (إدخال وتعديل)</button>
-    <button class="nav-btn admin-btn" id="btnAdmin" onclick="switchPortal('admin')">🔒 لوحة الإشراف والإدارة</button>
+  <!-- 1. شريط البوابات: بوابة ولي الأمر الكبيرة في المنتصف + ترسان جانبيان -->
+  <div class="portal-nav-bar no-print">
+    <button class="gear-btn" id="btnTeacher" onclick="switchPortal('teacher')" title="دخول المعلم">
+      ⚙️ المعلم
+    </button>
+    
+    <button class="parent-main-btn" id="btnParent" onclick="switchPortal('parent')">
+      👨‍👩‍👧‍👦 بوابة ولي الأمر الموحدة (عرض ومتابعة)
+    </button>
+
+    <button class="gear-btn admin-btn" id="btnAdmin" onclick="switchPortal('admin')" title="دخول الإدارة والإشراف">
+      🔒 الإدارة ⚙️
+      <span id="adminUnreadDot" class="status-dot red" style="display: none;" title="استفسارات جديدة غير مقروءة"></span>
+    </button>
   </div>
 
   <!-- شريط القفل التحذيري -->
@@ -507,37 +676,117 @@
     <span id="lockoutMessageText">تم إغلاق وتجميد التعديل والإدخال من قِبل إدارة المدرسة.</span>
   </div>
 
-  <!-- صندوق تحكم الأدمن في قفل النظام -->
+  <!-- صندوق تحكم الأدمن -->
   <div class="card no-print admin-view" style="display: none; border-color: #dc2626; background: #fffaf0;">
     <div class="card-title" style="color: #991b1b; border-bottom-color: #dc2626;">
-      🛡 إعدادات قفل النظام للجميع سحابياً
+      🛡 لوحة التحكم الإداري الشامل
     </div>
-    <div style="display: flex; flex-direction: column; gap: 10px;">
+    <div style="display: flex; flex-direction: column; gap: 12px;">
       <div style="display: flex; align-items: center; gap: 10px; flex-wrap: wrap;">
         <label style="font-size: 1rem; color: #991b1b;">
           <input type="checkbox" id="lockoutToggle" onchange="toggleLockoutSetting()" style="width: 18px; height: 18px; vertical-align: middle;">
-          <strong>تفعيل قفل التعديل والإدخال للمعلمين والطلاب</strong>
+          <strong>تفعيل قفل التعديل والإدخال للمعلمين</strong>
         </label>
-        <span style="font-size: 0.85rem; color: #64748b;">(عند التفعيل يقفل تلقائياً على كل شاشات المعلمين في جميع الأجهزة)</span>
+        <span style="font-size: 0.85rem; color: #64748b;">(عند التفعيل يقفل تلقائياً على كل شاشات المعلمين)</span>
       </div>
+      
       <div class="form-group">
-        <label>نص رسالة الإغلاق المخصصة التي تظهر للجميع:</label>
-        <input type="text" id="lockoutCustomMessage" value="عزيزي المعلم / ولي الأمر: تم إغلاق تعديل الخطط والواجبات مؤقتاً للاعتماد النهائي من إدارة المدرسة." onchange="updateLockoutMessage()">
+        <label>رسالة الإغلاق:</label>
+        <input type="text" id="lockoutCustomMessage" value="عزيزي المعلم: تم إغلاق تعديل الخطط والواجبات مؤقتاً للاعتماد النهائي." onchange="updateLockoutMessage()">
+      </div>
+
+      <!-- ضبط وتثبيت التاريخ واليوم للأدمن -->
+      <div style="background: #fff; padding: 12px; border-radius: 8px; border: 1px solid #ebd9b5;">
+        <strong style="color: #854d0e; display: block; margin-bottom: 8px;">📅 التحكم بتاريخ ويوم الواجبات اليومية:</strong>
+        <div class="form-grid" style="margin-bottom: 8px;">
+          <div class="form-group">
+            <label>اليوم المعتمد للواجبات:</label>
+            <select id="adminOverrideDaySelect" onchange="saveAdminDateOverride()">
+              <option value="auto">🔄 تلقائي حسب التاريخ واليوم الفعلي</option>
+              <option value="الأحد">الأحد</option>
+              <option value="الإثنين">الإثنين</option>
+              <option value="الثلاثاء">الثلاثاء</option>
+              <option value="الأربعاء">الأربعاء</option>
+              <option value="الخميس">الخميس</option>
+            </select>
+          </div>
+          <div class="form-group">
+            <label>التاريخ الميلادي المعتمد (اتركه فارغاً للتلقائي):</label>
+            <input type="text" id="adminOverrideDateInput" placeholder="مثلاً: 04 / 10 / 2026 م" onchange="saveAdminDateOverride()">
+          </div>
+        </div>
+        <span style="font-size: 0.8rem; color: #64748b;">* يتم تفريغ جدول الواجبات اليومية تلقائياً كل يوم الساعة 11:00 مساءً للبدء باليوم التالي.</span>
+      </div>
+
+      <!-- إعدادات الأسبوع الموحد وزر المسح للأدمن فقط -->
+      <div style="background: #fff; padding: 12px; border-radius: 8px; border: 1px solid #ebd9b5;">
+        <strong style="color: #854d0e; display: block; margin-bottom: 8px;">⚙️ إعدادات الخطة الأسبوعية الموحدة لجميع أولياء الأمور:</strong>
+        <div class="form-grid" style="margin-bottom: 8px;">
+          <div class="form-group">
+            <label>عنوان ورقم الأسبوع الحالي المعروض:</label>
+            <input type="text" id="adminWeekTitleInput" value="الأسبوع السادس" onchange="saveWeekSettings()">
+          </div>
+          <div class="form-group">
+            <label>تاريخ الأسبوع المعروض:</label>
+            <input type="text" id="adminWeekDateInput" value="من 04 / 10 / 2026 إلى 08 / 10 / 2026 م" onchange="saveWeekSettings()">
+          </div>
+        </div>
+        <button class="btn btn-danger" onclick="adminClearAllWeeklyPlans()">🗑️ تصفير ومحو الخطة الأسبوعية للبدء بأسبوع جديد</button>
+      </div>
+
+      <!-- تحكم الأدمن في شريط تنبيهات أولياء الأمور -->
+      <div style="background: #fff; padding: 12px; border-radius: 8px; border: 1px solid #ebd9b5;">
+        <strong style="color: #854d0e; display: block; margin-bottom: 8px;">📢 تحرير شريط (تنبيهات هامة لأولياء الأمور):</strong>
+        <textarea id="adminAlertNoticeInput" placeholder="اكتب التنبيه الهام هنا..." onchange="saveAlertNotice()"></textarea>
+      </div>
+
+      <!-- تحكم الأدمن في المكتسبات المهارية -->
+      <div style="background: #fff; padding: 12px; border-radius: 8px; border: 1px solid #ebd9b5;">
+        <strong style="color: #854d0e; display: block; margin-bottom: 8px;">🎯 إدارة المكتسبات المهارية:</strong>
+        <div class="form-grid">
+          <div class="form-group">
+            <label>نص أو عنوان المهارة:</label>
+            <input type="text" id="adminSkillTextInput" placeholder="مثلاً: إتقان جدول الضرب / مهارة القراءة السريعة...">
+          </div>
+          <div class="form-group">
+            <label>رابط إثرائي أو ملف (اختياري):</label>
+            <input type="url" id="adminSkillLinkInput" placeholder="https://...">
+          </div>
+          <div class="form-group">
+            <label>رابط صورة المهارة (اختياري):</label>
+            <input type="url" id="adminSkillImgInput" placeholder="رابط صورة المهارة...">
+          </div>
+        </div>
+        <button class="btn btn-primary" onclick="saveSkillContent()">💾 حفظ واعتماد المكتسبات المهارية</button>
+      </div>
+
+      <!-- سجل استفسارات أولياء الأمور بنظام النقاط الحمراء والخضراء والرد المباشر -->
+      <div style="background: #fff; padding: 12px; border-radius: 8px; border: 1px solid #ebd9b5;">
+        <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 8px;">
+          <strong style="color: #854d0e;">📬 سجل استفسارات وتقييمات أولياء الأمور:</strong>
+          <span style="font-size: 0.8rem; color: #64748b;">🔴 أحمر: جديد | 🟢 أخضر: تم الاطلاع</span>
+        </div>
+        <div id="adminInquiriesList" style="max-height: 300px; overflow-y: auto; display: flex; flex-direction: column; gap: 8px;"></div>
       </div>
     </div>
   </div>
 
-  <!-- 2. الأيقونتان الرئيسيتان للتبديل -->
+  <!-- 2. الأيقونات الجمالية الثلاثة الرئيسية -->
   <div class="system-switcher no-print">
     <div class="switch-card" id="cardWeekly" onclick="switchSystem('weekly')">
       <div class="icon">📅</div>
       <h3>الخطة الأسبوعية</h3>
-      <p>عرض وتوزيع الخطط الدراسية حتى الأسبوع 20</p>
+      <p>خطة الأسبوع المعتمد لجميع المواد</p>
     </div>
     <div class="switch-card active" id="cardDaily" onclick="switchSystem('daily')">
       <div class="icon">📝</div>
-      <h3>الدروس والواجبات اليومية</h3>
-      <p>جدول الحصص اليومي (7 حصص) والتكليفات</p>
+      <h3>الواجبات اليومية</h3>
+      <p>جدول اليوم المباشر (تفريغ يومي 11 م)</p>
+    </div>
+    <div class="switch-card" id="cardSkills" onclick="switchSystem('skills')">
+      <div class="icon">🎯</div>
+      <h3>المكتسبات المهارية</h3>
+      <p>أهداف ومهارات ونواتج التعلم المستهدفة</p>
     </div>
   </div>
 
@@ -563,31 +812,20 @@
         </div>
 
         <div class="form-group">
-          <label>رقم الأسبوع:</label>
-          <select id="dailyWeekSelect" onchange="renderDailyTable();"></select>
+          <label>اليوم المعتمد:</label>
+          <input type="text" id="displayTodayDayName" readonly style="background: #f8fafc; font-weight: bold; color: var(--primary);">
         </div>
 
         <div class="form-group">
-          <label>اليوم:</label>
-          <select id="daySelect" onchange="renderDailyTable();">
-            <option value="الأحد">الأحد</option>
-            <option value="الإثنين">الإثنين</option>
-            <option value="الثلاثاء">الثلاثاء</option>
-            <option value="الأربعاء" selected>الأربعاء</option>
-            <option value="الخميس">الخميس</option>
-          </select>
-        </div>
-
-        <div class="form-group">
-          <label>التاريخ الميلادي:</label>
-          <input type="text" id="dateInput" value="30 / 09 / 2026 م" onchange="renderDailyTable();">
+          <label>تاريخ اليوم الميلادي:</label>
+          <input type="text" id="displayTodayDateVal" readonly style="background: #f8fafc; font-weight: bold; color: var(--primary);">
         </div>
       </div>
     </div>
 
     <!-- لوحة إدخال المعلم للواجب اليومي -->
     <div class="card no-print teacher-view" style="display: none;">
-      <div class="card-title" id="dailyFormTitle">✍ تسجيل / تعديل الحصة والواجب اليومي</div>
+      <div class="card-title">✍ تسجيل / تعديل الحصة لجدول اليوم</div>
       
       <div class="form-grid">
         <div class="form-group" style="max-width: 130px;">
@@ -604,33 +842,30 @@
         </div>
 
         <div class="form-group">
-          <label>المادة الدراسية (24 مادة معتمدة):</label>
+          <label>المادة الدراسية:</label>
           <select id="subjectInput" onchange="checkCustomSubject('daily')">
-            <!-- قائمة المواد الـ 24 المعتمدة -->
+            <option value="القرآن الكريم والدراسات الإسلامية">القرآن الكريم والدراسات الإسلامية</option>
             <option value="لغتي">لغتي</option>
-            <option value="English">English</option>
             <option value="علوم">علوم</option>
             <option value="رياضيات">رياضيات</option>
-            <option value="تربية بدنية PE">تربية بدنية PE</option>
-            <option value="دراسات اجتماعية">دراسات اجتماعية</option>
-            <option value="تربية فنية Art">تربية فنية Art</option>
-            <option value="Science">Science</option>
+            <option value="English">English</option>
             <option value="Math">Math</option>
+            <option value="Science">Science</option>
+            <option value="دراسات اجتماعية">دراسات اجتماعية</option>
+            <option value="تربية بدنية PE">تربية بدنية PE</option>
+            <option value="تربية فنية Art">تربية فنية Art</option>
+            <option value="مهارات رقمية">مهارات رقمية</option>
+            <option value="مهارات حياتية">مهارات حياتية</option>
+            <option value="ذكاء اصطناعي">ذكاء اصطناعي</option>
             <option value="خط عربي">خط عربي</option>
-            <option value="نافس عربي">نافس عربي</option>
+            <option value="إتقان لغتي">إتقان لغتي</option>
+            <option value="لغتي – الإعراب الفصيح">لغتي – الإعراب الفصيح</option>
             <option value="نافس لغتي">نافس لغتي</option>
+            <option value="نافس عربي">نافس عربي</option>
             <option value="نافس رياضيات">نافس رياضيات</option>
             <option value="نافس علوم">نافس علوم</option>
             <option value="قدرات كمي">قدرات كمي</option>
             <option value="خط وقدرات لفظي">خط وقدرات لفظي</option>
-            <option value="إتقان لغتي">إتقان لغتي</option>
-            <option value="تحفيظ القرآن الكريم">تحفيظ القرآن الكريم</option>
-            <option value="تلاوة القرآن الكريم">تلاوة القرآن الكريم</option>
-            <option value="فقه وتوحيد">فقه وتوحيد</option>
-            <option value="مهارات حياتية">مهارات حياتية</option>
-            <option value="مهارات رقمية">مهارات رقمية</option>
-            <option value="ذكاء اصطناعي">ذكاء اصطناعي</option>
-            <option value="لغتي – الإعراب الفصيح">لغتي – الإعراب الفصيح</option>
             <option value="__custom__">✏️ مادة أخرى (كتابة يدوية)...</option>
           </select>
           <input type="text" id="customDailySubjectInput" placeholder="اكتب اسم المادة هنا..." style="display: none; margin-top: 5px; border-color: var(--gold);">
@@ -657,15 +892,9 @@
       </div>
     </div>
 
-    <!-- لوحة الأدمن للواجب اليومي -->
-    <div class="card no-print admin-view" style="display: none; border-color: #854d0e; background: #fffcf7;">
-      <div class="card-title" style="color: #854d0e; border-bottom-color: #854d0e;">🔒 إدارة الحصص اليومية (الإشراف)</div>
-      <button class="btn btn-danger" onclick="adminClearCurrentDay()">🗑 مسح حصص هذا اليوم لهذا الأسبوع سحابياً</button>
-    </div>
-
     <!-- أزرار الإجراءات اليومية -->
     <div class="no-print" style="display: flex; gap: 10px; justify-content: flex-end; flex-wrap: wrap;">
-      <button class="btn btn-whatsapp" onclick="shareDailyWhatsApp()">📲 إرسال الواجبات عبر الواتساب</button>
+      <button class="btn btn-whatsapp" onclick="shareDailyWhatsApp()">📲 إرسال جدول اليوم عبر الواتساب</button>
       <button class="btn btn-print" onclick="window.print()">🖨️ طباعة جدول اليوم (A4)</button>
     </div>
 
@@ -692,9 +921,8 @@
 
       <div class="meta-bar">
         <div class="meta-item"><span>الصف والفصل</span><strong id="displayDailyGrade">الصف السادس 1</strong></div>
-        <div class="meta-item"><span>رقم الأسبوع</span><strong id="displayDailySection">الأسبوع 6</strong></div>
-        <div class="meta-item"><span>اليوم</span><strong id="displayDailyDay">الأربعاء</strong></div>
-        <div class="meta-item"><span>التاريخ الميلادي</span><strong id="displayDailyDate">30 / 09 / 2026 م</strong></div>
+        <div class="meta-item"><span>اليوم</span><strong id="displayDailyDay">الأحد</strong></div>
+        <div class="meta-item"><span>التاريخ الميلادي</span><strong id="displayDailyDate">04 / 10 / 2026 م</strong></div>
       </div>
 
       <div class="table-container">
@@ -711,7 +939,6 @@
         </table>
       </div>
 
-      <!-- أزرار تعديل وحذف للمعلم والأدمن -->
       <div id="teacherDailyControls" class="no-print teacher-view" style="display: none; background: #f8fafc; padding: 10px; border-radius: 8px; border: 1px solid var(--border); margin-top: 10px;">
         <strong style="color: var(--primary); font-size: 0.9rem; display: block; margin-bottom: 6px;">✏️ خيارات تعديل الحصص المضافة:</strong>
         <div style="display: flex; gap: 8px; flex-wrap: wrap;" id="dailyActionButtons"></div>
@@ -723,14 +950,15 @@
     </div>
   </div>
 
-  <!-- ==================== 2. قسم الخطة الأسبوعية (بدون ذكر عدد الفصول) ==================== -->
+  <!-- ==================== 2. قسم الخطة الأسبوعية ==================== -->
   <div id="weeklySectionContainer" style="display: none;">
     
     <div class="card no-print teacher-view" style="display: none;">
+      <div class="card-title">✍ إدخال وتعديل مادة بالخطة الأسبوعية</div>
       <div class="form-grid">
         <div class="form-group">
           <label>الصف الدراسي:</label>
-          <select id="weeklyGradeSelect" onchange="onTeacherGradeChange();">
+          <select id="weeklyGradeSelect" onchange="onWeeklyGradeChange();">
             <option value="الصف الأول">الصف الأول</option>
             <option value="الصف الثاني">الصف الثاني</option>
             <option value="الصف الثالث">الصف الثالث</option>
@@ -741,38 +969,30 @@
         </div>
 
         <div class="form-group">
-          <label>رقم الأسبوع (حتى 20):</label>
-          <select id="weekNumberSelect" onchange="onTeacherWeekChange();"></select>
-        </div>
-
-        <div class="form-group">
-          <label>المادة الدراسية (24 مادة معتمدة):</label>
+          <label>المادة الدراسية:</label>
           <select id="weeklySubjectInput" onchange="checkCustomSubject('weekly'); loadWeeklySubjectDraft();">
-            <!-- قائمة المواد الـ 24 المعتمدة -->
             <option value="لغتي" selected>لغتي</option>
-            <option value="English">English</option>
+            <option value="القرآن الكريم والدراسات الإسلامية">القرآن الكريم والدراسات الإسلامية</option>
             <option value="علوم">علوم</option>
             <option value="رياضيات">رياضيات</option>
-            <option value="تربية بدنية PE">تربية بدنية PE</option>
-            <option value="دراسات اجتماعية">دراسات اجتماعية</option>
-            <option value="تربية فنية Art">تربية فنية Art</option>
-            <option value="Science">Science</option>
+            <option value="English">English</option>
             <option value="Math">Math</option>
+            <option value="Science">Science</option>
+            <option value="دراسات اجتماعية">دراسات اجتماعية</option>
+            <option value="تربية بدنية PE">تربية بدنية PE</option>
+            <option value="تربية فنية Art">تربية فنية Art</option>
+            <option value="مهارات رقمية">مهارات رقمية</option>
+            <option value="مهارات حياتية">مهارات حياتية</option>
+            <option value="ذكاء اصطناعي">ذكاء اصطناعي</option>
             <option value="خط عربي">خط عربي</option>
-            <option value="نافس عربي">نافس عربي</option>
+            <option value="إتقان لغتي">إتقان لغتي</option>
+            <option value="لغتي – الإعراب الفصيح">لغتي – الإعراب الفصيح</option>
             <option value="نافس لغتي">نافس لغتي</option>
+            <option value="نافس عربي">نافس عربي</option>
             <option value="نافس رياضيات">نافس رياضيات</option>
             <option value="نافس علوم">نافس علوم</option>
             <option value="قدرات كمي">قدرات كمي</option>
             <option value="خط وقدرات لفظي">خط وقدرات لفظي</option>
-            <option value="إتقان لغتي">إتقان لغتي</option>
-            <option value="تحفيظ القرآن الكريم">تحفيظ القرآن الكريم</option>
-            <option value="تلاوة القرآن الكريم">تلاوة القرآن الكريم</option>
-            <option value="فقه وتوحيد">فقه وتوحيد</option>
-            <option value="مهارات حياتية">مهارات حياتية</option>
-            <option value="مهارات رقمية">مهارات رقمية</option>
-            <option value="ذكاء اصطناعي">ذكاء اصطناعي</option>
-            <option value="لغتي – الإعراب الفصيح">لغتي – الإعراب الفصيح</option>
             <option value="__custom__">✏️ مادة أخرى (كتابة يدوية)...</option>
           </select>
           <input type="text" id="customWeeklySubjectInput" placeholder="اكتب اسم المادة هنا..." style="display: none; margin-top: 5px; border-color: var(--gold);" onchange="loadWeeklySubjectDraft()">
@@ -785,57 +1005,22 @@
       </div>
 
       <div class="info-bar" id="weeklyInfoBar">
-        ℹ️ تم استرجاع الخطة المسجلة سحابياً لهذه المادة، يمكنك تعديلها والحفظ.
+        ℹ️ أضف الدروس والواجبات الخاصة بمادتك (سيتم فرز وترتيب المواد بأولويتها المعتمدة تلقائياً).
       </div>
 
-      <!-- شبكة الأيام الخمسة -->
-      <div class="days-grid">
-        <div class="day-box">
-          <div class="day-box-header">الأحد</div>
-          <div class="day-box-body">
-            <input type="text" id="sunLesson" placeholder="موضوع الدرس">
-            <input type="text" id="sunHw" placeholder="الواجب المحدد">
-          </div>
-        </div>
-        <div class="day-box">
-          <div class="day-box-header">الإثنين</div>
-          <div class="day-box-body">
-            <input type="text" id="monLesson" placeholder="موضوع الدرس">
-            <input type="text" id="monHw" placeholder="الواجب المحدد">
-          </div>
-        </div>
-        <div class="day-box">
-          <div class="day-box-header">الثلاثاء</div>
-          <div class="day-box-body">
-            <input type="text" id="tueLesson" placeholder="موضوع الدرس">
-            <input type="text" id="tueHw" placeholder="الواجب المحدد">
-          </div>
-        </div>
-        <div class="day-box">
-          <div class="day-box-header">الأربعاء</div>
-          <div class="day-box-body">
-            <input type="text" id="wedLesson" placeholder="موضوع الدرس">
-            <input type="text" id="wedHw" placeholder="الواجب المحدد">
-          </div>
-        </div>
-        <div class="day-box">
-          <div class="day-box-header">الخميس</div>
-          <div class="day-box-body">
-            <input type="text" id="thuLesson" placeholder="موضوع الدرس">
-            <input type="text" id="thuHw" placeholder="الواجب المحدد">
-          </div>
-        </div>
-      </div>
+      <label style="font-weight: 800; color: var(--primary); margin-bottom: 6px; display: block;">قائمة الدروس والواجبات للمادة:</label>
+      <div id="lessonRowsContainer" class="lesson-rows-container"></div>
+
+      <button type="button" class="btn-add-row" onclick="addNewLessonRow()">➕ إضافة درس / واجب آخر للمادة</button>
 
       <button class="btn-save-full" onclick="teacherSaveWeeklyPlan()">⚡ اعتماد وحفظ خطة المادة سحابياً</button>
-      <div class="hint-text">* تُحفظ الخطة فوراً وتظهر لجميع المعلمين وأولياء الأمور في الأسبوع المختار.</div>
     </div>
 
-    <!-- لوحة استعراض ولي الأمر والأدمن -->
+    <!-- لوحة استعراض ولي الأمر -->
     <div class="card no-print" id="weeklyParentFilter">
       <div class="form-grid" style="margin-bottom: 0;">
         <div class="form-group">
-          <label>عرض الخطة للصف:</label>
+          <label>عرض الخطة للصف الدراسي:</label>
           <select id="viewWeeklyGradeSelect" onchange="syncGradeAndRender();">
             <option value="الصف الأول">الصف الأول</option>
             <option value="الصف الثاني">الصف الثاني</option>
@@ -845,23 +1030,7 @@
             <option value="الصف السادس">الصف السادس</option>
           </select>
         </div>
-
-        <div class="form-group">
-          <label>رقم الأسبوع (حتى 20):</label>
-          <select id="viewWeekNumberSelect" onchange="syncWeekAndRender();"></select>
-        </div>
-
-        <div class="form-group">
-          <label>تاريخ الأسبوع الميلادي:</label>
-          <input type="text" id="weeklyDateText" value="من 27 / 09 / 2026 إلى 01 / 10 / 2026 م" onchange="renderWeeklyTable();">
-        </div>
       </div>
-    </div>
-
-    <!-- لوحة الأدمن للخطة الأسبوعية -->
-    <div class="card no-print admin-view" style="display: none; border-color: #854d0e; background: #fffcf7;">
-      <div class="card-title" style="color: #854d0e; border-bottom-color: #854d0e;">🔒 إدارة الخطط الأسبوعية (الإشراف)</div>
-      <button class="btn btn-danger" onclick="adminClearCurrentWeek()">🗑 مسح خطة هذا الأسبوع بالكامل لهذا الصف سحابياً</button>
     </div>
 
     <!-- أزرار الإجراءات الأسبوعية -->
@@ -870,7 +1039,7 @@
       <button class="btn btn-print" onclick="window.print()">🖨️ طباعة الخطة الأسبوعية (A4)</button>
     </div>
 
-    <!-- ورقة الطباعة والعرض -->
+    <!-- ورقة الطباعة والعرض للخطة الأسبوعية -->
     <div class="print-sheet" id="printAreaWeekly">
       <div class="official-header">
         <div class="header-text-ar">
@@ -893,27 +1062,16 @@
 
       <div class="meta-bar">
         <div class="meta-item"><span>الصف الدراسي</span><strong id="displayWeeklyGrade">الصف الرابع</strong></div>
-        <div class="meta-item"><span>الأسبوع</span><strong id="displayWeeklyWeek">رقم 6</strong></div>
-        <div class="meta-item" style="grid-column: span 2;"><span>التاريخ الميلادي</span><strong id="displayWeeklyDate">من 27 / 09 / 2026 إلى 01 / 10 / 2026 م</strong></div>
+        <div class="meta-item"><span>الأسبوع الدراسي</span><strong id="displayWeeklyWeek">الأسبوع السادس</strong></div>
+        <div class="meta-item"><span>الفترة الزمنية</span><strong id="displayWeeklyDate">من 04 / 10 / 2026 إلى 08 / 10 / 2026 م</strong></div>
       </div>
 
       <div class="table-container">
         <table>
-          <thead>
-            <tr>
-              <th style="width: 15%;">المادة / المعلم</th>
-              <th style="width: 17%;">الأحد</th>
-              <th style="width: 17%;">الإثنين</th>
-              <th style="width: 17%;">الثلاثاء</th>
-              <th style="width: 17%;">الأربعاء</th>
-              <th style="width: 17%;">الخميس</th>
-            </tr>
-          </thead>
           <tbody id="weeklyTableBody"></tbody>
         </table>
       </div>
 
-      <!-- أزرار تعديل وحذف المواد للمعلم والأدمن -->
       <div id="teacherWeeklyControls" class="no-print teacher-view" style="display: none; background: #f8fafc; padding: 10px; border-radius: 8px; border: 1px solid var(--border); margin-top: 10px;">
         <strong style="color: var(--primary); font-size: 0.9rem; display: block; margin-bottom: 6px;">✏️ خيارات تعديل خطط المواد المسجلة:</strong>
         <div style="display: flex; gap: 8px; flex-wrap: wrap;" id="weeklyActionButtons"></div>
@@ -926,10 +1084,73 @@
 
   </div>
 
+  <!-- ==================== 3. قسم المكتسبات المهارية ==================== -->
+  <div id="skillsSectionContainer" style="display: none;">
+    <div class="card">
+      <div class="card-title">🎯 المكتسبات المهارية ونواتج التعلم المستهدفة</div>
+      <div id="skillsDisplayArea" style="display: flex; flex-direction: column; gap: 15px; text-align: center; padding: 10px;"></div>
+    </div>
+  </div>
+
+  <!-- ==================== 4. شريط تنبيهات هامة لأولياء الأمور ==================== -->
+  <div class="parent-alert-box no-print">
+    <div class="parent-alert-title">
+      📢 تنبيهات هامة لأولياء الأمور
+    </div>
+    <div class="parent-alert-content" id="parentAlertNoticeText">
+      حرصاً على تميز أبنائنا الطلاب، نرجو متابعة إنجاز الواجبات اليومية ومراجعة الخطة الأسبوعية بشكل مستمر، والتواصل مع إدارة المدرسة عند الحاجة.
+    </div>
+  </div>
+
+  <!-- ==================== 5. تقييم ولي الأمر واستفساراته ==================== -->
+  <div class="card no-print">
+    <div class="card-title">⭐ تقييم واستفسارات أولياء الأمور</div>
+    
+    <div class="rating-container" style="margin-bottom: 18px;">
+      <span style="font-weight: 700; color: var(--primary);">تقييمك لمستوى المتابعة والخدمات التعليمية:</span>
+      <div class="stars-box" id="starRatingBox">
+        <span class="star-item" onclick="setStarRating(1)">★</span>
+        <span class="star-item" onclick="setStarRating(2)">★</span>
+        <span class="star-item" onclick="setStarRating(3)">★</span>
+        <span class="star-item" onclick="setStarRating(4)">★</span>
+        <span class="star-item" onclick="setStarRating(5)">★</span>
+        <span class="star-item" onclick="setStarRating(6)">★</span>
+        <span class="star-item" onclick="setStarRating(7)">★</span>
+        <span class="star-item" onclick="setStarRating(8)">★</span>
+        <span class="star-item" onclick="setStarRating(9)">★</span>
+        <span class="star-item" onclick="setStarRating(10)">★</span>
+      </div>
+      <span id="starRatingLabel" style="font-size: 0.85rem; font-weight: bold; color: #854d0e;">(اضغط لتقييم من 1 إلى 10)</span>
+    </div>
+
+    <div style="background: #f8fafc; border: 1px solid var(--border); padding: 16px; border-radius: 10px;">
+      <strong style="color: var(--primary); display: block; margin-bottom: 10px;">💬 هل لديك استفسار أو ملاحظة؟ اكتبها هنا وسنتواصل معك:</strong>
+      <div class="form-grid">
+        <div class="form-group">
+          <label>اسم ولي الأمر / الطالب:</label>
+          <input type="text" id="inqNameInput" placeholder="أدخل الاسم الرباعي...">
+        </div>
+        <div class="form-group">
+          <label>رقم الجوال للتواصل:</label>
+          <input type="tel" id="inqPhoneInput" placeholder="05xxxxxxxx">
+        </div>
+        <div class="form-group">
+          <label>الصف والفصل:</label>
+          <input type="text" id="inqClassInput" placeholder="مثلاً: الصف الرابع 2">
+        </div>
+      </div>
+      <div class="form-group" style="margin-bottom: 12px;">
+        <label>نص الاستفسار أو الملاحظة:</label>
+        <textarea id="inqMessageInput" placeholder="اكتب تفاصيل استفسارك أو ملاحظتك هنا..."></textarea>
+      </div>
+      <button class="btn btn-primary" onclick="submitParentInquiry()">📨 إرسال الاستفسار لإدارة المدرسة</button>
+    </div>
+  </div>
+
 </div>
 
 <script>
-  // تهيئة Firebase بمفاتيح مشروعك الرسمية
+  // تهيئة Firebase
   const firebaseConfig = {
     apiKey: "AIzaSyBUEDHUAK-6KQOwnsKECYEwsWZzOU2_LWs",
     authDomain: "bayariq-weekly-plan.firebaseapp.com",
@@ -949,9 +1170,7 @@
   }
 
   const TOTAL_PERIODS = 7;
-  const MAX_WEEKS = 20;
 
-  // عدد الفصول الفعلي لكل صف
   const GRADE_SECTIONS_COUNT = {
     "الصف الأول": 2,
     "الصف الثاني": 2,
@@ -961,14 +1180,103 @@
     "الصف السادس": 2
   };
 
+  const SUBJECTS_PRIORITY_ORDER = [
+    "لغتي",
+    "القرآن الكريم والدراسات الإسلامية",
+    "علوم",
+    "رياضيات",
+    "English",
+    "Math",
+    "Science",
+    "دراسات اجتماعية"
+  ];
+
   let activeSystem = 'daily'; 
   let currentPortal = 'parent'; 
 
   let dailyData = {};
   let weeklyData = {};
+  let skillsData = {};
+  let parentAlertText = "حرصاً على تميز أبنائنا الطلاب، نرجو متابعة إنجاز الواجبات اليومية ومراجعة الخطة الأسبوعية بشكل مستمر، والتواصل مع إدارة المدرسة عند الحاجة.";
+
+  let currentWeekTitle = "الأسبوع السادس";
+  let currentWeekDate = "من 04 / 10 / 2026 إلى 08 / 10 / 2026 م";
 
   let isLocked = false;
-  let lockMessage = "عزيزي المعلم / ولي الأمر: تم إغلاق تعديل الخطط والواجبات مؤقتاً للاعتماد النهائي من إدارة المدرسة.";
+  let lockMessage = "عزيزي المعلم: تم إغلاق تعديل الخطط والواجبات مؤقتاً للاعتماد النهائي.";
+
+  // متغيرات التاريخ واليوم مع دعم التعديل الإداري
+  let currentEffectiveDay = "";
+  let currentEffectiveDate = "";
+  let adminOverrideDay = "auto";
+  let adminOverrideDate = "";
+
+  let userRatingScore = 10;
+  let lastAutoClearDate = "";
+
+  // ضبط التاريخ التلقائي بدقة رياضية سليمة لليوم والتاريخ الفعليين
+  function computeLiveDateTime() {
+    if (adminOverrideDay !== "auto" && adminOverrideDay !== "") {
+      currentEffectiveDay = adminOverrideDay;
+    } else {
+      const now = new Date();
+      const dayIdx = now.getDay(); // 0=Sunday, 1=Monday, 2=Tuesday, 3=Wednesday, 4=Thursday, 5=Friday, 6=Saturday
+      const daysMap = ['الأحد', 'الإثنين', 'الثلاثاء', 'الأربعاء', 'الخميس', 'الجمعة', 'السبت'];
+      
+      // إذا كان جمعة أو سبت نحسب الأحد القادم تلقائياً
+      if (dayIdx === 5 || dayIdx === 6) {
+        currentEffectiveDay = 'الأحد';
+      } else {
+        currentEffectiveDay = daysMap[dayIdx];
+      }
+    }
+
+    if (adminOverrideDate && adminOverrideDate.trim() !== "") {
+      currentEffectiveDate = adminOverrideDate.trim();
+    } else {
+      const now = new Date();
+      const dayIdx = now.getDay();
+      let targetDate = new Date(now);
+
+      // إذا كان جمعة (5) يضاف يومان ليصبح الأحد القادم (4 أكتوبر مثلاً)
+      if (dayIdx === 5) {
+        targetDate.setDate(now.getDate() + 2);
+      } else if (dayIdx === 6) { // إذا كان السبت (6) يضاف يوم
+        targetDate.setDate(now.getDate() + 1);
+      }
+
+      const dayStr = String(targetDate.getDate()).padStart(2, '0');
+      const monthStr = String(targetDate.getMonth() + 1).padStart(2, '0');
+      const yearStr = targetDate.getFullYear();
+      currentEffectiveDate = `${dayStr} / ${monthStr} / ${yearStr} م`;
+    }
+
+    const elDay = document.getElementById('displayTodayDayName');
+    const elDate = document.getElementById('displayTodayDateVal');
+    if (elDay) elDay.value = currentEffectiveDay;
+    if (elDate) elDate.value = currentEffectiveDate;
+  }
+
+  // فحص التفريغ التلقائي للواجبات اليومية الساعة 11:00 مساءً
+  function checkDailyAutoClear() {
+    const now = new Date();
+    const hours = now.getHours();
+    const todayKey = now.toDateString();
+
+    // يتم التفريغ اليومي تلقائياً عند الساعة 11 مساءً (23:00 وما بعدها)
+    if (hours >= 23 && lastAutoClearDate !== todayKey) {
+      lastAutoClearDate = todayKey;
+      if (db) {
+        db.ref('daily_live_v4').remove();
+        db.ref('system/lastAutoClearDate').set(todayKey);
+      }
+    }
+  }
+
+  setInterval(() => {
+    computeLiveDateTime();
+    checkDailyAutoClear();
+  }, 30000);
 
   function sanitizeKey(k) {
     return k.replace(/[\/\.\#\$\[\]]/g, "_");
@@ -978,21 +1286,13 @@
     if (type === 'daily') {
       const select = document.getElementById('subjectInput');
       const customInput = document.getElementById('customDailySubjectInput');
-      if (select.value === '__custom__') {
-        customInput.style.display = 'block';
-        customInput.focus();
-      } else {
-        customInput.style.display = 'none';
-      }
+      customInput.style.display = (select.value === '__custom__') ? 'block' : 'none';
+      if (select.value === '__custom__') customInput.focus();
     } else {
       const select = document.getElementById('weeklySubjectInput');
       const customInput = document.getElementById('customWeeklySubjectInput');
-      if (select.value === '__custom__') {
-        customInput.style.display = 'block';
-        customInput.focus();
-      } else {
-        customInput.style.display = 'none';
-      }
+      customInput.style.display = (select.value === '__custom__') ? 'block' : 'none';
+      if (select.value === '__custom__') customInput.focus();
     }
   }
 
@@ -1012,49 +1312,23 @@
     }
   }
 
-  function populateWeeks() {
-    const s1 = document.getElementById('weekNumberSelect');
-    const s2 = document.getElementById('viewWeekNumberSelect');
-    const s3 = document.getElementById('dailyWeekSelect');
-    
-    s1.innerHTML = '';
-    s2.innerHTML = '';
-    s3.innerHTML = '';
-
-    for (let i = 1; i <= MAX_WEEKS; i++) {
-      const o1 = document.createElement('option');
-      o1.value = i.toString();
-      o1.textContent = i.toString();
-      if (i === 6) o1.selected = true;
-      s1.appendChild(o1);
-
-      const o2 = document.createElement('option');
-      o2.value = i.toString();
-      o2.textContent = `الأسبوع ${i}`;
-      if (i === 6) o2.selected = true;
-      s2.appendChild(o2);
-
-      const o3 = document.createElement('option');
-      o3.value = i.toString();
-      o3.textContent = `الأسبوع ${i}`;
-      if (i === 6) o3.selected = true;
-      s3.appendChild(o3);
-    }
-  }
-
   function switchSystem(sys) {
     activeSystem = sys;
     document.getElementById('cardDaily').classList.toggle('active', sys === 'daily');
     document.getElementById('cardWeekly').classList.toggle('active', sys === 'weekly');
+    document.getElementById('cardSkills').classList.toggle('active', sys === 'skills');
 
-    document.getElementById('dailySectionContainer').style.display = sys === 'daily' ? 'block' : 'none';
-    document.getElementById('weeklySectionContainer').style.display = sys === 'weekly' ? 'block' : 'none';
+    document.getElementById('dailySectionContainer').style.display = (sys === 'daily') ? 'block' : 'none';
+    document.getElementById('weeklySectionContainer').style.display = (sys === 'weekly') ? 'block' : 'none';
+    document.getElementById('skillsSectionContainer').style.display = (sys === 'skills') ? 'block' : 'none';
 
     if (sys === 'daily') {
       renderDailyTable();
-    } else {
+    } else if (sys === 'weekly') {
       loadWeeklySubjectDraft();
       renderWeeklyTable();
+    } else if (sys === 'skills') {
+      renderSkills();
     }
   }
 
@@ -1082,7 +1356,9 @@
   }
 
   function applyPortalUI() {
-    document.querySelectorAll('.nav-btn').forEach(b => b.classList.remove('active'));
+    document.getElementById('btnTeacher').classList.toggle('active', currentPortal === 'teacher');
+    document.getElementById('btnAdmin').classList.toggle('active', currentPortal === 'admin');
+
     document.querySelectorAll('.teacher-view').forEach(el => el.style.display = 'none');
     document.querySelectorAll('.admin-view').forEach(el => el.style.display = 'none');
 
@@ -1094,40 +1370,237 @@
       lockBanner.style.display = 'none';
     }
 
-    if (currentPortal === 'parent') {
-      document.getElementById('btnParent').classList.add('active');
-    } else if (currentPortal === 'teacher') {
-      document.getElementById('btnTeacher').classList.add('active');
+    if (currentPortal === 'teacher') {
       if (!isLocked) {
         document.querySelectorAll('.teacher-view').forEach(el => el.style.display = 'block');
       }
     } else if (currentPortal === 'admin') {
-      document.getElementById('btnAdmin').classList.add('active');
       document.querySelectorAll('.teacher-view').forEach(el => el.style.display = 'block');
       document.querySelectorAll('.admin-view').forEach(el => el.style.display = 'block');
     }
     renderDailyTable();
     renderWeeklyTable();
+    renderSkills();
   }
 
   function toggleLockoutSetting() {
     isLocked = document.getElementById('lockoutToggle').checked;
-    if (db) {
-      db.ref('system/isLocked').set(isLocked);
-    }
+    if (db) db.ref('system/isLocked').set(isLocked);
     applyPortalUI();
-    alert(isLocked ? "تم قفل التعديل والإدخال للجميع سحابياً." : "تم فتح التعديل والإدخال للجميع سحابياً.");
   }
 
   function updateLockoutMessage() {
     lockMessage = document.getElementById('lockoutCustomMessage').value;
+    if (db) db.ref('system/lockMessage').set(lockMessage);
+  }
+
+  function saveAdminDateOverride() {
+    adminOverrideDay = document.getElementById('adminOverrideDaySelect').value;
+    adminOverrideDate = document.getElementById('adminOverrideDateInput').value;
     if (db) {
-      db.ref('system/lockMessage').set(lockMessage);
+      db.ref('system/overrideDay').set(adminOverrideDay);
+      db.ref('system/overrideDate').set(adminOverrideDate);
+    }
+    computeLiveDateTime();
+    renderDailyTable();
+  }
+
+  function saveWeekSettings() {
+    currentWeekTitle = document.getElementById('adminWeekTitleInput').value.trim();
+    currentWeekDate = document.getElementById('adminWeekDateInput').value.trim();
+    if (db) {
+      db.ref('system/weekTitle').set(currentWeekTitle);
+      db.ref('system/weekDate').set(currentWeekDate);
+    }
+    renderWeeklyTable();
+  }
+
+  function saveAlertNotice() {
+    parentAlertText = document.getElementById('adminAlertNoticeInput').value.trim();
+    if (db) db.ref('system/parentAlert').set(parentAlertText);
+    document.getElementById('parentAlertNoticeText').textContent = parentAlertText;
+  }
+
+  function saveSkillContent() {
+    const text = document.getElementById('adminSkillTextInput').value.trim();
+    const link = document.getElementById('adminSkillLinkInput').value.trim();
+    const img = document.getElementById('adminSkillImgInput').value.trim();
+
+    skillsData = { text, link, img };
+    if (db) db.ref('system/skillsData').set(skillsData);
+    renderSkills();
+    alert("تم حفظ المكتسبات المهارية بنجاح.");
+  }
+
+  function renderSkills() {
+    const area = document.getElementById('skillsDisplayArea');
+    area.innerHTML = '';
+
+    if (!skillsData.text && !skillsData.link && !skillsData.img) {
+      area.innerHTML = `<div style="color: #64748b; font-weight: 700; padding: 20px;">سيتم إدراج المكتسبات المهارية ونواتج التعلم المستهدفة قريباً من قِبل إدارة المدرسة.</div>`;
+      return;
+    }
+
+    if (skillsData.text) {
+      area.innerHTML += `<div style="font-size: 1.25rem; font-weight: 800; color: var(--primary);">${skillsData.text}</div>`;
+    }
+
+    if (skillsData.img) {
+      area.innerHTML += `<div style="margin: 10px 0;"><img src="${skillsData.img}" alt="المكتسبات المهارية" style="max-width: 100%; max-height: 400px; border-radius: 10px; border: 1px solid var(--border);" onerror="this.style.display='none'"></div>`;
+    }
+
+    if (skillsData.link) {
+      area.innerHTML += `<div><a href="${skillsData.link}" target="_blank" class="btn btn-primary" style="text-decoration: none;">🔗 اضغط هنا للاطلاع على المحتوى الإثرائي / المهارة</a></div>`;
     }
   }
 
-  /* ================= منطق الواجبات اليومية والفصول ================= */
-  // صياغة اسم الفصل مثل: الصف الأول 1 أو الصف الرابع 3
+  function adminClearAllWeeklyPlans() {
+    if (confirm("تحذير الإدارة: هل أنت متأكد من مسح وتصفير جميع بيانات الخطة الأسبوعية للبدء بأسبوع جديد؟")) {
+      if (db) {
+        db.ref('weekly_v8').remove();
+      } else {
+        weeklyData = {};
+        renderWeeklyTable();
+      }
+      alert("تم تصفير الخطة الأسبوعية بنجاح.");
+    }
+  }
+
+  /* ================= منطق تقييم واستفسارات أولياء الأمور ================= */
+  function setStarRating(num) {
+    userRatingScore = num;
+    const stars = document.querySelectorAll('#starRatingBox .star-item');
+    stars.forEach((s, i) => {
+      s.classList.toggle('active', i < num);
+    });
+    document.getElementById('starRatingLabel').textContent = `تقييمك: (${num} من 10)`;
+  }
+
+  function submitParentInquiry() {
+    const name = document.getElementById('inqNameInput').value.trim();
+    const phone = document.getElementById('inqPhoneInput').value.trim();
+    const studentClass = document.getElementById('inqClassInput').value.trim();
+    const msg = document.getElementById('inqMessageInput').value.trim();
+
+    if (!name || !phone || !msg) {
+      alert("يرجى كتابة الاسم ورقم الجوال ونص الاستفسار.");
+      return;
+    }
+
+    const inquiryObj = {
+      name,
+      phone,
+      studentClass: studentClass || 'غير محدد',
+      msg,
+      rating: userRatingScore,
+      isRead: false, // افتراضياً غير مقروء (نقطة حمراء)
+      time: new Date().toLocaleString('ar-SA')
+    };
+
+    if (db) {
+      db.ref('parent_inquiries_v2').push(inquiryObj);
+    }
+    alert("تم إرسال استفسارك وتقييمك بنجاح! ستتواصل معك إدارة المدرسة قريباً.");
+
+    document.getElementById('inqNameInput').value = '';
+    document.getElementById('inqPhoneInput').value = '';
+    document.getElementById('inqClassInput').value = '';
+    document.getElementById('inqMessageInput').value = '';
+  }
+
+  function markInquiryAsRead(key) {
+    if (db) {
+      db.ref('parent_inquiries_v2/' + key + '/isRead').set(true);
+    }
+  }
+
+  function formatWhatsAppNumber(phone) {
+    let clean = phone.replace(/[^0-9]/g, '');
+    if (clean.startsWith('05')) {
+      clean = '966' + clean.substring(1);
+    } else if (clean.startsWith('5')) {
+      clean = '966' + clean;
+    }
+    return clean;
+  }
+
+  function replyViaWhatsApp(key, phone, parentName, studentClass, queryMsg) {
+    markInquiryAsRead(key); // تحويل النقطة إلى خضراء تلقائياً عند الرد
+    const intlPhone = formatWhatsAppNumber(phone);
+    let replyText = `السلام عليكم ورحمة الله وبركاته أخي/أختي ولي أمر الطالب: ${parentName} (${studentClass})\n`;
+    replyText += `معكم إدارة مدارس البيارق الأهلية - القسم الابتدائي.\n`;
+    replyText += `بخصوص استفساركم المسجل لدينا:\n"${queryMsg}"\n\n`;
+    replyText += `يسعدنا الرد عليكم ومساعدتكم: `;
+    
+    const url = `https://api.whatsapp.com/send?phone=${intlPhone}&text=${encodeURIComponent(replyText)}`;
+    window.open(url, '_blank');
+  }
+
+  function deleteInquiry(key) {
+    if (confirm("هل تريد حذف هذا الاستفسار نهائياً من السجل؟")) {
+      if (db) {
+        db.ref('parent_inquiries_v2/' + key).remove();
+      }
+    }
+  }
+
+  function renderAdminInquiries(listObj) {
+    const box = document.getElementById('adminInquiriesList');
+    const unreadBadge = document.getElementById('adminUnreadDot');
+    if (!box) return;
+    box.innerHTML = '';
+
+    const keys = Object.keys(listObj || {});
+    let unreadCount = 0;
+
+    if (keys.length === 0) {
+      box.innerHTML = `<div style="color: #64748b; font-size: 0.85rem;">لا توجد استفسارات واردة حالياً.</div>`;
+      if (unreadBadge) unreadBadge.style.display = 'none';
+      return;
+    }
+
+    keys.reverse().forEach(k => {
+      const item = listObj[k];
+      const isRead = !!item.isRead;
+      if (!isRead) unreadCount++;
+
+      const safeName = (item.name || '').replace(/'/g, "\\'");
+      const safeClass = (item.studentClass || '').replace(/'/g, "\\'");
+      const safeMsg = (item.msg || '').replace(/'/g, "\\'");
+      const safePhone = item.phone || '';
+
+      const dotClass = isRead ? 'status-dot green' : 'status-dot red';
+      const dotTitle = isRead ? 'تم الاطلاع (مقروء)' : 'جديد (غير مقروء)';
+
+      box.innerHTML += `
+        <div style="background: ${isRead ? '#f8fafc' : '#fff1f2'}; border: 1px solid ${isRead ? '#cbd5e1' : '#fecdd3'}; padding: 10px 12px; border-radius: 8px; font-size: 0.88rem; display: flex; flex-direction: column; gap: 6px;" onclick="markInquiryAsRead('${k}')">
+          <div style="display: flex; justify-content: space-between; align-items: center; font-weight: 700; color: var(--primary);">
+            <div style="display: flex; align-items: center;">
+              <span class="${dotClass}" title="${dotTitle}"></span>
+              <span>👤 ${item.name} <small style="color: #64748b;">(${item.studentClass})</small></span>
+            </div>
+            <span style="color: #854d0e; background: #fef3c7; padding: 2px 8px; border-radius: 6px;">⭐ ${item.rating}/10</span>
+          </div>
+          <div style="color: #047857; font-weight: 600; font-size: 0.82rem;">📞 جوال: ${item.phone} | 🕒 ${item.time}</div>
+          <div style="background: #fff; padding: 8px; border-radius: 6px; border: 1px dashed #cbd5e1; color: #334155;">💬 "${item.msg}"</div>
+          <div style="display: flex; gap: 8px; justify-content: flex-end; margin-top: 4px;">
+            <button class="btn btn-whatsapp" style="padding: 4px 10px; font-size: 0.8rem;" onclick="event.stopPropagation(); replyViaWhatsApp('${k}', '${safePhone}', '${safeName}', '${safeClass}', '${safeMsg}')">
+              💬 رد واتساب مباشر
+            </button>
+            <button class="btn btn-danger" style="padding: 4px 10px; font-size: 0.8rem;" onclick="event.stopPropagation(); deleteInquiry('${k}')">
+              🗑️ حذف
+            </button>
+          </div>
+        </div>
+      `;
+    });
+
+    if (unreadBadge) {
+      unreadBadge.style.display = unreadCount > 0 ? 'inline-block' : 'none';
+    }
+  }
+
+  /* ================= منطق الواجبات اليومية ================= */
   function updateClassSection() {
     const grade = document.getElementById('gradeSelect').value;
     const sectionSelect = document.getElementById('sectionSelect');
@@ -1144,10 +1617,8 @@
   }
 
   function getDailyKey() {
-    const sectionFullName = document.getElementById('sectionSelect').value; // مثلا: الصف الأول 1
-    const week = document.getElementById('dailyWeekSelect').value;
-    const day = document.getElementById('daySelect').value;
-    return sanitizeKey(`${sectionFullName}_أسبوع${week}_${day}`);
+    const sectionFullName = document.getElementById('sectionSelect').value;
+    return sanitizeKey(`${sectionFullName}_${currentEffectiveDay}`);
   }
 
   function teacherSavePeriod() {
@@ -1176,7 +1647,7 @@
     };
 
     if (db) {
-      db.ref(`daily/${key}/${period}`).set(dataObj);
+      db.ref(`daily_live_v4/${key}/${period}`).set(dataObj);
     } else {
       if (!dailyData[key]) dailyData[key] = {};
       dailyData[key][period] = dataObj;
@@ -1228,7 +1699,7 @@
     const key = getDailyKey();
     if (confirm(`حذف الحصة ${p} سحابياً؟`)) {
       if (db) {
-        db.ref(`daily/${key}/${p}`).remove();
+        db.ref(`daily_live_v4/${key}/${p}`).remove();
       } else {
         delete dailyData[key][p];
         renderDailyTable();
@@ -1236,28 +1707,12 @@
     }
   }
 
-  function adminClearCurrentDay() {
-    const key = getDailyKey();
-    if (confirm("تحذير: هل أنت متأكد من مسح حصص هذا اليوم لهذا الأسبوع سحابياً؟")) {
-      if (db) {
-        db.ref(`daily/${key}`).remove();
-      } else {
-        delete dailyData[key];
-        renderDailyTable();
-      }
-    }
-  }
-
   function renderDailyTable() {
     const sectionFullName = document.getElementById('sectionSelect').value || document.getElementById('gradeSelect').value;
-    const week = document.getElementById('dailyWeekSelect').value;
-    const day = document.getElementById('daySelect').value;
-    const date = document.getElementById('dateInput').value;
 
-    document.getElementById('displayDailyGrade').textContent = sectionFullName; // يظهر مثلا: الصف الأول 1
-    document.getElementById('displayDailySection').textContent = `الأسبوع ${week}`;
-    document.getElementById('displayDailyDay').textContent = day;
-    document.getElementById('displayDailyDate').textContent = date;
+    document.getElementById('displayDailyGrade').textContent = sectionFullName;
+    document.getElementById('displayDailyDay').textContent = currentEffectiveDay;
+    document.getElementById('displayDailyDate').textContent = currentEffectiveDate;
 
     const key = getDailyKey();
     const current = dailyData[key] || {};
@@ -1314,16 +1769,13 @@
 
   function shareDailyWhatsApp() {
     const sectionFullName = document.getElementById('sectionSelect').value;
-    const week = document.getElementById('dailyWeekSelect').value;
-    const day = document.getElementById('daySelect').value;
-    const date = document.getElementById('dateInput').value;
     const key = getDailyKey();
     const current = dailyData[key] || {};
 
     let msg = `*مدارس البيارق الأهلية - القسم الابتدائي*\n`;
     msg += `*الدروس والواجبات اليومية*\n`;
-    msg += `📌 *الفصل:* ${sectionFullName} - *الأسبوع ${week}*\n`;
-    msg += `📅 *اليوم:* ${day} (${date})\n`;
+    msg += `📌 *الفصل:* ${sectionFullName}\n`;
+    msg += `📅 *اليوم:* ${currentEffectiveDay} (${currentEffectiveDate})\n`;
     msg += `━━━━━━━━━━━━━━━━━━━━━\n`;
 
     let has = false;
@@ -1343,20 +1795,12 @@
   /* ================= منطق الخطة الأسبوعية ================= */
   function getWeeklyKey() {
     const grade = document.getElementById('weeklyGradeSelect').value;
-    const week = document.getElementById('weekNumberSelect').value;
-    return sanitizeKey(`${grade}_الأسبوع_${week}`);
+    return sanitizeKey(`${grade}`);
   }
 
-  function onTeacherGradeChange() {
+  function onWeeklyGradeChange() {
     const val = document.getElementById('weeklyGradeSelect').value;
     document.getElementById('viewWeeklyGradeSelect').value = val;
-    loadWeeklySubjectDraft();
-    renderWeeklyTable();
-  }
-
-  function onTeacherWeekChange() {
-    const val = document.getElementById('weekNumberSelect').value;
-    document.getElementById('viewWeekNumberSelect').value = val;
     loadWeeklySubjectDraft();
     renderWeeklyTable();
   }
@@ -1368,11 +1812,36 @@
     renderWeeklyTable();
   }
 
-  function syncWeekAndRender() {
-    const val = document.getElementById('viewWeekNumberSelect').value;
-    document.getElementById('weekNumberSelect').value = val;
-    loadWeeklySubjectDraft();
-    renderWeeklyTable();
+  function createLessonRowHtml(index, lessonVal = '', hwVal = '') {
+    return `
+      <div class="lesson-row-card" id="lessonRow_${index}">
+        <strong style="color: var(--primary); font-size: 0.9rem;">درس ${index}</strong>
+        <input type="text" class="input-lesson" placeholder="موضوع الدرس..." value="${lessonVal}">
+        <input type="text" class="input-hw" placeholder="الواجب المطلوب..." value="${hwVal}">
+        <button type="button" class="btn btn-danger" style="padding: 4px;" onclick="removeLessonRow(${index})" title="حذف هذا الصف">✕</button>
+      </div>
+    `;
+  }
+
+  function addNewLessonRow() {
+    const container = document.getElementById('lessonRowsContainer');
+    const currentCount = container.children.length;
+    const newIndex = currentCount + 1;
+    const tempDiv = document.createElement('div');
+    tempDiv.innerHTML = createLessonRowHtml(newIndex);
+    container.appendChild(tempDiv.firstElementChild);
+  }
+
+  function removeLessonRow(index) {
+    const row = document.getElementById(`lessonRow_${index}`);
+    if (row) row.remove();
+    const rows = document.querySelectorAll('#lessonRowsContainer .lesson-row-card');
+    rows.forEach((r, idx) => {
+      const num = idx + 1;
+      r.id = `lessonRow_${num}`;
+      r.querySelector('strong').textContent = `درس ${num}`;
+      r.querySelector('button').setAttribute('onclick', `removeLessonRow(${num})`);
+    });
   }
 
   function loadWeeklySubjectDraft() {
@@ -1381,26 +1850,29 @@
     const currentSub = (weeklyData[key] && weeklyData[key][sub]) ? weeklyData[key][sub] : null;
 
     document.getElementById('weeklyTeacherNameInput').value = currentSub ? (currentSub.teacher || '') : '';
-    document.getElementById('sunLesson').value = currentSub ? (currentSub.sunLesson || '') : '';
-    document.getElementById('sunHw').value = currentSub ? (currentSub.sunHw || '') : '';
-    document.getElementById('monLesson').value = currentSub ? (currentSub.monLesson || '') : '';
-    document.getElementById('monHw').value = currentSub ? (currentSub.monHw || '') : '';
-    document.getElementById('tueLesson').value = currentSub ? (currentSub.tueLesson || '') : '';
-    document.getElementById('tueHw').value = currentSub ? (currentSub.tueHw || '') : '';
-    document.getElementById('wedLesson').value = currentSub ? (currentSub.wedLesson || '') : '';
-    document.getElementById('wedHw').value = currentSub ? (currentSub.wedHw || '') : '';
-    document.getElementById('thuLesson').value = currentSub ? (currentSub.thuLesson || '') : '';
-    document.getElementById('thuHw').value = currentSub ? (currentSub.thuHw || '') : '';
+    
+    const container = document.getElementById('lessonRowsContainer');
+    container.innerHTML = '';
+
+    const lessonsList = currentSub ? (currentSub.lessons || []) : [];
+
+    if (lessonsList.length > 0) {
+      lessonsList.forEach((item, idx) => {
+        container.innerHTML += createLessonRowHtml(idx + 1, item.lesson || '', item.hw || '');
+      });
+    } else {
+      container.innerHTML += createLessonRowHtml(1);
+      container.innerHTML += createLessonRowHtml(2);
+    }
 
     const infoBar = document.getElementById('weeklyInfoBar');
     if (infoBar) {
-      const curWeek = document.getElementById('weekNumberSelect').value;
       if (currentSub) {
-        infoBar.innerHTML = `ℹ️ تم استرجاع الخطة المسجلة للأسبوع (${curWeek}) لمادة [${sub}] - يمكنك التعديل والحفظ.`;
+        infoBar.innerHTML = `ℹ️ تم استرجاع (${lessonsList.length}) موضوعات مسجلة لمادة [${sub}] - يمكنك التعديل والحفظ.`;
         infoBar.style.backgroundColor = 'var(--info-bg)';
         infoBar.style.color = 'var(--info-text)';
       } else {
-        infoBar.innerHTML = `✨ أسبوع جديد (${curWeek}) - الخانات فارغة لمادة [${sub}] وجاهزة للإدخال.`;
+        infoBar.innerHTML = `✨ مادة جديدة [${sub}] - أضف الدروس والواجبات حسب عدد حصصك بالأسبوع.`;
         infoBar.style.backgroundColor = '#f0fdf4';
         infoBar.style.color = '#15803d';
       }
@@ -1417,29 +1889,39 @@
     const sub = getSelectedSubject('weekly');
     const teacher = document.getElementById('weeklyTeacherNameInput').value.trim();
 
+    const rows = document.querySelectorAll('#lessonRowsContainer .lesson-row-card');
+    const lessonsArray = [];
+
+    rows.forEach(r => {
+      const lessonVal = r.querySelector('.input-lesson').value.trim();
+      const hwVal = r.querySelector('.input-hw').value.trim();
+      if (lessonVal || hwVal) {
+        lessonsArray.push({
+          lesson: lessonVal || '—',
+          hw: hwVal || 'لا يوجد'
+        });
+      }
+    });
+
+    if (lessonsArray.length === 0) {
+      alert("يرجى كتابة موضوع درس أو واجب لصف واحد على الأقل!");
+      return;
+    }
+
     const planObj = {
       teacher: teacher || '',
-      sunLesson: document.getElementById('sunLesson').value.trim(),
-      sunHw: document.getElementById('sunHw').value.trim(),
-      monLesson: document.getElementById('monLesson').value.trim(),
-      monHw: document.getElementById('monHw').value.trim(),
-      tueLesson: document.getElementById('tueLesson').value.trim(),
-      tueHw: document.getElementById('tueHw').value.trim(),
-      wedLesson: document.getElementById('wedLesson').value.trim(),
-      wedHw: document.getElementById('wedHw').value.trim(),
-      thuLesson: document.getElementById('thuLesson').value.trim(),
-      thuHw: document.getElementById('thuHw').value.trim()
+      lessons: lessonsArray
     };
 
     if (db) {
-      db.ref(`weekly/${key}/${sanitizeKey(sub)}`).set(planObj);
+      db.ref(`weekly_v8/${key}/${sanitizeKey(sub)}`).set(planObj);
     } else {
       if (!weeklyData[key]) weeklyData[key] = {};
       weeklyData[key][sub] = planObj;
       renderWeeklyTable();
     }
 
-    alert(`تم اعتماد وحفظ خطة مادة (${sub}) للأسبوع (${document.getElementById('weekNumberSelect').value}) سحابياً.`);
+    alert(`تم اعتماد وحفظ خطة مادة (${sub}) بنجاح.`);
   }
 
   function editWeeklySubject(sub) {
@@ -1468,9 +1950,9 @@
 
   function deleteWeeklySubject(sub) {
     const key = getWeeklyKey();
-    if (confirm(`حذف خطة مادة (${sub}) سحابياً؟`)) {
+    if (confirm(`حذف مادة (${sub}) بالكامل من الخطة؟`)) {
       if (db) {
-        db.ref(`weekly/${key}/${sanitizeKey(sub)}`).remove();
+        db.ref(`weekly_v8/${key}/${sanitizeKey(sub)}`).remove();
       } else {
         delete weeklyData[key][sub];
         renderWeeklyTable();
@@ -1479,36 +1961,25 @@
     }
   }
 
-  function adminClearCurrentWeek() {
-    const key = getWeeklyKey();
-    if (confirm("هل أنت متأكد من مسح جميع خطط هذا الأسبوع بالكامل سحابياً؟")) {
-      if (db) {
-        db.ref(`weekly/${key}`).remove();
-      } else {
-        delete weeklyData[key];
-        renderWeeklyTable();
-        loadWeeklySubjectDraft();
-      }
-    }
-  }
+  function sortSubjectsByPriority(subjectsList) {
+    return subjectsList.sort((a, b) => {
+      let indexA = SUBJECTS_PRIORITY_ORDER.indexOf(a);
+      let indexB = SUBJECTS_PRIORITY_ORDER.indexOf(b);
 
-  function formatDayCell(lesson, hw) {
-    if (!lesson && !hw) return '—';
-    let content = '';
-    if (lesson) content += `<div style="font-weight: 700; color: #1e293b; text-align: center;">${lesson}</div>`;
-    if (hw) content += `<div style="font-size: 0.82rem; color: #b45309; background: #fffbeb; padding: 2px 4px; border-radius: 4px; margin-top: 4px; border: 1px dashed #fde68a; text-align: center;"><strong>الواجب:</strong> ${hw}</div>`;
-    return content;
+      if (indexA === -1) indexA = 999;
+      if (indexB === -1) indexB = 999;
+
+      return indexA - indexB;
+    });
   }
 
   function renderWeeklyTable() {
     const grade = document.getElementById('weeklyGradeSelect').value;
-    const week = document.getElementById('weekNumberSelect').value;
-    const dateText = document.getElementById('weeklyDateText').value;
 
     document.getElementById('weeklySheetTitle').textContent = `الخطة الأسبوعية لـ ${grade}`;
     document.getElementById('displayWeeklyGrade').textContent = grade;
-    document.getElementById('displayWeeklyWeek').textContent = `رقم ${week}`;
-    document.getElementById('displayWeeklyDate').textContent = dateText;
+    document.getElementById('displayWeeklyWeek').textContent = currentWeekTitle;
+    document.getElementById('displayWeeklyDate').textContent = currentWeekDate;
 
     const key = getWeeklyKey();
     const currentWeekPlans = weeklyData[key] || {};
@@ -1518,31 +1989,62 @@
     const actionBtns = document.getElementById('weeklyActionButtons');
     actionBtns.innerHTML = '';
 
-    const subjects = Object.keys(currentWeekPlans);
+    let subjects = Object.keys(currentWeekPlans);
 
     if (subjects.length === 0) {
-      tbody.innerHTML = `<tr><td colspan="6" style="padding: 24px; color: #94a3b8; font-weight: 700; font-size: 1rem; text-align: center;">لم يتم إدخال خطط دراسية للأسبوع (${week}) بعد.</td></tr>`;
+      tbody.innerHTML = `<tr><td colspan="2" style="padding: 24px; color: #94a3b8; font-weight: 700; font-size: 1rem; text-align: center;">لم يتم إدخال خطط دراسية لهذا الصف في ${currentWeekTitle} بعد.</td></tr>`;
       return;
     }
 
+    subjects = sortSubjectsByPriority(subjects);
+
     subjects.forEach(sub => {
       const p = currentWeekPlans[sub];
-      const tr = document.createElement('tr');
-      const teacherText = p.teacher ? `<div style="font-size: 0.8rem; color: #64748b; font-weight: 600; margin-top: 3px;">(أ. ${p.teacher})</div>` : '';
+      const lessonsList = p.lessons || [];
+      const teacherName = p.teacher ? `أ. ${p.teacher}` : 'معلم المادة';
 
-      tr.innerHTML = `
-        <td style="font-weight: 800; color: var(--primary); text-align: center;">
-          ${sub}
-          ${teacherText}
+      // 1. رأس المادة المدمج
+      const headerTr = document.createElement('tr');
+      headerTr.innerHTML = `
+        <td colspan="2" class="merged-subject-header-td">
+          📚 المادة: ${sub} &nbsp;&nbsp;|&nbsp;&nbsp; 👨‍🏫 المعلم: ${teacherName}
         </td>
-        <td class="cell-center">${formatDayCell(p.sunLesson, p.sunHw)}</td>
-        <td class="cell-center">${formatDayCell(p.monLesson, p.monHw)}</td>
-        <td class="cell-center">${formatDayCell(p.tueLesson, p.tueHw)}</td>
-        <td class="cell-center">${formatDayCell(p.wedLesson, p.wedHw)}</td>
-        <td class="cell-center">${formatDayCell(p.thuLesson, p.thuHw)}</td>
       `;
-      tbody.appendChild(tr);
+      tbody.appendChild(headerTr);
 
+      // 2. عناوين الخانتين
+      const subheadTr = document.createElement('tr');
+      subheadTr.innerHTML = `
+        <th class="subhead-th" style="width: 50%; text-align: center;">موضوع الدرس</th>
+        <th class="subhead-th" style="width: 50%; text-align: center;">الواجب المطلوب</th>
+      `;
+      tbody.appendChild(subheadTr);
+
+      // 3. صفوف الدروس والواجبات
+      if (lessonsList.length === 0) {
+        const emptyTr = document.createElement('tr');
+        emptyTr.innerHTML = `
+          <td class="cell-center" style="color: #94a3b8;">—</td>
+          <td class="cell-center" style="color: #94a3b8;">لا يوجد</td>
+        `;
+        tbody.appendChild(emptyTr);
+      } else {
+        lessonsList.forEach(item => {
+          const rowTr = document.createElement('tr');
+          rowTr.innerHTML = `
+            <td class="cell-center" style="font-weight: 700;">${item.lesson}</td>
+            <td class="cell-center">${item.hw}</td>
+          `;
+          tbody.appendChild(rowTr);
+        });
+      }
+
+      // فاصل جمالي
+      const spacerTr = document.createElement('tr');
+      spacerTr.innerHTML = `<td colspan="2" style="background: #f1f5f9; height: 10px; padding: 0; border: none;"></td>`;
+      tbody.appendChild(spacerTr);
+
+      // أزرار التحكم
       const wrap = document.createElement('div');
       wrap.style.display = 'inline-flex';
       wrap.style.gap = '4px';
@@ -1572,30 +2074,28 @@
 
   function shareWeeklyWhatsApp() {
     const grade = document.getElementById('weeklyGradeSelect').value;
-    const week = document.getElementById('weekNumberSelect').value;
-    const dateText = document.getElementById('weeklyDateText').value;
     const key = getWeeklyKey();
     const currentWeekPlans = weeklyData[key] || {};
-    const subjects = Object.keys(currentWeekPlans);
+    let subjects = Object.keys(currentWeekPlans);
 
     let msg = `*مدارس البيارق الأهلية - القسم الابتدائي*\n`;
     msg += `*الخطة الدراسية الأسبوعية*\n`;
     msg += `📌 *الصف:* ${grade}\n`;
-    msg += `📅 *الأسبوع:* رقم ${week} (${dateText})\n`;
+    msg += `📅 *الأسبوع:* ${currentWeekTitle} (${currentWeekDate})\n`;
     msg += `━━━━━━━━━━━━━━━━━━━━━\n`;
 
     if (subjects.length === 0) {
-      msg += `لم يتم رصد خطط أسبوعية لهذا الصف في الأسبوع ${week} بعد.\n`;
+      msg += `لم يتم رصد خطط أسبوعية لهذا الصف بعد.\n`;
     } else {
+      subjects = sortSubjectsByPriority(subjects);
       subjects.forEach(sub => {
         const p = currentWeekPlans[sub];
         const teacherText = p.teacher ? ` (أ. ${p.teacher})` : '';
         msg += `📚 *مادة ${sub}${teacherText}:*\n`;
-        if (p.sunLesson || p.sunHw) msg += `• الأحد: ${p.sunLesson || '—'} | واجب: ${p.sunHw || '—'}\n`;
-        if (p.monLesson || p.monHw) msg += `• الإثنين: ${p.monLesson || '—'} | واجب: ${p.monHw || '—'}\n`;
-        if (p.tueLesson || p.tueHw) msg += `• الثلاثاء: ${p.tueLesson || '—'} | واجب: ${p.tueHw || '—'}\n`;
-        if (p.wedLesson || p.wedHw) msg += `• الأربعاء: ${p.wedLesson || '—'} | واجب: ${p.wedHw || '—'}\n`;
-        if (p.thuLesson || p.thuHw) msg += `• الخميس: ${p.thuLesson || '—'} | واجب: ${p.thuHw || '—'}\n`;
+        const list = p.lessons || [];
+        list.forEach((item, idx) => {
+          msg += `• درس ${idx + 1}: ${item.lesson} | واجب: ${item.hw}\n`;
+        });
         msg += `\n`;
       });
     }
@@ -1607,33 +2107,61 @@
   function initFirebaseSync() {
     if (!db) return;
 
-    db.ref('daily').on('value', snapshot => {
+    db.ref('daily_live_v4').on('value', snapshot => {
       dailyData = snapshot.val() || {};
       renderDailyTable();
     });
 
-    db.ref('weekly').on('value', snapshot => {
+    db.ref('weekly_v8').on('value', snapshot => {
       weeklyData = snapshot.val() || {};
       renderWeeklyTable();
       loadWeeklySubjectDraft();
+    });
+
+    db.ref('parent_inquiries_v2').on('value', snapshot => {
+      renderAdminInquiries(snapshot.val() || {});
     });
 
     db.ref('system').on('value', snapshot => {
       const sys = snapshot.val() || {};
       isLocked = !!sys.isLocked;
       lockMessage = sys.lockMessage || lockMessage;
+      currentWeekTitle = sys.weekTitle || currentWeekTitle;
+      currentWeekDate = sys.weekDate || currentWeekDate;
+      parentAlertText = sys.parentAlert || parentAlertText;
+      skillsData = sys.skillsData || {};
+      adminOverrideDay = sys.overrideDay || "auto";
+      adminOverrideDate = sys.overrideDate || "";
+      lastAutoClearDate = sys.lastAutoClearDate || "";
+
       document.getElementById('lockoutToggle').checked = isLocked;
       document.getElementById('lockoutCustomMessage').value = lockMessage;
+      document.getElementById('adminWeekTitleInput').value = currentWeekTitle;
+      document.getElementById('adminWeekDateInput').value = currentWeekDate;
+      document.getElementById('adminAlertNoticeInput').value = parentAlertText;
+      document.getElementById('parentAlertNoticeText').textContent = parentAlertText;
+
+      document.getElementById('adminOverrideDaySelect').value = adminOverrideDay;
+      document.getElementById('adminOverrideDateInput').value = adminOverrideDate;
+
+      if (skillsData) {
+        document.getElementById('adminSkillTextInput').value = skillsData.text || '';
+        document.getElementById('adminSkillLinkInput').value = skillsData.link || '';
+        document.getElementById('adminSkillImgInput').value = skillsData.img || '';
+      }
+
+      computeLiveDateTime();
       applyPortalUI();
     });
   }
 
   window.onload = function() {
-    populateWeeks();
+    computeLiveDateTime();
     updateClassSection();
+    setStarRating(10);
     initFirebaseSync();
     applyPortalUI();
-    switchSystem('weekly');
+    switchSystem('daily');
   };
 </script>
 
