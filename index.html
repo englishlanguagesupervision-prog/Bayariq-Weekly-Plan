@@ -96,6 +96,57 @@
       box-shadow: 0 2px 8px rgba(195, 154, 72, 0.15);
     }
 
+    /* الشريط المتحرك أسفل الشعار */
+    .ticker-wrap {
+      width: 100%;
+      background: linear-gradient(90deg, #0e402d 0%, #15573f 50%, #0e402d 100%);
+      color: #ffffff;
+      border-radius: 10px;
+      overflow: hidden;
+      display: flex;
+      align-items: center;
+      box-shadow: 0 3px 10px rgba(14, 64, 45, 0.15);
+      border: 1px solid #07261a;
+    }
+
+    .ticker-title {
+      background: var(--gold);
+      color: #07261a;
+      padding: 8px 16px;
+      font-weight: 900;
+      font-size: 0.88rem;
+      white-space: nowrap;
+      display: flex;
+      align-items: center;
+      gap: 6px;
+      z-index: 2;
+    }
+
+    .ticker-content {
+      flex: 1;
+      overflow: hidden;
+      white-space: nowrap;
+      padding: 8px 0;
+    }
+
+    .ticker-text {
+      display: inline-block;
+      white-space: nowrap;
+      padding-right: 100%;
+      animation: tickerAnim 25s linear infinite;
+      font-weight: 700;
+      font-size: 0.92rem;
+    }
+
+    .ticker-wrap:hover .ticker-text {
+      animation-play-state: paused;
+    }
+
+    @keyframes tickerAnim {
+      0% { transform: translate3d(0, 0, 0); }
+      100% { transform: translate3d(100%, 0, 0); }
+    }
+
     .sync-status {
       display: flex;
       align-items: center;
@@ -180,10 +231,10 @@
       box-shadow: 0 6px 16px rgba(14, 64, 45, 0.3);
     }
 
-    /* الأقسام الثلاثة */
+    /* الأقسام الأربعة (تشمل الأرشيف) */
     .system-switcher {
       display: grid;
-      grid-template-columns: repeat(3, 1fr);
+      grid-template-columns: repeat(4, 1fr);
       gap: 12px;
     }
 
@@ -191,7 +242,7 @@
       background: #fff;
       border: 2px solid var(--border);
       border-radius: 14px;
-      padding: 15px 10px;
+      padding: 14px 8px;
       text-align: center;
       cursor: pointer;
       transition: all 0.25s ease;
@@ -209,8 +260,8 @@
     }
 
     .switch-card .icon { font-size: 1.8rem; }
-    .switch-card h3 { font-size: 1.1rem; color: var(--primary); font-weight: 800; }
-    .switch-card p { font-size: 0.8rem; color: #64748b; font-weight: 600; }
+    .switch-card h3 { font-size: 1rem; color: var(--primary); font-weight: 800; }
+    .switch-card p { font-size: 0.78rem; color: #64748b; font-weight: 600; }
 
     .card {
       background: var(--card-bg);
@@ -383,7 +434,6 @@
       100% { transform: scale(0.9); }
     }
 
-    /* صندوق المكتسبات المهارية متعدد الصور */
     .skill-embedded-wrapper {
       background: #fff;
       border: 1.5px solid #cbd5e1;
@@ -432,7 +482,6 @@
       border: none;
     }
 
-    /* صفوف إدخال الدروس للخطة الأسبوعية */
     .lesson-rows-container {
       display: flex;
       flex-direction: column;
@@ -675,6 +724,12 @@
         font-size: 0.8rem !important;
       }
     }
+
+    @media (max-width: 800px) {
+      .system-switcher {
+        grid-template-columns: repeat(2, 1fr);
+      }
+    }
   </style>
 </head>
 <body>
@@ -693,6 +748,16 @@
       </div>
       <div class="vision-ribbon">
         ✨ رؤيتنا: بناء الشخصية المتكاملة للطالب
+      </div>
+    </div>
+
+    <!-- الشريط المتحرك أسفل الشعار -->
+    <div class="ticker-wrap" id="tickerContainer">
+      <div class="ticker-title">📢 تنبيه هام</div>
+      <div class="ticker-content">
+        <span class="ticker-text" id="tickerContentText">
+          أهلاً بكم في بوابة مدارس البيارق الأهلية — نرجو متابعة الواجبات اليومية وحلها أولاً بأول — متاح الآن أرشيف الواجبات لمراجعة الأيام السابقة بكل يسر وسهولة.
+        </span>
       </div>
     </div>
   </div>
@@ -742,6 +807,12 @@
       <div class="form-group">
         <label>رسالة الإغلاق:</label>
         <input type="text" id="lockoutCustomMessage" value="عزيزي المعلم: تم إغلاق تعديل الخطط والواجبات مؤقتاً للاعتماد النهائي." onchange="updateLockoutMessage()">
+      </div>
+
+      <!-- تحكم الأدمن في نص الشريط المتحرك -->
+      <div style="background: #fff; padding: 12px; border-radius: 8px; border: 1px solid #ebd9b5;">
+        <strong style="color: #854d0e; display: block; margin-bottom: 8px;">📢 تحرير نص الشريط الإخباري المتحرك:</strong>
+        <input type="text" id="adminTickerInput" placeholder="اكتب النص المتحرك هنا..." onchange="saveTickerText()">
       </div>
 
       <!-- ضبط وتثبيت التاريخ واليوم للأدمن -->
@@ -824,26 +895,31 @@
     </div>
   </div>
 
-  <!-- 2. الأيقونات الجمالية الثلاثة الرئيسية -->
+  <!-- 2. الأيقونات الأربعة الرئيسية (تشمل الأرشيف)[cite: 7] -->
   <div class="system-switcher no-print">
     <div class="switch-card" id="cardWeekly" onclick="switchSystem('weekly')">
       <div class="icon">📅</div>
       <h3>الخطة الأسبوعية</h3>
-      <p>خطة الأسبوع المعتمد (موضوعات الدروس)</p>
+      <p>خطة الأسبوع المعتمد</p>
     </div>
     <div class="switch-card active" id="cardDaily" onclick="switchSystem('daily')">
       <div class="icon">📝</div>
       <h3>الواجبات اليومية</h3>
       <p>جدول اليوم المباشر</p>
     </div>
+    <div class="switch-card" id="cardArchive" onclick="switchSystem('archive')">
+      <div class="icon">📂</div>
+      <h3>أرشيف الواجبات</h3>
+      <p>واجبات الأيام السابقة</p>
+    </div>
     <div class="switch-card" id="cardSkills" onclick="switchSystem('skills')">
       <div class="icon">🎯</div>
       <h3>المكتسبات المهارية</h3>
-      <p>تفتح وتُعرض مباشرة في الصفحة</p>
+      <p>تفتح وتُعرض بالصفحة</p>
     </div>
   </div>
 
-  <!-- ==================== 1. قسم الدروس والواجبات اليومية (مع اسم المعلم) ==================== -->
+  <!-- ==================== 1. قسم الدروس والواجبات اليومية (المباشر) ==================== -->
   <div id="dailySectionContainer">
     <div class="card no-print">
       <div class="form-grid" style="margin-bottom: 0;">
@@ -876,7 +952,7 @@
       </div>
     </div>
 
-    <!-- لوحة إدخال المعلم للواجب اليومي (تحتوي على اسم المعلم) -->
+    <!-- لوحة إدخال المعلم للواجب اليومي -->
     <div class="card no-print teacher-view" style="display: none;">
       <div class="card-title">✍ تسجيل / تعديل الحصة لجدول اليوم</div>
       
@@ -951,7 +1027,7 @@
       <button class="btn btn-print" onclick="window.print()">🖨️ طباعة جدول اليوم (A4)</button>
     </div>
 
-    <!-- ورقة الطباعة والعرض للواجب اليومي (المادة والمعلم) -->
+    <!-- ورقة الطباعة والعرض للواجب اليومي -->
     <div class="print-sheet" id="printAreaDaily">
       <div class="official-header">
         <div class="header-text-ar">
@@ -993,7 +1069,7 @@
       </div>
 
       <div id="teacherDailyControls" class="no-print teacher-view" style="display: none; background: #f8fafc; padding: 10px; border-radius: 8px; border: 1px solid var(--border); margin-top: 10px;">
-        <strong style="color: var(--primary); font-size: 0.9rem; display: block; margin-bottom: 6px;">✏️️ خيارات تعديل الحصص المضافة:</strong>
+        <strong style="color: var(--primary); font-size: 0.9rem; display: block; margin-bottom: 6px;">✏️ خيارات تعديل الحصص المضافة:</strong>
         <div style="display: flex; gap: 8px; flex-wrap: wrap;" id="dailyActionButtons"></div>
       </div>
 
@@ -1003,7 +1079,94 @@
     </div>
   </div>
 
-  <!-- ==================== 2. قسم الخطة الأسبوعية (بدون اسم المعلم وبدون واجبات) ==================== -->
+  <!-- ==================== 2. قسم أرشيف ومخزن الواجبات اليومية ==================== -->
+  <div id="archiveSectionContainer" style="display: none;">
+    <div class="card no-print">
+      <div class="card-title">📂 مخزن وأرشيف الواجبات اليومية للأيام السابقة</div>
+      <div class="form-grid" style="margin-bottom: 0;">
+        <div class="form-group">
+          <label>الصف الدراسي:</label>
+          <select id="archiveGradeSelect" onchange="updateArchiveClassSection(); renderArchiveTable();">
+            <option value="الصف الأول">الصف الأول</option>
+            <option value="الصف الثاني">الصف الثاني</option>
+            <option value="الصف الثالث">الصف الثالث</option>
+            <option value="الصف الرابع">الصف الرابع</option>
+            <option value="الصف الخامس">الصف الخامس</option>
+            <option value="الصف السادس" selected>الصف السادس</option>
+          </select>
+        </div>
+
+        <div class="form-group">
+          <label>الفصل:</label>
+          <select id="archiveSectionSelect" onchange="renderArchiveTable();"></select>
+        </div>
+
+        <div class="form-group">
+          <label>اختر اليوم المطلوب استرجاع واجباته:</label>
+          <select id="archiveDaySelect" onchange="renderArchiveTable();">
+            <option value="الأحد">الأحد</option>
+            <option value="الإثنين">الإثنين</option>
+            <option value="الثلاثاء">الثلاثاء</option>
+            <option value="الأربعاء">الأربعاء</option>
+            <option value="الخميس" selected>الخميس</option>
+          </select>
+        </div>
+      </div>
+    </div>
+
+    <!-- أزرار إجراءات الأرشيف -->
+    <div class="no-print" style="display: flex; gap: 10px; justify-content: flex-end; flex-wrap: wrap;">
+      <button class="btn btn-print" onclick="window.print()">🖨️️ طباعة جدول الأرشيف (A4)</button>
+    </div>
+
+    <!-- ورقة عرض الأرشيف -->
+    <div class="print-sheet" id="printAreaArchive">
+      <div class="official-header">
+        <div class="header-text-ar">
+          المملكة العربية السعودية<br>
+          وزارة التعليم<br>
+          مدارس البيارق الأهلية<br>
+          القسم الابتدائي — بنين
+        </div>
+        <div class="header-center">
+          <img src="logo.png" alt="شعار مدارس البيارق" onerror="this.onerror=null; this.src='https://englishlanguagesupervision-prog.github.io/Bayariq-Weekly-Plan/logo.jpg';">
+          <h2>أرشيف الواجبات اليومية (السابقة)</h2>
+        </div>
+        <div class="header-text-en">
+          Kingdom of Saudi Arabia<br>
+          Ministry of Education<br>
+          Al-Bayariq Private Schools<br>
+          Primary Section – Boys
+        </div>
+      </div>
+
+      <div class="meta-bar">
+        <div class="meta-item"><span>الصف والفصل</span><strong id="displayArchiveGrade">الصف السادس 1</strong></div>
+        <div class="meta-item"><span>اليوم المؤرشف</span><strong id="displayArchiveDay">الخميس</strong></div>
+        <div class="meta-item"><span>نوع السجل</span><strong>سجل محفوظ (مخزن الأرشيف)</strong></div>
+      </div>
+
+      <div class="table-container">
+        <table>
+          <thead>
+            <tr>
+              <th style="width: 7%;">م</th>
+              <th style="width: 25%;">المادة والمعلم</th>
+              <th style="width: 33%;">موضوع الدرس</th>
+              <th style="width: 35%;">الواجب المطلوب</th>
+            </tr>
+          </thead>
+          <tbody id="archiveTableBody"></tbody>
+        </table>
+      </div>
+
+      <div class="sheet-footer">
+        رؤيتنا: بناء الشخصية المتكاملة للطالب
+      </div>
+    </div>
+  </div>
+
+  <!-- ==================== 3. قسم الخطة الأسبوعية ==================== -->
   <div id="weeklySectionContainer" style="display: none;">
     
     <div class="card no-print teacher-view" style="display: none;">
@@ -1056,7 +1219,6 @@
         ℹ️ اكتب موضوعات الدروس الخاصة بمادتك حسب عدد الحصص الأسبوعية (الخطة عامة وموحدة لجميع فصول الصف).
       </div>
 
-      <!-- صفوف موضوعات الدروس فقط -->
       <label style="font-weight: 800; color: var(--primary); margin-bottom: 6px; display: block;">قائمة موضوعات الدروس للأسبوع:</label>
       <div id="lessonRowsContainer" class="lesson-rows-container"></div>
 
@@ -1085,10 +1247,10 @@
     <!-- أزرار الإجراءات الأسبوعية -->
     <div class="no-print" style="display: flex; gap: 10px; justify-content: flex-end; flex-wrap: wrap;">
       <button class="btn btn-whatsapp" onclick="shareWeeklyWhatsApp()">📲 إرسال الخطة عبر الواتساب</button>
-      <button class="btn btn-print" onclick="window.print()">🖨️ طباعة الخطة الأسبوعية (A4)</button>
+      <button class="btn btn-print" onclick="window.print()">🖨️️ طباعة الخطة الأسبوعية (A4)</button>
     </div>
 
-    <!-- ورقة الطباعة والعرض للخطة الأسبوعية (بدون اسم المعلم) -->
+    <!-- ورقة الطباعة والعرض للخطة الأسبوعية -->
     <div class="print-sheet" id="printAreaWeekly">
       <div class="official-header">
         <div class="header-text-ar">
@@ -1133,7 +1295,7 @@
 
   </div>
 
-  <!-- ==================== 3. قسم المكتسبات المهارية (متعدد الصور) ==================== -->
+  <!-- ==================== 4. قسم المكتسبات المهارية ==================== -->
   <div id="skillsSectionContainer" style="display: none;">
     <div class="card">
       <div class="card-title">🎯 المكتسبات المهارية ونواتج التعلم المستهدفة</div>
@@ -1141,7 +1303,7 @@
     </div>
   </div>
 
-  <!-- ==================== 4. شريط تنبيهات هامة لأولياء الأمور ==================== -->
+  <!-- ==================== 5. شريط تنبيهات هامة لأولياء الأمور ==================== -->
   <div class="parent-alert-box no-print">
     <div class="parent-alert-title">
       📢 تنبيهات هامة لأولياء الأمور
@@ -1151,7 +1313,7 @@
     </div>
   </div>
 
-  <!-- ==================== 5. تقييم ولي الأمر واستفساراته ==================== -->
+  <!-- ==================== 6. تقييم ولي الأمر واستفساراته ==================== -->
   <div class="card no-print">
     <div class="card-title">⭐ تقييم واستفسارات أولياء الأمور</div>
     
@@ -1244,9 +1406,11 @@
   let currentPortal = 'parent'; 
 
   let dailyData = {};
+  let archiveData = {};
   let weeklyData = {};
   let skillsData = { text: '', link: '', images: [] };
   let parentAlertText = "حرصاً على تميز أبنائنا الطلاب، نرجو متابعة إنجاز الواجبات اليومية ومراجعة الخطة الأسبوعية بشكل مستمر، والتواصل مع إدارة المدرسة عند الحاجة.";
+  let tickerTextVal = "أهلاً بكم في بوابة مدارس البيارق الأهلية — نرجو متابعة الواجبات اليومية وحلها أولاً بأول — متاح الآن أرشيف الواجبات لمراجعة الأيام السابقة بكل يسر وسهولة.";
 
   let currentWeekTitle = "الأسبوع السادس";
   let currentWeekDate = "من 04 / 10 / 2026 إلى 08 / 10 / 2026 م";
@@ -1272,7 +1436,6 @@
       const dayIdx = now.getDay();
       const daysMap = ['الأحد', 'الإثنين', 'الثلاثاء', 'الأربعاء', 'الخميس', 'الجمعة', 'السبت'];
       
-      // إذا كان يوم جمعة أو سبت نحسب الأحد القادم تلقائياً
       if (dayIdx === 5 || dayIdx === 6) {
         currentEffectiveDay = 'الأحد';
       } else {
@@ -1305,26 +1468,29 @@
     if (elDate) elDate.value = currentEffectiveDate;
   }
 
-  // التفريغ التلقائي: يومياً 11 م عدا الخميس يترك حتى مساء السبت 11 م
+  // التفريغ التلقائي مع حفظ نسخة في الأرشيف
   function checkDailyAutoClear() {
     const now = new Date();
-    const dayIdx = now.getDay(); // 0=Sun, 1=Mon, 2=Tue, 3=Wed, 4=Thu, 5=Fri, 6=Sat
+    const dayIdx = now.getDay();
     const hours = now.getHours();
     const todayKey = now.toDateString();
 
-    // إذا كان يوم الخميس أو الجمعة: لا نقوم بالتفريغ، لتبقى واجبات الخميس حتى مساء السبت
     if (dayIdx === 4 || dayIdx === 5) {
       return;
     }
 
-    // يتم التفريغ عند حلول الساعة 11 مساءً (23:00 وما بعدها)
-    // - لأيام الأحد والإثنين والثلاثاء والأربعاء: يتم تفريغ نفس اليوم الساعة 11 م.
-    // - ليوم السبت: الساعة 11 م يتم تفريغ جدول الخميس المنتهي تمهيداً للأحد.
     if (hours >= 23 && lastAutoClearDate !== todayKey) {
       lastAutoClearDate = todayKey;
       if (db) {
-        db.ref('daily_live_v4').remove();
-        db.ref('system/lastAutoClearDate').set(todayKey);
+        // نقل الواجبات اليومية المنتهية إلى الأرشيف السحابي قبل المسح
+        db.ref('daily_live_v4').once('value', snapshot => {
+          const val = snapshot.val();
+          if (val) {
+            db.ref('daily_archive').update(val);
+          }
+          db.ref('daily_live_v4').remove();
+          db.ref('system/lastAutoClearDate').set(todayKey);
+        });
       }
     }
   }
@@ -1372,14 +1538,19 @@
     activeSystem = sys;
     document.getElementById('cardDaily').classList.toggle('active', sys === 'daily');
     document.getElementById('cardWeekly').classList.toggle('active', sys === 'weekly');
+    document.getElementById('cardArchive').classList.toggle('active', sys === 'archive');
     document.getElementById('cardSkills').classList.toggle('active', sys === 'skills');
 
     document.getElementById('dailySectionContainer').style.display = (sys === 'daily') ? 'block' : 'none';
     document.getElementById('weeklySectionContainer').style.display = (sys === 'weekly') ? 'block' : 'none';
+    document.getElementById('archiveSectionContainer').style.display = (sys === 'archive') ? 'block' : 'none';
     document.getElementById('skillsSectionContainer').style.display = (sys === 'skills') ? 'block' : 'none';
 
     if (sys === 'daily') {
       renderDailyTable();
+    } else if (sys === 'archive') {
+      updateArchiveClassSection();
+      renderArchiveTable();
     } else if (sys === 'weekly') {
       loadWeeklySubjectDraft();
       renderWeeklyTable();
@@ -1435,6 +1606,7 @@
       document.querySelectorAll('.admin-view').forEach(el => el.style.display = 'block');
     }
     renderDailyTable();
+    renderArchiveTable();
     renderWeeklyTable();
     renderSkills();
   }
@@ -1477,7 +1649,12 @@
     document.getElementById('parentAlertNoticeText').textContent = parentAlertText;
   }
 
-  /* ================= منطق المكتسبات المهارية متعددة الصور ================= */
+  function saveTickerText() {
+    tickerTextVal = document.getElementById('adminTickerInput').value.trim();
+    if (db) db.ref('system/tickerText').set(tickerTextVal);
+    document.getElementById('tickerContentText').textContent = tickerTextVal;
+  }
+
   function handleMultipleSkillImagesUpload(input) {
     tempUploadedImages = [];
     const files = input.files;
@@ -1762,7 +1939,7 @@
     }
   }
 
-  /* ================= منطق الواجبات اليومية (مع اسم المعلم) ================= */
+  /* ================= منطق الواجبات اليومية ================= */
   function updateClassSection() {
     const grade = document.getElementById('gradeSelect').value;
     const sectionSelect = document.getElementById('sectionSelect');
@@ -1809,7 +1986,9 @@
     };
 
     if (db) {
+      // حفظ في الجدول المباشر وكذلك في مخزن الأرشيف التلقائي
       db.ref(`daily_live_v4/${key}/${period}`).set(dataObj);
+      db.ref(`daily_archive/${key}/${period}`).set(dataObj);
     } else {
       if (!dailyData[key]) dailyData[key] = {};
       dailyData[key][period] = dataObj;
@@ -1954,7 +2133,61 @@
     window.open(`https://api.whatsapp.com/send?text=${encodeURIComponent(msg)}`, '_blank');
   }
 
-  /* ================= منطق الخطة الأسبوعية (بدون اسم المعلم) ================= */
+  /* ================= منطق أرشيف ومخزن الواجبات ================= */
+  function updateArchiveClassSection() {
+    const grade = document.getElementById('archiveGradeSelect').value;
+    const sectionSelect = document.getElementById('archiveSectionSelect');
+    sectionSelect.innerHTML = '';
+    
+    const count = GRADE_SECTIONS_COUNT[grade] || 2;
+    for (let i = 1; i <= count; i++) {
+      const opt = document.createElement('option');
+      opt.value = `${grade} ${i}`;
+      opt.textContent = `${grade} ${i}`;
+      if (i === 1) opt.selected = true;
+      sectionSelect.appendChild(opt);
+    }
+  }
+
+  function renderArchiveTable() {
+    const sectionFullName = document.getElementById('archiveSectionSelect').value || document.getElementById('archiveGradeSelect').value;
+    const selectedDay = document.getElementById('archiveDaySelect').value;
+
+    document.getElementById('displayArchiveGrade').textContent = sectionFullName;
+    document.getElementById('displayArchiveDay').textContent = selectedDay;
+
+    const key = sanitizeKey(`${sectionFullName}_${selectedDay}`);
+    // البحث في الأرشيف أولاً ثم في الجدول الحي كاحتياط
+    const current = (archiveData && archiveData[key]) ? archiveData[key] : (dailyData[key] || {});
+    const tbody = document.getElementById('archiveTableBody');
+    tbody.innerHTML = '';
+
+    let hasContent = false;
+    for (let i = 1; i <= TOTAL_PERIODS; i++) {
+      const row = current[i];
+      if (row && row.subject !== '—') {
+        hasContent = true;
+        const teacherBadge = row.teacher ? `<div style="font-size: 0.8rem; color: #475569; font-weight: 600; margin-top: 3px;">(أ. ${row.teacher})</div>` : '';
+        const tr = document.createElement('tr');
+        tr.innerHTML = `
+          <td style="font-weight: 800; color: var(--primary);">${i}</td>
+          <td style="font-weight: 700;">
+            ${row.subject}
+            ${teacherBadge}
+          </td>
+          <td class="cell-center">${row.lesson}</td>
+          <td class="cell-center">${row.homework}</td>
+        `;
+        tbody.appendChild(tr);
+      }
+    }
+
+    if (!hasContent) {
+      tbody.innerHTML = `<tr><td colspan="4" style="padding: 24px; color: #94a3b8; font-weight: 700; font-size: 1rem; text-align: center;">لا توجد واجبات مؤرشفة مسجلة ليوم (${selectedDay}) لهذا الفصل.</td></tr>`;
+    }
+  }
+
+  /* ================= منطق الخطة الأسبوعية ================= */
   function getWeeklyKey() {
     const grade = document.getElementById('weeklyGradeSelect').value;
     return sanitizeKey(`${grade}`);
@@ -2157,7 +2390,6 @@
       const p = currentWeekPlans[sub];
       const lessonsList = p.lessons || [];
 
-      // 1. رأس المادة بدون اسم المعلم
       const headerTr = document.createElement('tr');
       headerTr.innerHTML = `
         <td class="merged-subject-header-td">
@@ -2166,14 +2398,12 @@
       `;
       tbody.appendChild(headerTr);
 
-      // 2. عنوان العمود
       const subheadTr = document.createElement('tr');
       subheadTr.innerHTML = `
         <th class="subhead-th" style="width: 100%; text-align: center;">موضوع الدرس</th>
       `;
       tbody.appendChild(subheadTr);
 
-      // 3. صفوف موضوعات الدروس
       if (lessonsList.length === 0) {
         const emptyTr = document.createElement('tr');
         emptyTr.innerHTML = `
@@ -2190,12 +2420,10 @@
         });
       }
 
-      // فاصل جمالي
       const spacerTr = document.createElement('tr');
       spacerTr.innerHTML = `<td style="background: #f1f5f9; height: 10px; padding: 0; border: none;"></td>`;
       tbody.appendChild(spacerTr);
 
-      // أزرار التحكم
       const wrap = document.createElement('div');
       wrap.style.display = 'inline-flex';
       wrap.style.gap = '4px';
@@ -2262,6 +2490,11 @@
       renderDailyTable();
     });
 
+    db.ref('daily_archive').on('value', snapshot => {
+      archiveData = snapshot.val() || {};
+      renderArchiveTable();
+    });
+
     db.ref('weekly_v9').on('value', snapshot => {
       weeklyData = snapshot.val() || {};
       renderWeeklyTable();
@@ -2279,6 +2512,7 @@
       currentWeekTitle = sys.weekTitle || currentWeekTitle;
       currentWeekDate = sys.weekDate || currentWeekDate;
       parentAlertText = sys.parentAlert || parentAlertText;
+      tickerTextVal = sys.tickerText || tickerTextVal;
       skillsData = sys.skillsData_v2 || { text: '', link: '', images: [] };
       adminOverrideDay = sys.overrideDay || "auto";
       adminOverrideDate = sys.overrideDate || "";
@@ -2290,6 +2524,9 @@
       document.getElementById('adminWeekDateInput').value = currentWeekDate;
       document.getElementById('adminAlertNoticeInput').value = parentAlertText;
       document.getElementById('parentAlertNoticeText').textContent = parentAlertText;
+
+      document.getElementById('adminTickerInput').value = tickerTextVal;
+      document.getElementById('tickerContentText').textContent = tickerTextVal;
 
       document.getElementById('adminOverrideDaySelect').value = adminOverrideDay;
       document.getElementById('adminOverrideDateInput').value = adminOverrideDate;
@@ -2307,6 +2544,7 @@
   window.onload = function() {
     computeLiveDateTime();
     updateClassSection();
+    updateArchiveClassSection();
     setStarRating(10);
     initFirebaseSync();
     applyPortalUI();
